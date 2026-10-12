@@ -45,7 +45,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and independently caught the kernel-bypass attack |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
-| Tests | 57 | all pass from a clean checkout |
+| Tests | 58 | all pass from a clean checkout |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -141,7 +141,7 @@ reference/     frozen statements, guards, claim catalogues, attestations,
 corpus/        test data: genuine submissions, 13 attacks, the Fermat pair
 harness/       the driver, the Lean auditor, the third checker, baseline and
                ablation tools
-tests/         57 tests, including the offline scope tests and forgery vectors
+tests/         58 tests, including the offline scope tests and forgery vectors
 scripts/       bootstrap and tiered verification
 evidence/      results of the recorded run, with an index of what each file is
 mathlib-tier/  the optional Mathlib Lake project, kept separate so core claims

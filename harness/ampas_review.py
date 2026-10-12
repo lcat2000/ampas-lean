@@ -65,12 +65,25 @@ def _lean_root() -> Path:
     found = shutil.which("lean")
     if found:
         return Path(found).resolve().parent.parent
-    raise SystemExit(
-        "Lean not found: put `lean` on PATH or set LEAN_ROOT. "
-        "See INSTALL.md (scripts/bootstrap.sh installs the pinned toolchain).")
+    # Deliberately NOT fatal here. Tier 0 of the verification runs with no
+    # Lean at all, and it imports this module; raising at import time would
+    # make the no-Lean tier impossible. Anything that actually needs Lean
+    # calls require_lean() first.
+    return None
 
 
-LEAN_ROOT = _lean_root()
+LEAN_ROOT = _lean_root() or Path("/nonexistent-lean-toolchain")
+LEAN_FOUND = _lean_root() is not None
+
+
+def require_lean() -> None:
+    """Fail with something actionable, at the point Lean is actually needed."""
+    if not LEAN_FOUND:
+        raise SystemExit(
+            "Lean not found: put `lean` on PATH or set LEAN_ROOT. "
+            "See INSTALL.md; ./scripts/bootstrap.sh installs the pinned "
+            "toolchain. (Tier 0 of the verification needs no Lean: "
+            "python3 -m pytest tests/test_third_check.py -q -k 'not pipeline')")
 AUDIT_BIN = Path(os.environ.get("AMPAS_AUDIT_BIN", HERE / "audit"))
 
 
@@ -79,6 +92,7 @@ def audit_cmd() -> list[str]:
     (slower, but needs no C toolchain). See harness/ampas_lean.py."""
     if AUDIT_BIN.exists() and os.access(AUDIT_BIN, os.X_OK):
         return [str(AUDIT_BIN)]
+    require_lean()
     return [str(LEAN_ROOT / "bin" / "lean"), "--run", str(HERE / "Audit.lean")]
 
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))

@@ -69,12 +69,25 @@ def _lean_root() -> Path:
     found = shutil.which("lean")
     if found:
         return Path(found).resolve().parent.parent
-    raise SystemExit(
-        "Lean not found: put `lean` on PATH or set LEAN_ROOT. "
-        "See INSTALL.md (scripts/bootstrap.sh installs the pinned toolchain).")
+    # Deliberately NOT fatal here. Tier 0 of the verification runs with no
+    # Lean at all, and it imports this module; raising at import time would
+    # make the no-Lean tier impossible. Anything that actually needs Lean
+    # calls require_lean() first.
+    return None
 
 
-LEAN_ROOT = _lean_root()
+LEAN_ROOT = _lean_root() or Path("/nonexistent-lean-toolchain")
+LEAN_FOUND = _lean_root() is not None
+
+
+def require_lean() -> None:
+    """Fail with something actionable, at the point Lean is actually needed."""
+    if not LEAN_FOUND:
+        raise SystemExit(
+            "Lean not found: put `lean` on PATH or set LEAN_ROOT. "
+            "See INSTALL.md; ./scripts/bootstrap.sh installs the pinned "
+            "toolchain. (Tier 0 of the verification needs no Lean: "
+            "python3 -m pytest tests/test_third_check.py -q -k 'not pipeline')")
 LEAN_BIN = LEAN_ROOT / "bin"
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))
 AUDIT_BIN = Path(os.environ.get("AMPAS_AUDIT_BIN", HERE / "audit"))
@@ -91,6 +104,7 @@ def audit_cmd() -> list[str]:
     """
     if AUDIT_BIN.exists() and os.access(AUDIT_BIN, os.X_OK):
         return [str(AUDIT_BIN)]
+    require_lean()
     src = HERE / "Audit.lean"
     if not src.exists():
         raise SystemExit(f"auditor not found: no executable at {AUDIT_BIN} and no {src}")
@@ -295,6 +309,7 @@ def trusted_fingerprint() -> dict:
 def baseline(module: str = "AmpasRef.Challenge") -> dict:
     """Once per toolchain and reference: replay everything the reference
     imports (Init and AmpasRef.Defs) and defines into an empty kernel."""
+    require_lean()
     import time
     t0 = time.time()
     r = _run([str(LEAN_BIN / "leanchecker"), "--fresh", module], ROOT, str(TRUSTED_OLEAN),
@@ -311,6 +326,7 @@ def load_catalogue() -> dict:
 def check_submission(sub_path: Path, module: str, claims: list[dict],
                      reference_module: str, trusted_modules: list[str],
                      defeq_default: bool = True) -> SubmissionResult:
+    require_lean()
     as_user = _sandbox_user()
     work = Path(tempfile.mkdtemp(prefix="ampas-sub-"))
     try:

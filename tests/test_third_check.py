@@ -43,6 +43,23 @@ def run(path: Path, baseline=None, **kw):
 
 
 # ---------------------------------------------------------------- A. offline
+def test_tier_zero_does_not_need_lean():
+    """Tier 0 is the tier a reviewer can run before installing anything, and
+    it imports the harness. Detecting the toolchain must therefore not be
+    fatal at import time: it has to fail later, where Lean is actually used,
+    with a message that says what to do. A fresh clone with no Lean on PATH
+    caught this."""
+    import ampas_lean as A
+
+    assert hasattr(A, "require_lean"), "no lazy Lean requirement"
+    assert isinstance(A.LEAN_FOUND, bool)
+    if not A.LEAN_FOUND:
+        import pytest as _pytest
+        with _pytest.raises(SystemExit) as e:
+            A.require_lean()
+        assert "INSTALL.md" in str(e.value)
+
+
 def test_baseline_file_is_present_and_nonempty():
     fps = json.loads(BASELINE.read_text())
     assert isinstance(fps, list) and len(fps) > 100

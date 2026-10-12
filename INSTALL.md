@@ -23,7 +23,7 @@ so the sandboxed path is Linux/macOS only; see
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
 ```
 
-Thirteen tests, under a second. They run the third checker against fixed
+Fourteen tests, under a second. They run the third checker against fixed
 export files committed in `tests/forgeries/` and pin what a clean result from
 it is allowed to mean. Worth running first: it is the part of this repository
 that is hardest to fake and easiest to check.
