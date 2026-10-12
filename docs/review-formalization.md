@@ -71,8 +71,17 @@ judgement.
 
 ### 3. Attributable sign-off
 
-For each claim the reviewer records identity, date, the `faithful` judgement,
-a note, and a checklist:
+For each claim three roles are recorded **separately**, because collapsing
+them is how a record comes to assert a judgement nobody made:
+
+| Field | Who | What it covers |
+| --- | --- | --- |
+| `prepared_by` | the harness | the machine-derived parts: hashes, closure list, guard types |
+| `reviewed_by` | whoever formed the fidelity judgement | the checklist below |
+| `confirmation` | the accountable owner | `confirmed_by`, `mode` (`personally_reviewed` or `delegated`) and the recorded `basis`; null until given |
+
+The reviewer's part records identity, date, the `faithful` judgement, a note,
+and a checklist:
 
 | Check | The question |
 | --- | --- |
@@ -87,6 +96,14 @@ The whole record is signed with a **detached Ed25519 signature**
 (`reference/reviewer_key.json` is the public key; the private key is **not** in
 this repository). The signature covers every field except itself, so even
 editing the `text` field invalidates it.
+
+**What the signature does not do.** The key shipped here is a demonstration
+key, generated inside the container that produced this repository and held by
+nobody. A signature with it establishes that a record has not been altered
+since freezing, and attributes **nothing to a person** — who reviewed and who
+confirmed are the separate fields above. An earlier key id,
+`kai-chang-morris-2026-10`, wrongly implied the owner's custody and was
+replaced. Real deployment needs a key the reviewer generates and holds.
 
 ### 4. Drift detection
 

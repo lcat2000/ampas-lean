@@ -3,7 +3,7 @@
   "claim": "PL-IND",
   "theorem": "Ampas.Claims.pl_independent",
   "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
-  "frozen_at": "2026-10-12T10:47:22Z",
+  "frozen_at": "2026-10-12T16:07:26Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
@@ -63,10 +63,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "Independence is a statement about the trusted proof system Ampas.PL.Derives, which is part of the reference. A proof of independence for a different (e.g. weaker) proof system is a different statement and the closure check rejects it. The reviewer confirms Derives is the standard classical Hilbert calculus and Independent means underivable-both-ways.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -76,10 +78,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:47:22Z",
-    "value": "379fb130bfc81637f403139681158294ee064b5473e49b9d9fab221b15aa90d9b3898b881ccd6cd10d49f78f714e15b63a25366ffee173ecde80571f7de02c03"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:26Z",
+    "value": "2c9336fde9d93c20ca291a1f421f01447ad031c6fc91a8aff1b50ba9013db88529ce8d2e9df4b07abe462e73218017d566e2a08e3152359c56d4857718ced40e"
   }
 }

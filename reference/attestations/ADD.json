@@ -3,7 +3,7 @@
   "claim": "ADD",
   "theorem": "Ampas.Claims.add_comm_nat",
   "text": "Addition of natural numbers is commutative.",
-  "frozen_at": "2026-10-12T10:47:22Z",
+  "frozen_at": "2026-10-12T16:07:26Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
@@ -62,10 +62,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "a + b = b + a over Nat; standard.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -75,10 +77,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:47:22Z",
-    "value": "cb180f79d92481de2d50ba9285ae46c218d4caf48cd3fe5f4c1f811e8610342eb1ea6fbbe6941652a47808ce5bab8d22a27b13b56a07796629f254ad0105dd03"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:26Z",
+    "value": "52b6ce1b4c62a67caeb2e45e9b86315c76c77f76e03882ef38d56a1164922fffed7ecc2e85623ac26948c47a82febfa014a1974e45f4c8463191f8afefb37208"
   }
 }

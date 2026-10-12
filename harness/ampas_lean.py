@@ -159,6 +159,9 @@ MEM_BYTES = int(os.environ.get("AMPAS_MEM_BYTES", str(10 * 1024 ** 3)))
 # unprivileged user still apply, and the exporter only reads.
 EXPORT_MEM_BYTES = int(os.environ.get("AMPAS_EXPORT_MEM_BYTES", str(24 * 1024 ** 3)))
 LEAN_THREADS = os.environ.get("AMPAS_LEAN_THREADS", "2")
+# 512 was low enough that thread creation failed on the largest submission
+# when the machine was loaded, which was then misreported as a rejection.
+NPROC_LIMIT = int(os.environ.get("AMPAS_NPROC_LIMIT", "2048"))
 
 FORBIDDEN_ALWAYS = ("SORRY", "NATIVE_EVALUATION", "OPAQUE_IN_STATEMENT",
                     "UNSAFE", "PARTIAL")
@@ -172,7 +175,7 @@ def _preexec(as_user: dict | None, limits: bool = True, mem: int | None = None):
         m = mem or MEM_BYTES
         resource.setrlimit(resource.RLIMIT_AS, (m, m))
         try:
-            resource.setrlimit(resource.RLIMIT_NPROC, (512, 512))
+            resource.setrlimit(resource.RLIMIT_NPROC, (NPROC_LIMIT, NPROC_LIMIT))
         except (ValueError, OSError):
             pass
         resource.setrlimit(resource.RLIMIT_FSIZE, (512 * 1024 ** 2, 512 * 1024 ** 2))
@@ -191,6 +194,16 @@ def _sandbox_user() -> dict | None:
     except KeyError:
         return None
     return {"uid": p.pw_uid, "gid": p.pw_gid}
+
+
+def _clip(text: str, n: int = 2000) -> str:
+    """Keep the head AND tail of a checker's output. The verdict is at the
+    start -- `(kernel) declaration type mismatch ...` -- while a crash can
+    append pages of stack trace, so a tail-only clip can discard the only
+    line that says what happened."""
+    if len(text) <= 2 * n:
+        return text
+    return text[:n] + f"\n...[{len(text) - 2 * n} characters omitted]...\n" + text[-n:]
 
 
 def _run(cmd, cwd, lean_path, as_user, env_extra=None, limits=True, wall=None, mem=None):
@@ -221,9 +234,19 @@ def _exhausted(r) -> bool:
     # A checker can also run out of memory without being signalled: Lean's C++
     # kernel throws std::bad_alloc and exits non-zero, which earlier code read
     # as a rejection. Found while packaging, on the largest submission.
+    # Lean reports resource failures as thrown exceptions with specific
+    # messages, so they have to be recognized by signature. Three of these
+    # were found one at a time, each having first been misreported as a
+    # kernel rejection: SIGXCPU, then std::bad_alloc, then thread exhaustion.
+    # This list is therefore KNOWN INCOMPLETE -- see ASSUMPTIONS.md A5. What
+    # actually protects a run is that every submission has a predicted verdict
+    # in the manifest, so a resource failure on a submission expected to
+    # certify fails the run loudly instead of passing as a rejection.
     return any(m in text for m in (
         "timeout", "out of memory", "bad_alloc", "cannot allocate memory",
-        "memoryerror", "killed"))
+        "memoryerror", "killed",
+        "failed to create thread", "resource temporarily unavailable",
+        "too many open files", "cannot allocate"))
 
 
 def _why(r) -> str:
@@ -232,8 +255,12 @@ def _why(r) -> str:
     if r.returncode in named:
         return named[r.returncode]
     text = ((r.stdout or "") + (r.stderr or "")).lower()
-    if "bad_alloc" in text or "cannot allocate memory" in text or "memoryerror" in text:
+    if "bad_alloc" in text or "cannot allocate" in text or "memoryerror" in text:
         return f"out of memory (exit {r.returncode})"
+    if "failed to create thread" in text or "resource temporarily unavailable" in text:
+        return f"thread/process limit (exit {r.returncode})"
+    if "too many open files" in text:
+        return f"file-descriptor limit (exit {r.returncode})"
     if "timeout" in text:
         return f"timeout (exit {r.returncode})"
     return f"exit {r.returncode}"
@@ -366,7 +393,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
         if _exhausted(kc):
             res.resource_exhausted.append(f"leanchecker ({_why(kc)})")
         if not res.kernel_replay:
-            res.compile_stderr += "\n[leanchecker]\n" + (kc.stdout + kc.stderr)[-2000:]
+            res.compile_stderr += "\n[leanchecker]\n" + _clip(kc.stdout + kc.stderr)
         # second, independent kernel: a different implementation by a
         # different author, re-checking the same compiled oleans
         if L4L_BIN:
@@ -380,11 +407,11 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
                 res.compile_stderr += (f"\n[KERNEL DISAGREEMENT] leanchecker="
                                        f"{res.kernel_replay} lean4lean="
                                        f"{res.kernel_replay_independent}\n"
-                                       + (l4.stdout + l4.stderr)[-1500:])
+                                       + _clip(l4.stdout + l4.stderr))
             else:
                 res.kernel_agreement = "agree"
             if not res.kernel_replay_independent:
-                res.compile_stderr += "\n[lean4lean]\n" + (l4.stdout + l4.stderr)[-1500:]
+                res.compile_stderr += "\n[lean4lean]\n" + _clip(l4.stdout + l4.stderr)
         # the fresh replay (all of Init into an empty kernel, ~3 minutes) is
         # run once per toolchain and reference (baseline()), not per submission;
         # the imported oleans are the baseline's, checked by hash below

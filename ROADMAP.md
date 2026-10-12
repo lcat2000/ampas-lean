@@ -85,23 +85,38 @@ applies to them too.
 adjudication file states that they will not be fixed and why, so a reader is
 not left expecting a fix that is not coming.
 
-## 4. Get the outstanding reviewer confirmations
+## 4. Independent review of the fidelity judgements
 
-Three sign-offs are open, and the files say so rather than implying otherwise:
+**Why.** All 13 claims are `reviewed_by` the same assistant that wrote the
+harness, and the owner's confirmation is recorded as **delegated**
+(REVIEW-CHECKLIST.md states both). The record is honest about this, which is
+necessary but not sufficient: the party that built the checks also judged
+whether the statements say what they claim, and that is precisely the
+judgement a verification system cannot make for itself.
 
-| Record | Status |
-| --- | --- |
-| `reference/claims_fermat.json` — formalization sign-off for the two Fermat statements | `PENDING` |
-| `reference/third_check_adjudications.json` — TC-01 and TC-02 | `PENDING_REVIEWER_CONFIRMATION` |
+Round 3 fixed the misattribution — 11 records previously named the owner for
+work he had not done — but fixing the attribution does not supply the
+independence.
 
-The adjudications matter for the gate: it currently discounts an adjudicated
-disagreement on the strength of the *machine-reproducible* half of each finding
-(library code, both kernels accept, reproduces with no submission involved).
-The reviewer's judgement that this is incompleteness rather than a missed
-soundness problem is the part still outstanding.
+**What to do.** Have someone who did not write the harness review the claims,
+starting with the ones anyone relies on. The per-claim reasoning in
+REVIEW-CHECKLIST.md exists so a reviewer can check the judgement rather than
+redo it from nothing. Two specific things to look at first:
 
-**Done when:** each record carries a named reviewer, a date and a signature, or
-is withdrawn.
+1. the definitions — `IsEven`, `PL.Derives`, `PL.DerivesPos`, `EL.Derives`,
+   `EL.monoid`, and Mathlib's `Nat.Prime` — since fidelity lives there and not
+   in the statement text;
+2. the two **nontriviality guards** (PL-AXIOM-IND, FERMAT-F5), the one place
+   where a guard's *relevance* is a reviewer's choice rather than a computed
+   type.
+
+Also still open: the third-check adjudications
+(`reference/third_check_adjudications.json`) are
+`PENDING_REVIEWER_CONFIRMATION`.
+
+**Done when:** at least one claim carries `confirmation.mode:
+personally_reviewed` from someone who did not author the harness, with a key
+in their own custody.
 
 ## 5. Attack the statement-fidelity problem directly
 

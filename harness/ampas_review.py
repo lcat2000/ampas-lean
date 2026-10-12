@@ -295,11 +295,27 @@ def cmd_freeze(args):
             "guards": d["guards"],
             "guards_satisfied": ok,
             "guard_problems": problems,
+            # Three separate things, because conflating them is how a record
+            # comes to assert a judgement nobody made. `prepared_by` is the
+            # machine-reproducible part (hashes, guard types, closure list);
+            # `reviewed_by` is whoever actually formed the fidelity judgement;
+            # `confirmed_by` is the accountable owner, and it stays null until
+            # they say so. Earlier rounds had one `attested_by` field, which
+            # the freeze filled with the owner's name for records the
+            # assistant had prepared.
+            "prepared_by": review.get("prepared_by", "UNATTRIBUTED"),
             "reviewer": {
-                "attested_by": review.get("attested_by", "UNATTESTED"),
+                "reviewed_by": review.get("reviewed_by", "UNREVIEWED"),
                 "faithful": review.get("faithful", False),
                 "note": review.get("note", ""),
+                "reviewed_on": review.get("reviewed_on"),
                 "checklist": {k: review.get("checklist", {}).get(k, False) for k in CHECKLIST},
+            },
+            "confirmation": {
+                "confirmed_by": review.get("confirmed_by"),
+                "confirmed_on": review.get("confirmed_on"),
+                "mode": review.get("confirmation_mode"),
+                "basis": review.get("confirmation_basis"),
             },
         }
         (AD / f"{cid}.json").write_text(
@@ -373,13 +389,27 @@ def cmd_verify(args):
         ok, problems = guards_ok(d)
         if not ok:
             failures.append(f"{cid}: guards no longer satisfied: {problems}")
-        # 5. the human part is actually present
+        # 5. the human part is actually present, and attributed to whoever
+        #    really did it. A record must not be able to pass by naming the
+        #    owner for work they did not do, so the three roles are checked
+        #    separately and a missing confirmation is reported as missing
+        #    rather than inferred from the review.
         rv = rec.get("reviewer", {})
+        if not rec.get("prepared_by") or rec["prepared_by"] == "UNATTRIBUTED":
+            failures.append(f"{cid}: no prepared_by")
+        if not rv.get("reviewed_by") or rv["reviewed_by"] == "UNREVIEWED":
+            failures.append(f"{cid}: no reviewed_by (nobody is named as having reviewed it)")
         if not rv.get("faithful"):
             failures.append(f"{cid}: reviewer did not attest faithfulness")
         missing = [k for k, v in rv.get("checklist", {}).items() if not v]
         if missing:
             failures.append(f"{cid}: checklist incomplete: {', '.join(missing)}")
+        conf = rec.get("confirmation", {})
+        if conf.get("confirmed_by") and not conf.get("mode"):
+            failures.append(f"{cid}: confirmed_by set without saying how "
+                            f"(mode: personally_reviewed | delegated)")
+        if conf.get("mode") and not conf.get("basis"):
+            failures.append(f"{cid}: confirmation mode without a recorded basis")
     report = {"checked": checked, "failures": failures,
               "verified_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
     if args.out:

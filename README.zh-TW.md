@@ -33,7 +33,7 @@
 | 核心（`corpus/manifest.json`） | 16（4 正確、12 攻擊） | 16/16 如預期；兩套 Lean 核心全部一致；第三道檢查佐證 15 份，並獨立抓到核心旁路攻擊 |
 | Mathlib（`reference/claims_mathlib.json`） | 2 | 2/2 如預期 |
 | 外部驗證（`corpus/manifest_fermat.json`） | 5 | 5/5 如預期 |
-| 測試 | 58 | 乾淨 checkout 全部通過 |
+| 測試 | 51 | 乾淨 checkout 全部通過 |
 
 每個攻擊都**由應該攔下它的那一層攔下**，不只是「被拒絕」——`build/ablation.json` 記錄每個攻擊觸發了哪些訊號，因為一套「某一層做完所有工作、其他層什麼都沒做」的系統，在通過／失敗的摘要上看起來完全一樣。
 
@@ -59,7 +59,7 @@
 四個層級。每一層自成一體，你跑不了的層級不會讓你跑得了的層級失效。
 
 ```bash
-git clone <this repo> && cd ampas-lean
+git clone https://github.com/lcat2000/ampas-lean.git && cd ampas-lean
 
 # tier 0 — 不需要 Lean，幾秒鐘
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
@@ -97,7 +97,7 @@ python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
 reference/     凍結的陳述、guard、主張目錄、簽核紀錄、來源基準、版本固定、裁定紀錄
 corpus/        測試資料：正確提交、13 個攻擊、Fermat 題組
 harness/       驅動程式、Lean 稽核器、第三道檢查、基準與 ablation 工具
-tests/         58 項測試，含離線範圍測試與偽造向量
+tests/         51 項測試，含離線範圍測試與偽造向量
 scripts/       bootstrap 與分層驗證
 evidence/      已記錄執行的結果，附每個檔案的索引
 mathlib-tier/  選用的 Mathlib Lake 專案，刻意分開，核心主張才不會取得 Mathlib 依賴

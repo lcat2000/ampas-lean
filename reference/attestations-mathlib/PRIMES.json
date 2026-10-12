@@ -3,7 +3,7 @@
   "claim": "PRIMES",
   "theorem": "Ampas.Claims.infinitude_of_primes",
   "text": "There are arbitrarily large prime numbers: for every natural number n there is a prime p with n <= p (Euclid's theorem).",
-  "frozen_at": "2026-10-12T10:45:57Z",
+  "frozen_at": "2026-10-12T16:07:57Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeMathlib",
   "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
@@ -368,6 +368,7 @@
     "hypotheses": 0,
     "witness": null,
     "necessity": [],
+    "nontriviality": null,
     "non_vacuity_status": "NO_HYPOTHESES",
     "necessity_status": [],
     "expected_witness": "",
@@ -375,10 +376,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -388,10 +391,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:45:57Z",
-    "value": "0db18451a9f3566a6c0e0ba353f6d4f9843f44cbd77a0fc777eda0943e9e1dcaa3c4adab640407b4cd4d09267767272b68393b2eff95ae2189ae5d7b582fbd0e"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:57Z",
+    "value": "5a6caa978a75339e4d5c3ddec592c968920a576d3a45e4cf83b3d9a577420eb059d659650db592066fec1a5241c7517ae316864b8aa9cfb8414f020d035cb300"
   }
 }

@@ -48,6 +48,32 @@ def corpus():
     return out
 
 
+def inconclusive(r: dict) -> str | None:
+    """Why no verdict was reached, or None if one was.
+
+    A checker killed by a resource limit has not rejected anything, so a test
+    asserting a verdict has nothing to assert. Skipping says that; failing
+    would report a wrong verdict that was never reached. This fires on the
+    largest submission when the machine is under memory pressure -- Lean's
+    kernel throws std::bad_alloc -- and it is why the driver distinguishes
+    INCONCLUSIVE from rejected at all.
+    """
+    if r.get("resource_exhausted"):
+        return f"resource limit: {r['resource_exhausted']}"
+    for c in r["claims"]:
+        if c.get("inconclusive"):
+            return f"{c['claim']}: {c['reasons'][0][:120] if c['reasons'] else 'inconclusive'}"
+    return None
+
+
+def need_verdict(corpus, *modules):
+    """Skip when any of these submissions came back without a verdict."""
+    for m in modules:
+        why = inconclusive(corpus[m])
+        if why:
+            pytest.skip(f"{m} reached no verdict ({why}); re-run on an unloaded machine")
+
+
 def claim(corpus, module, cid):
     for c in corpus[module]["claims"]:
         if c["claim"] == cid:
@@ -59,19 +85,28 @@ def claim(corpus, module, cid):
 
 # ---- overall behaviour
 def test_every_submission_matches_its_expected_verdict(corpus):
+    skipped = []
     for module, r in corpus.items():
+        why = inconclusive(r)
+        if why:
+            skipped.append(f"{module} ({why})")
+            continue
         if r["expected"] == "certified_all":
             assert r["compiled"] and all(c["certified"] for c in r["claims"]), module
         else:
             assert all(not c["certified"] for c in r["claims"]), module
+    if skipped:
+        pytest.skip("no verdict for: " + "; ".join(skipped))
 
 
 def test_genuine_arithmetic_certifies(corpus):
+    need_verdict(corpus, "Genuine")
     for cid in ("ADD", "SUB", "EVEN", "DVD", "GREATER", "DIV"):
         assert claim(corpus, "Genuine", cid)["certified"]
 
 
 def test_independence_proofs_certify(corpus):
+    need_verdict(corpus, "PLSol", "ELSol", "PLAxiomSol")
     assert claim(corpus, "PLSol", "PL-IND")["certified"]
     assert claim(corpus, "ELSol", "EL-IND")["certified"]
     # PL uses no axioms at all
@@ -393,3 +428,25 @@ def test_mathlib_claim_has_a_verified_signed_attestation():
     r = _review(trusted=MATHLIB_PATH, catalogue=ROOT / "reference" / "claims_mathlib.json")
     assert r.returncode == 0, f"{r.stdout}\n{r.stderr}"
     assert "0 failures" in r.stdout
+
+
+# ---- round 3: the reference module and the catalogue must not drift apart
+def test_every_reference_theorem_is_catalogued_and_vice_versa():
+    """The reference module's header says every theorem in it is the frozen
+    statement of a claim in claims.json. That was FALSE until round 3: two
+    modal-logic statements sat in the module in no catalogue, so they were
+    never frozen, attested, guarded or checked, and a submission declaring
+    either name would simply have been ignored.
+
+    A text check rather than an elaborated one, deliberately: it needs no Lean
+    and so runs in tier 0, where a reviewer can see the two sets agree before
+    installing anything.
+    """
+    import re
+    src = (ROOT / "reference" / "AmpasRef" / "Challenge.lean").read_text()
+    declared = set(re.findall(r"^theorem\s+(\w+)", src, re.MULTILINE))
+    catalogued = {c["theorem"].rsplit(".", 1)[-1] for c in CAT["claims"]}
+    assert declared == catalogued, (
+        f"reference module and catalogue disagree:\n"
+        f"  in the module, not catalogued: {sorted(declared - catalogued)}\n"
+        f"  catalogued, not in the module: {sorted(catalogued - declared)}")

@@ -3,7 +3,7 @@
   "claim": "EL-IND",
   "theorem": "Ampas.Claims.el_comm_independent",
   "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not make the theory inconsistent (x = y stays underivable).",
-  "frozen_at": "2026-10-12T10:47:22Z",
+  "frozen_at": "2026-10-12T16:07:26Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
@@ -91,10 +91,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "Independence over the trusted equational calculus Ampas.EL.Derives. The second conjunct rules out the vacuous 'independence by inconsistency'. Reviewer confirms the axiom set is the usual monoid presentation.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -104,10 +106,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:47:22Z",
-    "value": "333a4789c581aad8ddb0b531f22ca044ebe5edb4b7d598bccdba511e0ad3ea323187e22dfa74c191e806306933945ff13bf3a0bcbe2cc8fb65b54cb70501c603"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:26Z",
+    "value": "85d0caaa579ae57020f601a1750cb7d9944ed939ac2a978d3af870e252c57c5d661b4e38105efcef90dd39b1da21be2acbead19cef744c1119a70075f42e6909"
   }
 }

@@ -39,9 +39,8 @@
         "comparator": "strict"
       },
       "review": {
-        "attested_by": "Kai Chang (Morris)",
         "faithful": true,
-        "reviewed_on": "2026-10-12",
+        "reviewed_on": "2026-10-13",
         "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
         "checklist": {
           "statement_matches_text": true,
@@ -50,7 +49,13 @@
           "hypotheses_necessary_and_satisfiable": true,
           "definitions_reviewed": true,
           "conclusion_not_weakened": true
-        }
+        },
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
+        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_on": "2026-10-13",
+        "confirmation_mode": "delegated",
+        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
       }
     }
   ],

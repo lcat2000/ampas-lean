@@ -53,15 +53,4 @@ never be certified: p1 → p1 is derivable from any theory. -/
 theorem pl_bogus_independent :
     PL.Independent PL.T_imp (PL.Fm.imp (PL.Fm.var 1) (PL.Fm.var 1)) := sorry
 
-/-- ML-T-IND: the T axiom (□p → p) is independent of the modal system K:
-K neither proves it nor refutes it. -/
-theorem ml_T_independent_of_K :
-    ML.Independent ML.K (ML.Fm.imp (ML.Fm.box (ML.Fm.var 0)) (ML.Fm.var 0)) := sorry
-
-/-- ML-4-IND: the 4 axiom (□p → □□p) is independent of K together with the
-T scheme, so transitivity is not forced by reflexivity. -/
-theorem ml_4_independent_of_KT :
-    ML.Independent ML.KT
-      (ML.Fm.imp (ML.Fm.box (ML.Fm.var 0)) (ML.Fm.box (ML.Fm.box (ML.Fm.var 0)))) := sorry
-
 end Ampas.Claims

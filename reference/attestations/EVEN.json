@@ -3,7 +3,7 @@
   "claim": "EVEN",
   "theorem": "Ampas.Claims.even_add_even",
   "text": "The sum of two even natural numbers is even.",
-  "frozen_at": "2026-10-12T10:47:22Z",
+  "frozen_at": "2026-10-12T16:07:26Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
@@ -93,10 +93,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "IsEven n := exists k, n = 2*k. The reviewer confirms this is the intended meaning of 'even'.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -106,10 +108,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:47:22Z",
-    "value": "d402fbf9c73234da96111fc0506879fc62e49f014ef8f0bda0d81e03d5b6833c5576bf72326a592f8da0e46ae97782a768b271d76c0d864b183ccac10332e804"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:26Z",
+    "value": "870de29c0332af3f8e67d790742c18889bfae2db9b2cf64c3f23eba019eb57130549b2382d7a5b22d97b73adb402fd045e6af62cea9dd8a2f6b5affcc3bf5107"
   }
 }

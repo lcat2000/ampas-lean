@@ -45,7 +45,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and independently caught the kernel-bypass attack |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
-| Tests | 58 | all pass from a clean checkout |
+| Tests | 51 | all pass from a clean checkout |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -80,7 +80,7 @@ Four tiers. Each is self-contained, and a tier you cannot run never
 invalidates one you can.
 
 ```bash
-git clone <this repo> && cd ampas-lean
+git clone https://github.com/lcat2000/ampas-lean.git && cd ampas-lean
 
 # tier 0 — no Lean needed, a few seconds
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
@@ -128,8 +128,13 @@ evidence for each.
   that produces the olean), the OS and the sandbox are all still trusted.
 - **Mathlib coverage is one claim**, over a 387-olean dependency cone, not the
   whole library.
-- **Key management is out of scope.** The signing key here is a demonstration
-  key.
+- **Key management is out of scope, and the signature attributes nothing to a
+  person.** The key here was generated in the container that built this
+  repository and is held by nobody: it shows a record is unaltered, no more.
+- **The fidelity judgements are not independently reviewed.** All 13 were
+  reviewed by the same assistant that wrote the harness
+  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)); the owner's confirmation is
+  recorded as delegated, not personal.
 - **`unreviewed/` is not part of the deliverable** and nothing loads it. See its
   README.
 
@@ -141,7 +146,7 @@ reference/     frozen statements, guards, claim catalogues, attestations,
 corpus/        test data: genuine submissions, 13 attacks, the Fermat pair
 harness/       the driver, the Lean auditor, the third checker, baseline and
                ablation tools
-tests/         58 tests, including the offline scope tests and forgery vectors
+tests/         51 tests, including the offline scope tests and forgery vectors
 scripts/       bootstrap and tiered verification
 evidence/      results of the recorded run, with an index of what each file is
 mathlib-tier/  the optional Mathlib Lake project, kept separate so core claims
@@ -159,9 +164,11 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 2. Close the third check's inductive-specification gap in the one direction
    that is safe: a positivity check, verified against both Lean kernels rather
    than bolted onto the checker under review.
-3. Get the outstanding reviewer confirmations: the two formalization sign-offs
-   for the Fermat pair and the third-check adjudications are **PENDING**, and
-   the files say so.
+3. Have the fidelity judgements reviewed by someone other than their author.
+   All 13 are currently `reviewed_by` the assistant that wrote the harness,
+   with the owner's confirmation recorded as **delegated** — see
+   [REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md). That is honestly recorded but it
+   is not independent review, and independence is the whole point.
 
 ## Licence
 

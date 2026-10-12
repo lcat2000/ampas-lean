@@ -43,6 +43,20 @@ def run(path: Path, baseline=None, **kw):
 
 
 # ---------------------------------------------------------------- A. offline
+def test_a_checker_output_clip_keeps_the_verdict_line():
+    """A crash can append pages of stack trace, and the verdict is at the
+    START of a checker's output -- `(kernel) declaration type mismatch ...`.
+    A tail-only clip threw away the only line that said what happened, which
+    is how a real lean4lean rejection came to look like a bare stack trace."""
+    import ampas_lean as A
+
+    text = "(kernel) declaration type mismatch\n" + ("stack frame\n" * 5000)
+    out = A._clip(text)
+    assert "(kernel) declaration type mismatch" in out
+    assert len(out) < len(text)
+    assert "characters omitted" in out
+
+
 def test_tier_zero_does_not_need_lean():
     """Tier 0 is the tier a reviewer can run before installing anything, and
     it imports the harness. Detecting the toolchain must therefore not be
@@ -182,8 +196,19 @@ def test_resource_exhaustion_is_inconclusive_not_a_rejection():
     bad_alloc = "terminate called after throwing an instance of 'St9bad_alloc'"
     assert A._exhausted(R(1, "", bad_alloc))
     assert "out of memory" in A._why(R(1, "", bad_alloc))
-    # and a genuine Lean error must NOT be mistaken for exhaustion
+    # Thread exhaustion was the third signature in this family, found after
+    # SIGXCPU and after std::bad_alloc, each having first been misreported as
+    # a kernel rejection.
+    threads = ("terminate called after throwing an instance of 'lean::exception'\n"
+               "  what():  failed to create thread")
+    assert A._exhausted(R(1, "", threads))
+    assert "thread" in A._why(R(1, "", threads))
+
+    # and a genuine kernel rejection must NOT be mistaken for exhaustion
     assert not A._exhausted(R(1, "", "error: unknown identifier 'foo'"))
+    assert not A._exhausted(
+        R(1, "", "(kernel) declaration type mismatch, 'f' has type True "
+                 "but it is expected to have type False"))
 
     claim = {"id": "X", "theorem": "T", "policy": {}}
     v = A._verdict(claim, {"found": True, "kind": "theorem"}, True, "CONFIRMED",
@@ -192,6 +217,47 @@ def test_resource_exhaustion_is_inconclusive_not_a_rejection():
     assert "INCONCLUSIVE" in v.reasons[0]
     assert not any("kernel replay did not succeed" in r for r in v.reasons), \
         "must not be reported as a kernel rejection"
+
+
+def test_no_attestation_names_a_person_for_work_they_did_not_do():
+    """Until round 3 every attestation carried a single `attested_by` field
+    filled with the repository owner's name, asserting he had personally
+    confirmed six checklist items per claim, for records the assistant had
+    prepared. He had not.
+
+    The three roles must stay separate fields, and a confirmation must say how
+    it was given, so a delegated approval can never read as a personal review.
+    """
+    import glob
+    recs = sorted(glob.glob(str(ROOT / "reference" / "attestations*" / "*.json")))
+    assert recs, "no attestations found"
+    for f in recs:
+        d = json.loads(Path(f).read_text())
+        name = Path(f).stem
+        assert "attested_by" not in d.get("reviewer", {}), (
+            f"{name}: the collapsed attested_by field is back")
+        assert d.get("prepared_by"), f"{name}: no prepared_by"
+        assert d["reviewer"].get("reviewed_by"), f"{name}: no reviewed_by"
+        conf = d.get("confirmation", {})
+        if conf.get("confirmed_by"):
+            assert conf.get("mode") in ("personally_reviewed", "delegated"), (
+                f"{name}: confirmation without a mode")
+            assert conf.get("basis"), f"{name}: confirmation without a basis"
+            if conf["mode"] == "delegated":
+                assert "NOT personally read" in conf["basis"] or \
+                       "not personally" in conf["basis"].lower(), (
+                    f"{name}: a delegated confirmation must say so plainly")
+
+
+def test_the_signing_key_does_not_claim_to_be_a_persons():
+    """The key was generated inside the container that built the repository and
+    is held by nobody, so its record must say that rather than carry an id that
+    reads like a custody claim."""
+    k = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    assert "kai" not in k["key_id"].lower(), (
+        "the key id names a person, implying custody that does not exist")
+    assert k.get("custody", "").startswith("NONE")
+    assert "attributes NOTHING to a person" in k.get("note", "")
 
 
 ADJ = ROOT / "reference" / "third_check_adjudications.json"

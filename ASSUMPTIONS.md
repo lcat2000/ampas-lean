@@ -47,11 +47,27 @@ no `sorry`, no added axiom, every line genuinely proved, and both kernels
 accept it — it proves the restricted statement `∀ n, n ≤ 3 → …` while filed
 under the general claim. Only the statement comparator rejects it.
 
-**Current status:** the sign-offs for the two Fermat statements are
-`PENDING` (`reference/claims_fermat.json`), and the third-check adjudications
-are `PENDING_REVIEWER_CONFIRMATION`
-(`reference/third_check_adjudications.json`). Those files state this; they do
-not imply a sign-off that was never given.
+**Current status — read this before relying on any attestation.** All 13
+fidelity judgements were made by the **same assistant that wrote the
+harness** (`reviewed_by`), with the owner's approval recorded as
+**delegated** rather than personal (`confirmation.mode`). The reasoning for
+each is in `REVIEW-CHECKLIST.md` so it can be disagreed with. This is
+honestly recorded, and it is **not independent review**: the party that built
+the checks also judged whether the statements say what they claim. Independent
+review of the claims you rely on is the single highest-value thing an outside
+reader can add.
+
+Until round 3 this was worse: a single `attested_by` field was filled with the
+owner's name for 11 records the assistant had prepared, asserting he had
+personally confirmed six checklist items per claim. He had not. The three
+roles are now separate fields, `verify` checks them separately, and the
+signing key was re-issued because its old id implied the owner's custody.
+
+The third-check adjudications (`reference/third_check_adjudications.json`)
+remain `PENDING_REVIEWER_CONFIRMATION`: the gate acts on the
+machine-reproducible half of each finding (library code, both kernels accept,
+reproduces with no submission involved), and the judgement that this is
+incompleteness rather than a missed soundness problem is still outstanding.
 
 ## A2. Kernel soundness — and cross-checking is weaker evidence than it looks
 
@@ -150,11 +166,29 @@ The driver classifies exit 124 / −24 / −9 / 137 / `TIMEOUT` as resource
 exhaustion and reports the claim `INCONCLUSIVE` — never certified, but not
 rejected either.
 
-**Evidence this matters:** it was found while packaging. Two concurrent test
-sessions on a two-core machine were enough to make lean4lean hit the CPU limit
-on the largest submission, and the earlier code read that non-zero exit as a
-kernel rejection — a verdict that depended on how busy the machine was, with an
-error message that misdescribed the cause.
+**Evidence this matters, and the residual gap.** Three such signatures were
+found one at a time, each having first been misreported as a kernel rejection
+on the same (largest) submission:
+
+| Signature | How it appeared |
+| --- | --- |
+| `SIGXCPU` (−24) | two concurrent test sessions on two cores exceeded the CPU limit |
+| `std::bad_alloc` | Lean's C++ kernel runs out of memory by throwing, exiting non-zero |
+| `failed to create thread` | thread creation failed under load; `RLIMIT_NPROC` was raised from 512 to 2048 |
+
+**The list is known incomplete.** Lean signals resource failures as thrown
+exceptions with particular messages, so they have to be recognized by
+signature, and the inverse rule — "treat any unrecognized crash as
+inconclusive" — is not available either: lean4lean's genuine rejection of the
+kernel-bypass attack is a bare stack trace with no verdict marker in it, so
+that rule would misclassify a real rejection.
+
+What actually protects a run is not the classifier: **every submission carries
+a predicted verdict in the manifest**, so a resource failure on a submission
+expected to certify fails the run loudly rather than passing as a rejection.
+That is how the third signature was caught (`scripts/check_expectations.py`:
+"ELSol: expected certified_all, got rejected"). A reviewer running a corpus
+without predicted verdicts does not have that protection.
 
 ## A6. Scope of the mathematics covered
 

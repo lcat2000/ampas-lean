@@ -3,7 +3,7 @@
   "claim": "SUB",
   "theorem": "Ampas.Claims.sub_add_cancel_nat",
   "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
-  "frozen_at": "2026-10-12T10:47:22Z",
+  "frozen_at": "2026-10-12T16:07:26Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
@@ -99,10 +99,12 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
-    "attested_by": "Kai Chang (Morris)",
+    "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
     "note": "The hypothesis b <= a is required because Nat subtraction truncates at 0; without it the claim is false (a=0,b=1). This is a Lean-convention trap: a statement without the hypothesis would be a different, false claim.",
+    "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
       "no_unintended_convention": true,
@@ -112,10 +114,16 @@
       "conclusion_not_weakened": true
     }
   },
+  "confirmation": {
+    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_on": "2026-10-13",
+    "mode": "delegated",
+    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+  },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "kai-chang-morris-2026-10",
-    "signed_at": "2026-10-12T10:47:22Z",
-    "value": "866244fc1a2f72bb4ec16eabaee5502a96caac5b13cdfd19ef61f6c5d643132b2ee54dace5756108a822d7fa0fc071ee1f43d02700d2322033fff64e8412d60d"
+    "key_id": "ampas-harness-demo-2026-10",
+    "signed_at": "2026-10-12T16:07:26Z",
+    "value": "025c2f4d2e11aa408597b6d2dd56be8a6bf796617b46ea6bfe65fad207d3fc6d0388a7210f35fda5b960ae3bcd21cdef63c348bf2190ea8bb5dedefb49969900"
   }
 }
