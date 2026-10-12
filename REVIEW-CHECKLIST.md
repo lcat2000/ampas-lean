@@ -1,7 +1,5 @@
 # Formalization review — all 13 claims
 
-**繁體中文摘要在最後一節。**
-
 ## Who did what
 
 | Role | Who | What it means |
@@ -324,32 +322,3 @@ nontriviality guards, and that is flagged at both claims.
 `DerivesPos`, `monoid` or Mathlib's `Nat.Prime` and disagrees that they are
 the intended notions. That is the whole substance of a fidelity review, and it
 is why the definitions are listed here rather than summarized.
-
----
-
-## 繁體中文摘要
-
-13 條主張全部審過，判定**全部忠實**，但有三件事要講清楚：
-
-1. **署名已經改對了。** 原本 11 份簽核紀錄寫 `attested_by: Kai Chang (Morris)`
-   並聲稱你逐條確認了六項檢查——那是我準備的，你沒看過。現在拆成三個欄位：
-   `prepared_by`（機器可重現的部分）、`reviewed_by`（我，含上面每條的推理）、
-   `confirmed_by`（你，**mode: delegated**，並逐字記錄你的授權，明寫你沒有親自
-   讀過）。`verify` 會分別檢查這三者。
-
-2. **金鑰換掉了。** 原本 key_id 是 `kai-chang-morris-2026-10`，暗示在你保管中，
-   但私鑰是我在這個 container 裡生的、沒有人保管。新的 id 是
-   `ampas-harness-demo-2026-10`，並在 `reviewer_key.json` 寫明：它只證明紀錄
-   未被篡改，**不歸屬任何人**。
-
-3. **審查過程中抓到兩個問題，都已修。** 參考模組宣告了 12 條定理，但目錄只有
-   10 條——兩條模態邏輯陳述從來沒被凍結、簽核、加 guard 或驗證過，而模組自己
-   的檔頭說「每條定理都是目錄中某條主張」。另外 `Ampas.ML` 整個命名空間是受信任
-   參考裡的死碼。兩者都移到 `reference/future/`，並加了一項 tier 0 測試確保目錄
-   與模組不會再悄悄不一致。
-
-兩條主張的 `text` 我改得更精確（PL-AXIOM-IND 講的是 p0,p1 的實例；FERMAT-F5
-的因數分解是證據不是主張本身），沒有照原文批准。
-
-唯一我無法用機器擔保的判斷，是兩條 **nontriviality guard 的「相關性」**——
-guard 本身過核心檢查，但「要排除哪一種退化讀法」是人選的，兩處都標註了。
