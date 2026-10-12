@@ -1,0 +1,84 @@
+{
+  "schema": "ampas-formalization-attestation/1",
+  "claim": "ADD",
+  "theorem": "Ampas.Claims.add_comm_nat",
+  "text": "Addition of natural numbers is commutative.",
+  "frozen_at": "2026-10-12T10:47:22Z",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
+  "closure_sha256": "bfda3a67be93ec783b38f2d6bea010fbb581838518c7da3adcd026c320f59d5f",
+  "closure_size": 31,
+  "closure_entries": {
+    "Add": "fa0e6eab587e1884e4df86eeccf0d26c73a00d19efbf6f91366e9ea623d93640",
+    "Eq": "0c02a2c0311bdc3685c122f816db1291e406e02188ef8c9e73184a5d5ae05dfb",
+    "HAdd": "9e6c75c44351ca3bc59ddf191c4d0dabc30c00868a946e6b352f07df529b439b",
+    "Nat": "24168e47100587e94f4c6c5601994e97263695388c97186ecfc8b53d45b02e59",
+    "PProd": "4b3f244381bce363f1f0da942489c7190999cbd96296d62c3f6ff46f49933170",
+    "PUnit": "bdce4193cf35cc44997352d05528157d91f7f9e237e10925e58d3eaa3e186335",
+    "instAddNat": "79364df8d19251b4905c32b3347e768c4ce6f0ab90183495a6feff95c7cb9f92",
+    "instHAdd": "5fc1628847de5a44b525ab488f36925f97ed03cf982a87e0ac31bd8e0d425fcc",
+    "outParam": "e5eae12824f75041b20cca79c6f11ac0a3816f4654ff7bc548c487f8b5705675",
+    "Add.add": "beefcadc1366cc9a4e715d3fbb1f3c6730aed71bd63903dcba53f5e0bbcaccdb",
+    "Add.mk": "54826f09b51cc4d6d271fac4aa000949d2bff76e9e3dee8fe3de63e468767c82",
+    "Add.rec": "b7b601bb60863f40fab243655b69e96a768e451a1774774a9ff087e92ba5ced7",
+    "Eq.rec": "5bb45d2c8ea9a31c50880827660a67c683bde55b69c903ffd96add5565355265",
+    "Eq.refl": "9329cc8083e1cf0f0b1f368a751c51d9caeca6c7a2fb836f0347f614d33c290b",
+    "HAdd.hAdd": "b674dcdfcdca5973fa2e41b571142bd6747c3c1c70f7a45a6d091fa297ecc5f0",
+    "HAdd.mk": "bfedd5551e653d67e212974cb1180552eed9d8fd327ee1007b9bdf5d82fc578a",
+    "HAdd.rec": "479fc7be60483382e203738404357c289a9a13c8ad03c72a2e052dd074b066b2",
+    "Nat.add": "fda0db504a7fd18d5506d292b3394322efaf4e137283cb709d7b172dec104e36",
+    "Nat.below": "fa5ebe6ceeef25081f877f0e82e4106f899061aac57a28d22ee531d7cb4f5730",
+    "Nat.brecOn": "1998fc5bd916c0864f4db19764b28520afdd7662c99e31374fe11e71c944bc91",
+    "Nat.casesOn": "b713e4e8c76e6f049fb1683f6cc036289ca2ec4420be7404589b340dbcd28cc8",
+    "Nat.rec": "1252112dedc66f32612e13c5d278d3c0499a5fcc9f9ad51599c635f50642f5cd",
+    "Nat.succ": "2a7a99eeaceaabd368458c386a2cd9995236fdda626c63e0e19d4d6546ecbbdb",
+    "Nat.zero": "bc5e9bb5c4dd168070b8902dc9e7da74d50befe261f9e8157ee0ac8b1c39b516",
+    "PProd.mk": "461e033b7b4e0285dbf907a711787881b84fed9c7966cb0005c639129cd15a45",
+    "PProd.rec": "a9f5e71c707b17e46570a08cd8035aee6611e92e5e41314991d262fdda18d28f",
+    "PUnit.rec": "aa7d5f58f19fc63f74a9c43e74ed48dcf50a782c538d06631dfcf67c890674e6",
+    "PUnit.unit": "52905b4948e0199bf6d6ea4f799fe41a17ce88a78a11a607fe428e46195aaa5f",
+    "Nat.add._f": "91f789984cf1035e8053eb6a52e16b0dcce63e5be4d81e9aab32e527828d750d",
+    "Nat.add.match_1": "17b6e479c1b69fdf0cac5c19c4b5dd700e5786d588fce81d39072c9ca9000531",
+    "Nat.brecOn.go": "69a765329aaea4348db9cf3cd8278dea275c6039ef304b2e707ddf011e6f1e1b"
+  },
+  "policy": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "comparator": "strict"
+  },
+  "guards": {
+    "hypotheses": 0,
+    "witness": null,
+    "necessity": [],
+    "nontriviality": null,
+    "non_vacuity_status": "NO_HYPOTHESES",
+    "necessity_status": [],
+    "expected_witness": "",
+    "expected_necessity": []
+  },
+  "guards_satisfied": true,
+  "guard_problems": [],
+  "reviewer": {
+    "attested_by": "Kai Chang (Morris)",
+    "faithful": true,
+    "note": "a + b = b + a over Nat; standard.",
+    "checklist": {
+      "statement_matches_text": true,
+      "no_unintended_convention": true,
+      "quantifier_order_checked": true,
+      "hypotheses_necessary_and_satisfiable": true,
+      "definitions_reviewed": true,
+      "conclusion_not_weakened": true
+    }
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "kai-chang-morris-2026-10",
+    "signed_at": "2026-10-12T10:47:22Z",
+    "value": "cb180f79d92481de2d50ba9285ae46c218d4caf48cd3fe5f4c1f811e8610342eb1ea6fbbe6941652a47808ce5bab8d22a27b13b56a07796629f254ad0105dd03"
+  }
+}

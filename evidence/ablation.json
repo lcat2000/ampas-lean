@@ -1,0 +1,101 @@
+[
+ {
+  "attack": "A01_kernel_bypass",
+  "signals": [
+   "primary kernel",
+   "independent kernel",
+   "third check"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A02_sorry",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A03_user_axiom",
+  "signals": [
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A04_native_lie",
+  "signals": [
+   "axiom-policy",
+   "NATIVE_EVALUATION"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A05_redefine",
+  "signals": [
+   "closure"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A06_wrong_statement",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A07_vacuous_hyp",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A08_axiom_kind",
+  "signals": [
+   "kind!=theorem",
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A09_hidden_sorry",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A10_choice_for_constructive",
+  "signals": [
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A11_bogus_independence",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A12_notation_hijack",
+  "signals": [
+   "closure",
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "A13_mathlib_redefine",
+  "signals": [
+   "closure"
+  ],
+  "verdict": "REJECTED"
+ }
+]

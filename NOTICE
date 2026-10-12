@@ -1,0 +1,21 @@
+AMPAS — Lean proof-verification harness
+Copyright 2026 Kai Chang (Morris)
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+This product bundles no third-party source. The following are fetched at build
+time and remain under their own licences:
+
+  * Lean 4 and its standard library — Apache-2.0
+    https://github.com/leanprover/lean4
+  * Mathlib (optional, Mathlib tier) — Apache-2.0
+    https://github.com/leanprover-community/mathlib4
+  * lean4lean (optional, second kernel) — Apache-2.0
+    https://github.com/digama0/lean4lean
+
+The code under unreviewed/ is quarantined, is loaded by nothing, and its
+provenance is NOT established; see unreviewed/README.md.

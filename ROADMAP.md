@@ -1,0 +1,189 @@
+# Next work
+
+In priority order. Each item says why it matters, what "done" looks like, and
+what it would cost. Items 1–3 come out of findings in this repository rather
+than from a wish list.
+
+---
+
+## 1. Stop treating cross-kernel agreement as the strongest available evidence
+
+**Why.** Certification currently requires two independently written kernels to
+accept a submission, and the round-2 write-up presented that as the main
+reduction in trusted base. External evidence weakens that claim: in 2026
+several Lean kernel soundness bugs surfaced, and for one of them cross-checking
+with an independent kernel **also accepted** the illicit proof, because that
+kernel had an unrelated bug of its own
+([Tao, 2026-10-09](https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/)).
+Independence of implementations is not independence of failure.
+
+**What to do, in increasing order of strength:**
+
+1. **Record kernel provenance per verdict.** Each certificate should name the
+   kernel binaries, their revisions and their *known-bug status as of the run*,
+   so a certificate issued before a disclosure can be found and re-checked
+   afterwards. Cheap, and the thing most obviously missing today.
+2. **Re-verification on disclosure.** A command that re-runs every stored
+   attestation against current kernels and reports which certificates no longer
+   reproduce. Medium effort; needs the attestations to carry enough to replay.
+3. **Add a checker that is different in kind, not just in authorship.** Both
+   current kernels implement the same algorithm from the same specification. A
+   *verified* kernel — one whose soundness is itself proved relative to a set
+   theory — fails differently. Con-Leche and the verified fragment of lean4lean
+   are the candidates to evaluate.
+4. **Statement-level redundancy.** For a claim that matters, require two proofs
+   by routes that share as little of the library as possible, and compare their
+   axiom closures. This catches a library-level problem that any number of
+   kernels would miss.
+
+**Done when:** a certificate names its kernels and their bug status, and
+`verify.sh` can answer "which stored certificates would not reproduce today".
+
+## 2. Close the third check's inductive gap — but only in the safe direction
+
+**Why.** `harness/kernel3` assumes every inductive declaration is a legitimate
+specification. Two hand-written forgeries in `tests/forgeries/` prove `False`
+through that hole. The provenance gate stops it producing a clean result, but
+that is containment, not a fix, and it is why the third check corroborates the
+term layer only.
+
+**What to do.** Implement the **strict positivity check** first: of the three
+unchecked properties (positivity, recursor shape, iota rules) it is the most
+self-contained and the easiest to test adversarially. Then the recursor shape.
+
+**The constraint that matters.** Adding this *widens* what the checker accepts,
+which is the direction in which a mistake becomes unsoundness. So it must not
+be written straight into the checker:
+
+- implement it as a separate pass with its own tests;
+- differentially test it against both Lean kernels over the whole Init and
+  Mathlib declaration sets — every declaration both kernels accept must pass,
+  every forgery must fail;
+- keep `tests/forgeries/` as the regression floor, and add forgeries for each
+  newly covered property.
+
+**Done when:** both existing forgeries are rejected on their *specification*
+rather than reported as introduced assumptions, and the differential test over
+Mathlib's inductives is clean.
+
+## 3. Fix the two recorded incompleteness findings, or document them as permanent
+
+**Why.** TC-01 and TC-02 (`reference/third_check_adjudications.json`) are the
+reason the third check cannot corroborate every declaration. They are safe —
+they reject rather than accept — but each one is a hole in the corroboration.
+
+- **TC-01**: iota reduction lacks to-constructor-when-structure. Affects three
+  Lean core declarations; the fix is a known kernel rule, applicable only to
+  single-constructor, index-free, non-`Prop` structures.
+- **TC-02**: `level_leq` cannot decide a nested `imax` identity. The fix is to
+  apply the `imax` case split recursively.
+
+Both are in the widening direction, so item 2's differential-testing discipline
+applies to them too.
+
+**Done when:** either both are fixed with differential tests, or the
+adjudication file states that they will not be fixed and why, so a reader is
+not left expecting a fix that is not coming.
+
+## 4. Get the outstanding reviewer confirmations
+
+Three sign-offs are open, and the files say so rather than implying otherwise:
+
+| Record | Status |
+| --- | --- |
+| `reference/claims_fermat.json` — formalization sign-off for the two Fermat statements | `PENDING` |
+| `reference/third_check_adjudications.json` — TC-01 and TC-02 | `PENDING_REVIEWER_CONFIRMATION` |
+
+The adjudications matter for the gate: it currently discounts an adjudicated
+disagreement on the strength of the *machine-reproducible* half of each finding
+(library code, both kernels accept, reproduces with no submission involved).
+The reviewer's judgement that this is incompleteness rather than a missed
+soundness problem is the part still outstanding.
+
+**Done when:** each record carries a named reviewer, a date and a signature, or
+is withdrawn.
+
+## 5. Attack the statement-fidelity problem directly
+
+**Why.** This is the largest remaining hole, and it is the one the external
+validation pair demonstrated: `FermatWeaker` has no `sorry`, no extra axiom,
+every line genuinely proved, and both kernels accept it — it just proves a
+different statement. Freezing and signing make a human judgement auditable;
+they do not make it correct, and a reviewer's attention is the scarcest
+resource in the whole pipeline.
+
+**Approaches worth trying, cheapest first:**
+
+1. **Counterexample search against the frozen statement.** Before accepting a
+   reference statement, search for a witness that falsifies it (`decide` over
+   small cases, `Plausible`/property testing). Fermat's claim would have been
+   caught by this at $n = 5$ in milliseconds. It cannot establish fidelity, but
+   it is a cheap filter against statements that are outright false.
+2. **Formalization triangulation.** Have two or more independent parties (or
+   models) formalize the same natural-language claim without seeing each
+   other's work, then *prove the statements equivalent in Lean*. A disagreement
+   localizes a fidelity problem without any human reading both. This is the
+   most promising idea here and it is testable at small scale now.
+3. **Back-translation with a stated protocol.** Render the Lean statement back
+   into natural language and compare against the original, with the comparison
+   done by someone who has not seen the Lean. Weak evidence, but it raises the
+   cost of an unnoticed mismatch.
+4. **A fidelity checklist with teeth.** The current six-item checklist is
+   attested wholesale. Per-item evidence — "quantifier order checked" pointing
+   at the specific binders — would make a careless attestation visible.
+
+**Done when:** a statement cannot be frozen without a counterexample search
+having run, and the triangulation protocol has been tried on at least one
+claim.
+
+## 6. Scale the corpus, and stop writing it ourselves
+
+**Why.** The corpus is adversarial but finite, and it was written by whoever
+wrote the harness — the structural weakness the Fermat pair was added to
+address. Thirteen attacks with recorded catching layers is evidence that those
+thirteen are caught, and nothing more.
+
+**What to do:**
+
+- a standing invitation for third-party submissions, genuine and adversarial;
+- AI-generated proofs at volume against the existing claims, since that is the
+  actual intended workload — and the failure modes to expect are exactly the
+  ones in the Fermat pair (`sorry`, an assumed axiom, a weakened statement);
+- more claims drawn from mathematical history where the right answer is already
+  known independently of this repository.
+
+## 7. Mathlib coverage beyond one claim
+
+Currently one claim over a 387-olean cone. Blockers: build time on small
+machines, and the prebuilt cache being unusable with the pinned toolchain's
+`leantar` (crates.io is unreachable in the recorded environment, so a newer
+`leantar` could not be built). Fixing the cache path is the cheapest win; it
+turns a 20-minute tier-3 build into a download.
+
+## 8. Operational robustness
+
+- **CI** over tiers 0–1 on every commit (`.github/workflows/verify.yml` does
+  this); tier 2 nightly.
+- **Resource limits.** `INCONCLUSIVE` now distinguishes a resource limit from a
+  rejection, but the limits themselves are tuned for a two-core machine. They
+  should scale with the host, and tier 3 should not need 20 minutes of a
+  reviewer's patience.
+- **Key custody.** The signing key is a demonstration key. Real deployment
+  needs hardware-backed custody and a binding between the key and the
+  reviewer's identity — the same problem as the identity track below.
+
+## 9. The separate security track
+
+The approval control plane (rounds 1–16: Safety Gate, claim state machine,
+event log, authorization) is a **different** verification axis and is not in
+this repository. Two items are open there:
+
+- **R15-02** — event-log writer authentication/authorization: an unauthorized
+  caller can still occupy a submission id.
+- **R16-01** — the gate's administrative interface has no verified privilege
+  isolation; if a deployment exposes the admin entry point, a caller can obtain
+  the approval role.
+
+An unfinished draft of that work exists outside this repository. It should stay
+a separate track: mathematical correctness and system security fail in
+different ways and should not be reported as one number.

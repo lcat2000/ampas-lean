@@ -1,0 +1,21 @@
+# Lake build output
+.lake/
+mathlib-tier/.lake/
+
+# verification output: verify.sh writes here so evidence/ stays the record
+# of the reference run
+build/
+
+# the compiled auditor is platform-specific and the driver can interpret
+# harness/Audit.lean instead
+harness/audit
+harness/Audit.c
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# scratch files the drift tests and the third check create
+tests/forgeries/.tmp_*
+.review_req.json

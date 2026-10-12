@@ -1,0 +1,65 @@
+{
+  "purpose": "Declarations the third check (harness/kernel3) rejects while BOTH Lean-based kernels accept them. Each one is a disagreement between checkers and must be adjudicated by a reviewer before the affected claim can be certified; an unadjudicated disagreement blocks certification. The file is consulted by harness/ampas_lean.py and verified by tests/test_third_check.py.",
+  "sign_off": {
+    "status": "PENDING_REVIEWER_CONFIRMATION",
+    "prepared_by": "assistant (round 3 / external validation)",
+    "prepared_on": "2026-10-12",
+    "reviewer": "Kai Chang (Morris)",
+    "confirmed_by": null,
+    "confirmed_on": null,
+    "note": "The reviewer has NOT confirmed these adjudications. What the gate acts on is the machine-reproducible part of each finding: the declaration is library code, both Lean kernels accept it, and the failure reproduces by exporting it from the reference environment with no submission involved. The reviewer's judgement that 'this is incompleteness, not a missed soundness problem' is a separate attestation and is outstanding. Until it is given, every row here should be read as the assistant's analysis, not as a signed-off verdict."
+  },
+  "findings": [
+    {
+      "id": "TC-01",
+      "severity": "medium",
+      "title": "iota reduction lacks to-constructor-when-structure, so the checker is incomplete on instance-heavy library code",
+      "direction": "INCOMPLETE, NOT UNSOUND: it fails to reduce, and therefore rejects. It cannot make this checker accept anything false.",
+      "mechanism": "Lean's kernel may eta-expand a neutral term of single-constructor structure type into a constructor application (`x` becomes `S.mk x.1 x.2`) so that a recursor applied to it can fire. harness/kernel3/check.py `_reduce_rec` applies only `_nat_to_ctor` and `_to_ctor_when_k` (the latter requires a field-free constructor), so a recursor applied to a neutral pair stays stuck.",
+      "worked_example": "Checking Prod.instLawfulBEq requires `BEq.beq (α × β) (instBEqProd α β instA instB) p q` definitionally equal to `(p.1 == q.1) && (p.2 == q.2)`. Unfolding the instance yields a match on the pair, compiled to `Prod.rec`, whose major premise is the neutral `p`. Lean eta-expands `p` and iota fires; this checker leaves `Prod.rec ... p` stuck, both sides are neutral, and the comparison fails.",
+      "evidence": "The three declarations below are Lean CORE LIBRARY declarations, not submission code: exporting them from the reference environment with no submission involved reproduces exactly these three failures (520/523 checked). Both leanchecker and lean4lean accept all three."
+    },
+    {
+      "id": "TC-02",
+      "severity": "low",
+      "title": "level_leq cannot decide a nested imax identity, so a core decidability instance is rejected",
+      "direction": "INCOMPLETE, NOT UNSOUND: level_leq returns False wherever it is incomplete, which rejects rather than accepts. This was recorded as a property of the implementation in the line-by-line review before it was ever observed to fire.",
+      "mechanism": "Deciding `imax(imax(1, imax(0,1)), imax(imax(1, imax(0,1)), u)) = u` needs the imax case split (u = 0 versus u = succ _) to be applied through a NESTED imax. The identity is true for every u: the inner term is 1, and `imax(1, imax(1, u))` is 0 when u = 0 and u otherwise. harness/kernel3 splits on imax arguments but not deeply enough here, so it reports an argument type mismatch on `Nat.casesOn`.",
+      "worked_example": "`Nat.decidableBallLT.match_5`, which `decide` on `Nat.Prime` pulls in: expected `(t : Nat) -> Sort u_1`, got `(x : Nat) -> Sort imax(imax(1, imax(0,1)), imax(imax(1, imax(0,1)), u_1))`.",
+      "evidence": "Found by the external validation run (the Fermat/Euler pair), not by the suite's own corpus. Reproducible from library code alone: exporting the closure of `Nat.decidableBallLT` from the reference environment, with no submission involved, gives 154/155 checked and this one failure. Both leanchecker and lean4lean accept it.",
+      "note": "It never changed a verdict: each submission whose closure contained it was rejected for an independent and real reason as well (axiom policy, SORRY, or the statement comparator). It is adjudicated so that it cannot mask or manufacture a verdict in future runs."
+    }
+  ],
+  "not_fixed_because": "Adding a reduction rule or widening a universe-level decision procedure in a checker under review widens what it accepts, which is the direction in which a mistake would be unsound. The scope statement in harness/kernel3/REVIEW.md is enforced instead, and the gate was changed so that an incomplete third implementation cannot veto a proof two Lean kernels accept.",
+  "consequence": "The third check corroborates the core corpus completely (16/16 submissions, 0 errors on the genuine ones) but cannot corroborate every Mathlib-scale or decide-heavy declaration. Where it disagrees, the claim rests on the two Lean kernels, and the package says so.",
+  "declarations": [
+    {
+      "name": "Prod.instLawfulBEq",
+      "origin": "Lean core (Init.Core)",
+      "finding": "TC-01",
+      "verdict": "checker_incompleteness",
+      "reason": "iota stuck on a neutral of structure type (Prod); see TC-01 worked_example."
+    },
+    {
+      "name": "Nat.Internal.Linear.Poly.denote_reverse",
+      "origin": "Lean core (Nat.Internal.Linear, the internal linear-arithmetic support)",
+      "finding": "TC-01",
+      "verdict": "checker_incompleteness",
+      "reason": "TC-01: same cause, reached through congr/Prod projections over the internal polynomial representation."
+    },
+    {
+      "name": "Nat.Internal.Linear.ExprCnstr.denote_toNormPoly",
+      "origin": "Lean core (Nat.Internal.Linear)",
+      "finding": "TC-01",
+      "verdict": "checker_incompleteness",
+      "reason": "TC-01: same cause, reached through `cond` at Sort 0 over the same representation."
+    },
+    {
+      "name": "Nat.decidableBallLT.match_5",
+      "origin": "Lean core (Init.Data.Nat.Basic; pulled in by `decide` on Nat.Prime)",
+      "finding": "TC-02",
+      "verdict": "checker_incompleteness",
+      "reason": "TC-02: a true nested-imax universe identity that level_leq cannot decide, so it rejects."
+    }
+  ]
+}

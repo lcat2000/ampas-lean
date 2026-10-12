@@ -1,0 +1,384 @@
+{
+  "results": [
+    {
+      "submission": "EulerSol.lean",
+      "module": "EulerSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 581,
+        "total": 581,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 150,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "581/581 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "FERMAT-F5",
+          "theorem": "Ampas.Claims.fermat_f5_not_prime",
+          "certified": true,
+          "reasons": [
+            "kernel-checked; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "¬Nat.Prime (2 ^ 2 ^ 5 + 1)",
+            "solution_pp": "Not (Nat.Prime (instHAdd.hAdd (instHPow.hPow 2 (instHPow.hPow 2 5)) 1))",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": null,
+            "status": "PENDING",
+            "note": "Formalization sign-off NOT given. The statement is a refutation, so the auditor requires a nontriviality guard rather than non-vacuity and necessity; Ampas.Guards.fermat_nontrivial shows F3 = 257 is prime, ruling out the degenerate reading that Nat.Prime holds of no Fermat number. Whether '2^(2^5)+1 is not prime' is a faithful rendering of Euler's result is a human judgement and is awaiting review.",
+            "attested_by": null,
+            "checklist": {},
+            "reviewed_on": null
+          },
+          "corroboration": "CONFIRMED",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "certified_all",
+      "note": "Euler's refutation, proved from the factorization 641 * 6700417."
+    },
+    {
+      "submission": "FermatAttempt.lean",
+      "module": "FermatAttempt",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-onorw4uv/FermatAttempt.lean:15:8: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "FERMAT-CLAIM",
+          "theorem": "Ampas.Claims.fermat_all_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "propext",
+            "sorryAx",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (2 ^ 2 ^ n + 1)",
+            "solution_pp": "∀ (n : Nat), Nat.Prime (instHAdd.hAdd (instHPow.hPow 2 (instHPow.hPow 2 n)) 1)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": null,
+            "control": "unprovable",
+            "status": "PENDING",
+            "note": "Formalization sign-off NOT given. Prepared by the assistant for the external validation run; the claim is a historically false assertion kept as a control, so its value here does not depend on a sign-off: the required outcome is rejection.",
+            "attested_by": null,
+            "checklist": {},
+            "reviewed_on": null
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Fermat's false claim: the cases he checked, then `sorry` for the rest."
+    },
+    {
+      "submission": "FermatAxiom.lean",
+      "module": "FermatAxiom",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "FERMAT-CLAIM",
+          "theorem": "Ampas.Claims.fermat_all_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: Ampas.Claims.fermat_step"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound",
+            "Ampas.Claims.fermat_step"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (2 ^ 2 ^ n + 1)",
+            "solution_pp": "∀ (n : Nat), Nat.Prime (instHAdd.hAdd (instHPow.hPow 2 (instHPow.hPow 2 n)) 1)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": null,
+            "control": "unprovable",
+            "status": "PENDING",
+            "note": "Formalization sign-off NOT given. Prepared by the assistant for the external validation run; the claim is a historically false assertion kept as a control, so its value here does not depend on a sign-off: the required outcome is rejection.",
+            "attested_by": null,
+            "checklist": {},
+            "reviewed_on": null
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Same false claim, no sorry: the gap is moved into an axiom."
+    },
+    {
+      "submission": "FermatWeaker.lean",
+      "module": "FermatWeaker",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "FERMAT-CLAIM",
+          "theorem": "Ampas.Claims.fermat_all_prime",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (2 ^ 2 ^ n + 1)",
+            "solution_pp": "∀ (n : Nat), instLENat.le n 3 → Nat.Prime (instHAdd.hAdd (instHPow.hPow 2 (instHPow.hPow 2 n)) 1)",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": null,
+            "control": "unprovable",
+            "status": "PENDING",
+            "note": "Formalization sign-off NOT given. Prepared by the assistant for the external validation run; the claim is a historically false assertion kept as a control, so its value here does not depend on a sign-off: the required outcome is rejection.",
+            "attested_by": null,
+            "checklist": {},
+            "reviewed_on": null
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, but of the RESTRICTED statement (n <= 3) filed under the general claim. The formalization-fidelity failure mode."
+    },
+    {
+      "submission": "FermatF5Wrong.lean",
+      "module": "FermatF5Wrong",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 581,
+        "total": 581,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 150,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "581/581 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "FERMAT-F5",
+          "theorem": "Ampas.Claims.fermat_f5_not_prime",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "¬Nat.Prime (2 ^ 2 ^ 5 + 1)",
+            "solution_pp": "Not (Nat.Prime (instHPow.hPow 2 (instHPow.hPow 2 5)))",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": null,
+            "status": "PENDING",
+            "note": "Formalization sign-off NOT given. The statement is a refutation, so the auditor requires a nontriviality guard rather than non-vacuity and necessity; Ampas.Guards.fermat_nontrivial shows F3 = 257 is prime, ruling out the degenerate reading that Nat.Prime holds of no Fermat number. Whether '2^(2^5)+1 is not prime' is a faithful rendering of Euler's result is a human judgement and is awaiting review.",
+            "attested_by": null,
+            "checklist": {},
+            "reviewed_on": null
+          },
+          "corroboration": "CONFIRMED",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Targets Euler's true statement but proves it for 2^32, not 2^32+1."
+    }
+  ]
+}

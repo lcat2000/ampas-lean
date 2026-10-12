@@ -1,0 +1,78 @@
+{
+  "schema": "ampas-formalization-attestation/1",
+  "claim": "PL-AXIOM-IND",
+  "theorem": "Ampas.Claims.pl_a3_independent",
+  "text": "In the Hilbert system of AmpasRef.Defs, axiom A3 ((¬p → ¬q) → (q → p)) is not derivable from axioms A1 and A2 by modus ponens alone: A3 is an independent axiom of the calculus.",
+  "frozen_at": "2026-10-12T10:47:22Z",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "statement_sha256": "1326b4b4ba1a48838d08350af9c4e82cfe10d45010b9a31d08ea1d2573e9e056",
+  "closure_sha256": "930885467066a74eda8de88f46640636b184f5844ba2478fa93f711b9e796605",
+  "closure_size": 25,
+  "closure_entries": {
+    "False": "9716740a567c72ab242de1c00df39d2dda494e893c2691fe1e840f2179ca4ab3",
+    "Nat": "24168e47100587e94f4c6c5601994e97263695388c97186ecfc8b53d45b02e59",
+    "Not": "6ac603a491817267376b1294f723ac75225ff1ba5a2fd092deb857d56eeb24bb",
+    "OfNat": "22cb7b0a7b9160dff9e2cf6f216ef58850e33ba7744594d1a6050a5b802d9f95",
+    "instOfNatNat": "9231f34f2999ea4c4d4907b6d0206fb4e71e2e686d3bf0ba0eb923828372d025",
+    "False.rec": "5b6abfa560a6d1d62854a2a35e89b8fe111fb28ccd2d2667e673b98f40030a3a",
+    "Nat.rec": "1252112dedc66f32612e13c5d278d3c0499a5fcc9f9ad51599c635f50642f5cd",
+    "Nat.succ": "2a7a99eeaceaabd368458c386a2cd9995236fdda626c63e0e19d4d6546ecbbdb",
+    "Nat.zero": "bc5e9bb5c4dd168070b8902dc9e7da74d50befe261f9e8157ee0ac8b1c39b516",
+    "OfNat.mk": "20499ae2e4cf87246c31eab1343f990f1560eadbf8290f6b4fbcbf31dcfe4e4f",
+    "OfNat.ofNat": "83875824ca9782ad7b8aff0708cf4daf5529e61ea182c16480356757462b9e8c",
+    "OfNat.rec": "fb235b2886b43a6ae009465c6745dc16fec9ba4b5ef1ef540115ac1815290add",
+    "Ampas.PL.DerivesPos": "2d4f8d869d464c4756ce01d62b34d4667919bc922ab9b33058c15b61adfc2a30",
+    "Ampas.PL.Empty": "10fdd88c2df061bb6c366c0a2e9dd5934695d9837055152dc8e67466aa850ec7",
+    "Ampas.PL.Fm": "9de1ee5967d874532c0c642208ecab60eda98643757639cd3b764eb1d21cda95",
+    "Ampas.PL.a3_instance": "dca634dc301f585bc550ba783e21a6945b828bccd583bbf14a39a70fad4a665e",
+    "Ampas.PL.DerivesPos.a1": "571b1497b873b628eec031326218d11f65367c285bbd1dc13ec03002c56bcbfb",
+    "Ampas.PL.DerivesPos.a2": "4248e07c128f99584ec816c7d1279ec85a579cc334a5cdbc237c8335514c16b8",
+    "Ampas.PL.DerivesPos.hyp": "98db15c1771154f9aa1aa09c3180a35764137da5e6a075992de2db3cbfb4bf57",
+    "Ampas.PL.DerivesPos.mp": "fb1100f84dcff6d6621bc40b5aeca7d8a23b06a41047bb3f84d607f9304e25a6",
+    "Ampas.PL.DerivesPos.rec": "ce7091c960c50a972a5f960b0804a923f34ba1250e65508128b40a0020b16eaf",
+    "Ampas.PL.Fm.imp": "a0ab746449d64d4c6f7929ba98e677885f7b1e88a5370b258d3ea3b94247934d",
+    "Ampas.PL.Fm.neg": "cff32d2d8c1009bb24ceae11f28c5d829fc621c70b0ee8cc25eb45dd2d3222b1",
+    "Ampas.PL.Fm.rec": "f3da5b237093b02270f866336630728f44bdc38b8b74e5c3294b8099deb9a42e",
+    "Ampas.PL.Fm.var": "89770bd33e6dbc5e77d50f60763d2b007811de0750a77a58855fccb47d83684c"
+  },
+  "policy": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "comparator": "strict"
+  },
+  "guards": {
+    "hypotheses": 0,
+    "witness": null,
+    "necessity": [],
+    "nontriviality": "Ampas.Guards.pos_nontrivial",
+    "non_vacuity_status": "REFUTATION",
+    "necessity_status": [],
+    "expected_witness": "",
+    "expected_necessity": []
+  },
+  "guards_satisfied": true,
+  "guard_problems": [],
+  "reviewer": {
+    "attested_by": "Kai Chang (Morris)",
+    "faithful": true,
+    "note": "Axiom independence, not theory independence: the statement is about the calculus Ampas.PL.DerivesPos (A1, A2, modus ponens; A3 absent) and says the A3 instance for p0, p1 is underivable from the empty theory. The reviewer confirms DerivesPos is the stated system minus A3, that Empty is the empty theory, and that a3_instance is the A3 schema at p0, p1. A proof for a different or weaker calculus is a different statement and the closure check rejects it. Guard: the claim is a refutation, so the non-vacuity and necessity guards do not apply; Ampas.Guards.pos_nontrivial instead shows the A1+A2 fragment still derives p0 -> p0, ruling out independence by a calculus that proves nothing.",
+    "checklist": {
+      "statement_matches_text": true,
+      "no_unintended_convention": true,
+      "quantifier_order_checked": true,
+      "hypotheses_necessary_and_satisfiable": true,
+      "definitions_reviewed": true,
+      "conclusion_not_weakened": true
+    }
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "kai-chang-morris-2026-10",
+    "signed_at": "2026-10-12T10:47:22Z",
+    "value": "f2e50ae5367d689091e2c359a1fe194680cfcc6d8288d050382310629a9d487474a2b744016fba3b14d45ee0b6bbe8923cfa96d9decf1374eed76b26d8005a09"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "schema": "ampas-formalization-attestation/1",
+  "claim": "DVD",
+  "theorem": "Ampas.Claims.dvd_trans_nat",
+  "text": "Divisibility of natural numbers is transitive.",
+  "frozen_at": "2026-10-12T10:47:22Z",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
+  "closure_sha256": "e615fa27075da2275792b436044ff4bfb14256635921096ac09aaaf4883b9288",
+  "closure_size": 47,
+  "closure_entries": {
+    "Dvd": "d28b6b5c5af92e33a0882daaa4d14fddcf20109126aa40e8d2d7254372b761f8",
+    "Eq": "0c02a2c0311bdc3685c122f816db1291e406e02188ef8c9e73184a5d5ae05dfb",
+    "Exists": "d71e658f858ae08c3b3ecf6e440a48eb8ffdf4dcba9523d51b360c568041ae19",
+    "HMul": "c59f11cbeaa290bab7ced225e553f1a2e6f662c93fb2b0d217fb6852c5d4259e",
+    "Mul": "aadc15ad00ab220fa532f4b099132d1aedf3e71a41efb6676ad8de77f9766eb6",
+    "Nat": "24168e47100587e94f4c6c5601994e97263695388c97186ecfc8b53d45b02e59",
+    "OfNat": "22cb7b0a7b9160dff9e2cf6f216ef58850e33ba7744594d1a6050a5b802d9f95",
+    "PProd": "4b3f244381bce363f1f0da942489c7190999cbd96296d62c3f6ff46f49933170",
+    "PUnit": "bdce4193cf35cc44997352d05528157d91f7f9e237e10925e58d3eaa3e186335",
+    "instHMul": "a48f0ab98cf5218bc69249834fc740977ef704e78c496b121ad79b79dd3e972e",
+    "instMulNat": "09d1ebad1390325b399083ec08896de74eb8ca67bb700afb5ecfd753e39e9fa7",
+    "instOfNatNat": "9231f34f2999ea4c4d4907b6d0206fb4e71e2e686d3bf0ba0eb923828372d025",
+    "outParam": "e5eae12824f75041b20cca79c6f11ac0a3816f4654ff7bc548c487f8b5705675",
+    "Dvd.dvd": "fe095dc9be089fcfac918f273d564a5b2c14c686663cd602245307ad7d857397",
+    "Dvd.mk": "c50723577e39b460ddcf969e63922edd2888d5a00e6c1c793a05557e2b03d1a8",
+    "Dvd.rec": "ba2a9685eb6391000b1cd57fb0ac8e5fbb4fc98066a5ca6219cab33c77526125",
+    "Eq.rec": "5bb45d2c8ea9a31c50880827660a67c683bde55b69c903ffd96add5565355265",
+    "Eq.refl": "9329cc8083e1cf0f0b1f368a751c51d9caeca6c7a2fb836f0347f614d33c290b",
+    "Exists.intro": "045b566689486cc545a89036ace0c43e1242aa3353890c6b617179d58d71a4cb",
+    "Exists.rec": "938bf73dda5760948b402976b8ae770552a573ff6a66f5b79c31fbd36bfe0724",
+    "HMul.hMul": "d3a9dc63d0a2f5623b293d5b54d04604d253d4171bba95aead16dafa181cbff9",
+    "HMul.mk": "3f1833f22e8be8aa822b6ed6d63177ce8566810ef6710c574cbe71b3b3917bb9",
+    "HMul.rec": "a7d908f8d13ef0a444b0dc21bee87ecc236188f086a51c603d7534e279f24767",
+    "Mul.mk": "6e39f455dcb8f8f3d5bcf970a03e22d39c358a0dea568e56448a778d74551188",
+    "Mul.mul": "9667a303d3c5351febbbdb1a0481b702be98a950cefbe25f6b593fb0f307f586",
+    "Mul.rec": "c5d88b6a89796897861ac86b332dfa636af7f36cb30588adadbb4f437e1433c1",
+    "Nat.add": "fda0db504a7fd18d5506d292b3394322efaf4e137283cb709d7b172dec104e36",
+    "Nat.below": "fa5ebe6ceeef25081f877f0e82e4106f899061aac57a28d22ee531d7cb4f5730",
+    "Nat.brecOn": "1998fc5bd916c0864f4db19764b28520afdd7662c99e31374fe11e71c944bc91",
+    "Nat.casesOn": "b713e4e8c76e6f049fb1683f6cc036289ca2ec4420be7404589b340dbcd28cc8",
+    "Nat.instDvd": "44dc6c2d0966502b891af0f904c69733dd2bb13925e4b01ddae2d00966ef9f6e",
+    "Nat.mul": "19175dff3f973b432e931d839336de158058cb0db0dff003d34d36f125a2e7df",
+    "Nat.rec": "1252112dedc66f32612e13c5d278d3c0499a5fcc9f9ad51599c635f50642f5cd",
+    "Nat.succ": "2a7a99eeaceaabd368458c386a2cd9995236fdda626c63e0e19d4d6546ecbbdb",
+    "Nat.zero": "bc5e9bb5c4dd168070b8902dc9e7da74d50befe261f9e8157ee0ac8b1c39b516",
+    "OfNat.mk": "20499ae2e4cf87246c31eab1343f990f1560eadbf8290f6b4fbcbf31dcfe4e4f",
+    "OfNat.ofNat": "83875824ca9782ad7b8aff0708cf4daf5529e61ea182c16480356757462b9e8c",
+    "OfNat.rec": "fb235b2886b43a6ae009465c6745dc16fec9ba4b5ef1ef540115ac1815290add",
+    "PProd.mk": "461e033b7b4e0285dbf907a711787881b84fed9c7966cb0005c639129cd15a45",
+    "PProd.rec": "a9f5e71c707b17e46570a08cd8035aee6611e92e5e41314991d262fdda18d28f",
+    "PUnit.rec": "aa7d5f58f19fc63f74a9c43e74ed48dcf50a782c538d06631dfcf67c890674e6",
+    "PUnit.unit": "52905b4948e0199bf6d6ea4f799fe41a17ce88a78a11a607fe428e46195aaa5f",
+    "Nat.add._f": "91f789984cf1035e8053eb6a52e16b0dcce63e5be4d81e9aab32e527828d750d",
+    "Nat.add.match_1": "17b6e479c1b69fdf0cac5c19c4b5dd700e5786d588fce81d39072c9ca9000531",
+    "Nat.brecOn.go": "69a765329aaea4348db9cf3cd8278dea275c6039ef304b2e707ddf011e6f1e1b",
+    "Nat.mul._f": "28edba5e95706d3381701e336407fe3e07e74b35ab2b39861e7a0a9c71f94f53",
+    "Nat.mul.match_1": "13a871e49bdd899f9558cc5192f967f023fbd95a751d38932a3e3711e121b6d6"
+  },
+  "policy": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "comparator": "strict"
+  },
+  "guards": {
+    "hypotheses": 2,
+    "witness": "Ampas.Guards.dvd_witness",
+    "necessity": [
+      "Ampas.Guards.dvd_necessity_1",
+      "Ampas.Guards.dvd_necessity_2"
+    ],
+    "nontriviality": null,
+    "non_vacuity_status": "OK",
+    "necessity_status": [
+      "OK",
+      "OK"
+    ],
+    "expected_witness": "∃ a b c, a ∣ b ∧ b ∣ c",
+    "expected_necessity": [
+      "¬∀ (a b c : Nat), b ∣ c → a ∣ c",
+      "¬∀ (a b c : Nat), a ∣ b → a ∣ c"
+    ]
+  },
+  "guards_satisfied": true,
+  "guard_problems": [],
+  "reviewer": {
+    "attested_by": "Kai Chang (Morris)",
+    "faithful": true,
+    "note": "Uses Lean's standard Dvd for Nat.",
+    "checklist": {
+      "statement_matches_text": true,
+      "no_unintended_convention": true,
+      "quantifier_order_checked": true,
+      "hypotheses_necessary_and_satisfiable": true,
+      "definitions_reviewed": true,
+      "conclusion_not_weakened": true
+    }
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "kai-chang-morris-2026-10",
+    "signed_at": "2026-10-12T10:47:22Z",
+    "value": "f71a341d341b843e07f2d5f1ecd5ba29e0918cefcaf86db2fa486990a5de05ff778a150b7a2eb650a8c8fb788f1b7bfe94eb80c1011f4ac732b934f2e1aa460a"
+  }
+}

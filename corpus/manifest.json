@@ -1,0 +1,173 @@
+{
+  "submissions": [
+    {
+      "file": "Genuine.lean",
+      "module": "Genuine",
+      "claims": [
+        "ADD",
+        "SUB",
+        "EVEN",
+        "DVD",
+        "GREATER",
+        "DIV"
+      ],
+      "expected": "certified_all",
+      "note": "Positive control: genuine proofs of all six arithmetic claims."
+    },
+    {
+      "file": "PLSol.lean",
+      "module": "PLSol",
+      "claims": [
+        "PL-IND"
+      ],
+      "expected": "certified_all",
+      "note": "Genuine propositional-logic independence proof (no axioms)."
+    },
+    {
+      "file": "ELSol.lean",
+      "module": "ELSol",
+      "claims": [
+        "EL-IND"
+      ],
+      "expected": "certified_all",
+      "note": "Genuine equational-logic independence proof."
+    },
+    {
+      "file": "PLAxiomSol.lean",
+      "module": "PLAxiomSol",
+      "claims": [
+        "PL-AXIOM-IND"
+      ],
+      "expected": "certified_all",
+      "note": "Axiom independence of A3 from A1+A2, by a semantics where negation is the identity."
+    },
+    {
+      "file": "attacks/A01_kernel_bypass.lean",
+      "module": "A01_kernel_bypass",
+      "claims": [
+        "ADD"
+      ],
+      "expected": "rejected",
+      "note": "skipKernelTC bypass; caught at kernel replay."
+    },
+    {
+      "file": "attacks/A02_sorry.lean",
+      "module": "A02_sorry",
+      "claims": [
+        "EVEN"
+      ],
+      "expected": "rejected",
+      "note": "sorry."
+    },
+    {
+      "file": "attacks/A03_user_axiom.lean",
+      "module": "A03_user_axiom",
+      "claims": [
+        "DVD"
+      ],
+      "expected": "rejected",
+      "note": "user axiom."
+    },
+    {
+      "file": "attacks/A04_native_lie.lean",
+      "module": "A04_native_lie",
+      "claims": [
+        "SUB"
+      ],
+      "expected": "rejected",
+      "note": "native_decide with a lying implemented_by; NATIVE_EVALUATION."
+    },
+    {
+      "file": "attacks/A05_redefine.lean",
+      "module": "A05_redefine",
+      "claims": [
+        "EVEN"
+      ],
+      "expected": "rejected",
+      "note": "redefines IsEven; closure check."
+    },
+    {
+      "file": "attacks/A06_wrong_statement.lean",
+      "module": "A06_wrong_statement",
+      "claims": [
+        "ADD"
+      ],
+      "expected": "rejected",
+      "note": "weaker statement."
+    },
+    {
+      "file": "attacks/A07_vacuous_hyp.lean",
+      "module": "A07_vacuous_hyp",
+      "claims": [
+        "DIV"
+      ],
+      "expected": "rejected",
+      "note": "extra false hypothesis."
+    },
+    {
+      "file": "attacks/A08_axiom_kind.lean",
+      "module": "A08_axiom_kind",
+      "claims": [
+        "ADD"
+      ],
+      "expected": "rejected",
+      "note": "declared as an axiom."
+    },
+    {
+      "file": "attacks/A09_hidden_sorry.lean",
+      "module": "A09_hidden_sorry",
+      "claims": [
+        "DVD"
+      ],
+      "expected": "rejected",
+      "note": "transitive sorry."
+    },
+    {
+      "file": "attacks/A10_choice_for_constructive.lean",
+      "module": "A10_choice_for_constructive",
+      "claims": [
+        "GREATER"
+      ],
+      "expected": "rejected",
+      "note": "sound but uses Classical.choice, forbidden by the constructive policy."
+    },
+    {
+      "file": "attacks/A11_bogus_independence.lean",
+      "module": "A11_bogus_independence",
+      "claims": [
+        "PL-BOGUS"
+      ],
+      "expected": "rejected",
+      "note": "false independence claim; cannot compile a sound proof."
+    },
+    {
+      "file": "attacks/A12_notation_hijack.lean",
+      "module": "A12_notation_hijack",
+      "claims": [
+        "DVD"
+      ],
+      "expected": "rejected",
+      "note": "custom relation under hijacked notation."
+    },
+    {
+      "file": "attacks/A13_mathlib_redefine.lean",
+      "module": "A13_mathlib_redefine",
+      "claims": [
+        "PRIMES"
+      ],
+      "expected": "rejected",
+      "catalogue": "mathlib",
+      "note": "Shadows Mathlib's Nat.Prime with an always-true predicate; closure check."
+    },
+    {
+      "file": "PrimesSol.lean",
+      "module": "PrimesSol",
+      "claims": [
+        "PRIMES"
+      ],
+      "expected": "certified_all",
+      "catalogue": "mathlib",
+      "note": "Euclid's theorem via Mathlib's Nat.exists_infinite_primes."
+    }
+  ]
+}

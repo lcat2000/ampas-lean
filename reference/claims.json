@@ -1,0 +1,317 @@
+{
+  "round": "math-verification-1",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "trusted_modules": [
+    "Init",
+    "AmpasRef.Defs"
+  ],
+  "axiom_policies": {
+    "classical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "constructive": []
+  },
+  "notes": "Each claim's `theorem` is the frozen statement in AmpasRef.Challenge. The `review` block is a human attestation that the Lean statement renders the natural-language `text`; the driver surfaces it but never infers it. Lean kernel acceptance means the proof type-checks under `policy.axioms` and the stated definitions, not that the natural-language claim is proved.",
+  "claims": [
+    {
+      "id": "ADD",
+      "theorem": "Ampas.Claims.add_comm_nat",
+      "text": "Addition of natural numbers is commutative.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "a + b = b + a over Nat; standard.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      }
+    },
+    {
+      "id": "SUB",
+      "theorem": "Ampas.Claims.sub_add_cancel_nat",
+      "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "The hypothesis b <= a is required because Nat subtraction truncates at 0; without it the claim is false (a=0,b=1). This is a Lean-convention trap: a statement without the hypothesis would be a different, false claim.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      },
+      "guards": {
+        "witness": "Ampas.Guards.sub_witness",
+        "necessity": [
+          "Ampas.Guards.sub_necessity"
+        ]
+      }
+    },
+    {
+      "id": "EVEN",
+      "theorem": "Ampas.Claims.even_add_even",
+      "text": "The sum of two even natural numbers is even.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "IsEven n := exists k, n = 2*k. The reviewer confirms this is the intended meaning of 'even'.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      },
+      "guards": {
+        "witness": "Ampas.Guards.even_witness",
+        "necessity": [
+          "Ampas.Guards.even_necessity_1",
+          "Ampas.Guards.even_necessity_2"
+        ]
+      }
+    },
+    {
+      "id": "DVD",
+      "theorem": "Ampas.Claims.dvd_trans_nat",
+      "text": "Divisibility of natural numbers is transitive.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Uses Lean's standard Dvd for Nat.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      },
+      "guards": {
+        "witness": "Ampas.Guards.dvd_witness",
+        "necessity": [
+          "Ampas.Guards.dvd_necessity_1",
+          "Ampas.Guards.dvd_necessity_2"
+        ]
+      }
+    },
+    {
+      "id": "GREATER",
+      "theorem": "Ampas.Claims.exists_greater",
+      "text": "Every natural number has a strictly greater natural number.",
+      "policy": {
+        "axioms": [],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Constructive policy: a witness must be given without Classical.choice.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      }
+    },
+    {
+      "id": "DIV",
+      "theorem": "Ampas.Claims.div_self_pos",
+      "text": "For every positive natural number n, n / n = 1.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "The hypothesis 0 < n is required: Lean defines n / 0 = 0, so without it the claim is false (n=0). Lean-convention trap.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      },
+      "guards": {
+        "witness": "Ampas.Guards.div_witness",
+        "necessity": [
+          "Ampas.Guards.div_necessity"
+        ]
+      }
+    },
+    {
+      "id": "PL-IND",
+      "theorem": "Ampas.Claims.pl_independent",
+      "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Independence is a statement about the trusted proof system Ampas.PL.Derives, which is part of the reference. A proof of independence for a different (e.g. weaker) proof system is a different statement and the closure check rejects it. The reviewer confirms Derives is the standard classical Hilbert calculus and Independent means underivable-both-ways.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      }
+    },
+    {
+      "id": "EL-IND",
+      "theorem": "Ampas.Claims.el_comm_independent",
+      "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not make the theory inconsistent (x = y stays underivable).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Independence over the trusted equational calculus Ampas.EL.Derives. The second conjunct rules out the vacuous 'independence by inconsistency'. Reviewer confirms the axiom set is the usual monoid presentation.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      }
+    },
+    {
+      "id": "PL-AXIOM-IND",
+      "theorem": "Ampas.Claims.pl_a3_independent",
+      "text": "In the Hilbert system of AmpasRef.Defs, axiom A3 ((¬p → ¬q) → (q → p)) is not derivable from axioms A1 and A2 by modus ponens alone: A3 is an independent axiom of the calculus.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "attested_by": "Kai Chang (Morris)",
+        "faithful": true,
+        "note": "Axiom independence, not theory independence: the statement is about the calculus Ampas.PL.DerivesPos (A1, A2, modus ponens; A3 absent) and says the A3 instance for p0, p1 is underivable from the empty theory. The reviewer confirms DerivesPos is the stated system minus A3, that Empty is the empty theory, and that a3_instance is the A3 schema at p0, p1. A proof for a different or weaker calculus is a different statement and the closure check rejects it. Guard: the claim is a refutation, so the non-vacuity and necessity guards do not apply; Ampas.Guards.pos_nontrivial instead shows the A1+A2 fragment still derives p0 -> p0, ruling out independence by a calculus that proves nothing.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      },
+      "guards": {
+        "nontriviality": "Ampas.Guards.pos_nontrivial"
+      }
+    },
+    {
+      "id": "PL-BOGUS",
+      "theorem": "Ampas.Claims.pl_bogus_independent",
+      "text": "FALSE CLAIM, kept as a control: {p0 -> p1} does not prove p1 -> p1. This is false (p1 -> p1 is a theorem of pure logic), and must never be certified.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "control": "unprovable",
+        "note": "No sound submission can certify this; it exists to confirm the pipeline does not certify a false statement that is merely well-typed.",
+        "attested_by": "Kai Chang (Morris)",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-12"
+      }
+    }
+  ],
+  "guards_module": "AmpasRef.Guards"
+}

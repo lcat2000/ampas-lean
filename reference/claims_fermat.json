@@ -1,0 +1,66 @@
+{
+  "round": "external-validation-fermat",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.ChallengeFermat",
+  "guards_module": "AmpasRef.GuardsFermat",
+  "trusted_modules": [
+    "Init",
+    "Lean",
+    "Std",
+    "Batteries",
+    "Mathlib",
+    "Aesop",
+    "Qq",
+    "ImportGraph",
+    "Plausible",
+    "LeanSearchClient",
+    "ProofWidgets",
+    "Cli",
+    "AmpasRef.Defs"
+  ],
+  "axiom_policies": {
+    "classical": ["propext", "Classical.choice", "Quot.sound"],
+    "constructive": []
+  },
+  "notes": "External validation pair, not invented for this suite: Fermat's assertion (c. 1640) that every Fermat number is prime, which is FALSE, and Euler's refutation (1732) that F5 = 4294967297 = 641 * 6700417, which is TRUE. Source: K. Conrad, 'Fermat numbers and factors' (U. Connecticut); Euler, 'Observationes de theoremate quodam Fermatiano', Novi Commentarii 1732/33. The system must reject every proof of the first and certify a correct proof of the second. The `review` blocks here are PENDING: the formalization sign-off is a human judgement and has not been given for these two statements.",
+  "claims": [
+    {
+      "id": "FERMAT-CLAIM",
+      "theorem": "Ampas.Claims.fermat_all_prime",
+      "text": "FALSE CLAIM, kept as a control (Fermat, c. 1640): every Fermat number 2^(2^n)+1 is prime. Euler refuted it in 1732 with F5 = 641 * 6700417. No submission may ever certify this.",
+      "policy": {
+        "axioms": ["propext", "Classical.choice", "Quot.sound"],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": null,
+        "control": "unprovable",
+        "status": "PENDING",
+        "note": "Formalization sign-off NOT given. Prepared by the assistant for the external validation run; the claim is a historically false assertion kept as a control, so its value here does not depend on a sign-off: the required outcome is rejection.",
+        "attested_by": null,
+        "checklist": {},
+        "reviewed_on": null
+      }
+    },
+    {
+      "id": "FERMAT-F5",
+      "theorem": "Ampas.Claims.fermat_f5_not_prime",
+      "text": "TRUE (Euler, 1732): the fifth Fermat number 2^(2^5)+1 = 4294967297 is not prime; it factors as 641 * 6700417.",
+      "policy": {
+        "axioms": ["propext", "Classical.choice", "Quot.sound"],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": null,
+        "status": "PENDING",
+        "note": "Formalization sign-off NOT given. The statement is a refutation, so the auditor requires a nontriviality guard rather than non-vacuity and necessity; Ampas.Guards.fermat_nontrivial shows F3 = 257 is prime, ruling out the degenerate reading that Nat.Prime holds of no Fermat number. Whether '2^(2^5)+1 is not prime' is a faithful rendering of Euler's result is a human judgement and is awaiting review.",
+        "attested_by": null,
+        "checklist": {},
+        "reviewed_on": null
+      },
+      "guards": {
+        "nontriviality": "Ampas.Guards.fermat_nontrivial"
+      }
+    }
+  ]
+}

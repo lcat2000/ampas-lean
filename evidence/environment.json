@@ -1,0 +1,75 @@
+{
+ "round": "math-verification-3",
+ "lean_version": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
+ "lean_source": "conda-forge lean4-4.33.0-h6c1889d_0 (linux-64)",
+ "conda_pkg_sha256": "cb623d648243b9668c8753fb2efd61a00163cf92eb133ccdfd51bc48c2023f29",
+ "python": "3.13.16",
+ "machine": {
+  "cores": 2,
+  "memory_gb": 7
+ },
+ "primary_kernel": {
+  "tool": "leanchecker (ships with Lean)",
+  "sha256": "612915adfd75d37c27ade001eb287eebf24268b720f597f4f8ea16e9a5c55f33"
+ },
+ "independent_kernel": {
+  "tool": "lean4lean",
+  "repo": "https://github.com/digama0/lean4lean",
+  "revision": "67f63b0c818920dfaed2ad07ccff187a6a8fe1e3",
+  "declared_toolchain": "leanprover/lean4:v4.33.0-rc2",
+  "built_with": "Lean 4.33.0 (release); the repo declares v4.33.0-rc2",
+  "dependency": {
+   "name": "batteries",
+   "revision": "76e1c118b0700b4ceafe99532e887d6431625e1a"
+  },
+  "sha256": "d1be1b1e726cbe6c79e64b95bd33f2f36576444b528a24eaa6fca1270f0572f8",
+  "note": "Independently written kernel ('external checker'). Its deliberate divergences from the C++ kernel are documented upstream in divergences.md; notably it does not implement reduceBool, so native evaluation cannot be reduced by it.",
+  "link_note": "lake's link step fails on this machine (the conda build records placeholder library paths); linked with system gcc via relink.py."
+ },
+ "lean_bin_sha256": "9842f89b9a1874db969cc58933e4117c397338f795eb8febffeb79edd5272847",
+ "auditor_sha256": "f9ba67a36bd3c68e38b5984e87851612d7004389ca7f5288e73c98a390789c1e",
+ "reference_oleans": {
+  "AmpasRef/Challenge.olean": "87cd65cebee274916555567a1cd2cb7d7c7f31564ec9e0212b67956c153a53fa",
+  "AmpasRef/Defs.olean": "9fd1d0e77e3183f78d1988a1caa5dc85295f2e1561736f33864925bda4e9f436",
+  "AmpasRef/Guards.olean": "9e5f8048edcf959729312a4f86021205121f7732c2ecca93e00035eed635162c"
+ },
+ "mathlib_reference_oleans": {
+  "AmpasRef/ChallengeMathlib.olean": "95e536e8286864e5db913fb75ef292b85bdb42a34dbe75adbcff45353aca8ef4"
+ },
+ "reviewer_key": "kai-chang-morris-2026-10",
+ "sandbox_user": "ampas-sub (system, no-login)",
+ "limits": {
+  "cpu_seconds": 120,
+  "wall_seconds": 180,
+  "mem_bytes": 10737418240,
+  "lean_threads": 2,
+  "export_mem_bytes": 25769803776,
+  "export_mem_note": "RLIMIT_AS caps address space, not resident memory; `lean --run` (the exporter) mmaps the whole Lean library plus the interpreter and needs more reserved address space than a submission compile. CPU, wall clock, file size and the unprivileged user still apply.",
+  "resource_exhaustion_note": "A checker killed by the CPU, wall-clock or memory limit has NOT rejected the proof. The driver classifies 124 / -24 / -9 / 137 / TIMEOUT as resource exhaustion and reports the claim INCONCLUSIVE (never certified, but not a rejection either). Found while verifying the package: two concurrent pytest sessions on this 2-core machine were enough to make lean4lean hit the CPU limit on the largest submission, and the earlier code read that as a kernel rejection -- a verdict that depended on machine load."
+ },
+ "third_check": {
+  "tool": "harness/kernel3 (independent type checker, Python)",
+  "provenance": "NOT written by this round's author: it appeared in harness/ mid-session, unreviewed, and was moved out of the trusted path. Reviewed line by line and fixed by this round's author; verdict and findings in harness/kernel3/REVIEW.md. The unmodified original is kept in unreviewed/kernel/ for comparison.",
+  "files": [
+   "__init__.py",
+   "check.py",
+   "parse.py",
+   "terms.py"
+  ],
+  "lines": 1367,
+  "source_set_sha256": "2476a64d77ff3271ea0e176142fd2f6b3863bf106be1a116006d7bacd38fafb0",
+  "exporter": {
+   "file": "harness/Export.lean",
+   "sha256": "1ab0708090bdc5c69c7b8847364b847922dd3b19cd4140fb8763702e7cc1ca99"
+  },
+  "independence": "shares no code with Lean and does not use Lean's elaborator; it reads an exported closure and re-derives every type itself",
+  "covers": "every declaration's type; inductive specifications only where their fingerprint matches reference/kernel_baseline.json",
+  "does_not_cover": "the legitimacy of an inductive specification (strict positivity, the shape of the generated recursor and its iota rules). Two hand-written forgeries that prove False through that hole are kept as test vectors in tests/forgeries/; the provenance gate reports them instead of vouching for them.",
+  "gate": "an error fails certification; introduced_assumptions do not block (that layer is covered by the two Lean-based kernels) but are recorded in the evidence",
+  "baseline": {
+   "file": "reference/kernel_baseline.json",
+   "assumed_declarations": 213,
+   "built_from": "the trusted reference closure (21 roots)"
+  }
+ }
+}

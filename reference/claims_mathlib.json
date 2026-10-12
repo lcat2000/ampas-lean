@@ -1,0 +1,58 @@
+{
+  "round": "math-verification-2-mathlib",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.ChallengeMathlib",
+  "trusted_modules": [
+    "Init",
+    "Lean",
+    "Std",
+    "Batteries",
+    "Mathlib",
+    "Aesop",
+    "Qq",
+    "ImportGraph",
+    "Plausible",
+    "LeanSearchClient",
+    "ProofWidgets",
+    "Cli",
+    "AmpasRef.Defs"
+  ],
+  "axiom_policies": {
+    "classical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "notes": "Claims stated over Mathlib's definitions. Mathlib is pinned by commit and built from source with the same toolchain; see reference/mathlib_pin.json. Mathlib's definitions are in the trusted set, so they enter each claim's freeze: a change in Mathlib's Nat.Prime breaks the attestation.",
+  "claims": [
+    {
+      "id": "PRIMES",
+      "theorem": "Ampas.Claims.infinitude_of_primes",
+      "text": "There are arbitrarily large prime numbers: for every natural number n there is a prime p with n <= p (Euclid's theorem).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "attested_by": "Kai Chang (Morris)",
+        "faithful": true,
+        "reviewed_on": "2026-10-12",
+        "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        }
+      }
+    }
+  ],
+  "attestation_dir": "reference/attestations-mathlib"
+}

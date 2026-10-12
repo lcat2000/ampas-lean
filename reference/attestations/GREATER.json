@@ -1,0 +1,66 @@
+{
+  "schema": "ampas-formalization-attestation/1",
+  "claim": "GREATER",
+  "theorem": "Ampas.Claims.exists_greater",
+  "text": "Every natural number has a strictly greater natural number.",
+  "frozen_at": "2026-10-12T10:47:22Z",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
+  "closure_sha256": "f6490c6cfad3de025d574a81b6bad4503a2c7c81b301d3399a365d5238808393",
+  "closure_size": 17,
+  "closure_entries": {
+    "Exists": "d71e658f858ae08c3b3ecf6e440a48eb8ffdf4dcba9523d51b360c568041ae19",
+    "LT": "de6038e892759b0c63103657eef6c108ef33c0207cdf2ae54c86847299524aae",
+    "Nat": "24168e47100587e94f4c6c5601994e97263695388c97186ecfc8b53d45b02e59",
+    "instLTNat": "02f46f50dd7f07b50c3ff9a62bc3c980ea4f2bab8ec6e8e3a93e93b1cfec7168",
+    "Exists.intro": "045b566689486cc545a89036ace0c43e1242aa3353890c6b617179d58d71a4cb",
+    "Exists.rec": "938bf73dda5760948b402976b8ae770552a573ff6a66f5b79c31fbd36bfe0724",
+    "LT.lt": "4c2fb1508f3afeb9b684ee3b618c26e265261304930be874425f6aa97904cf59",
+    "LT.mk": "b0d1e111955d5a29a7a8927438d4099e986662d21e97c199dbabb0deb9cccf90",
+    "LT.rec": "0d9d20b0b081597d399771302143f241efbd84bf6e1bf10abde1025a61170759",
+    "Nat.le": "0e69034c90010c2777c040c83eca06b4d078f504ac6219daa6f0ffbd264db221",
+    "Nat.lt": "5b876f858849f6bfeac86ea72baebb0672f53e67b2ae2333706e021f10ae9ca8",
+    "Nat.rec": "1252112dedc66f32612e13c5d278d3c0499a5fcc9f9ad51599c635f50642f5cd",
+    "Nat.succ": "2a7a99eeaceaabd368458c386a2cd9995236fdda626c63e0e19d4d6546ecbbdb",
+    "Nat.zero": "bc5e9bb5c4dd168070b8902dc9e7da74d50befe261f9e8157ee0ac8b1c39b516",
+    "Nat.le.rec": "8226ac4ef43bac34df9038570a552b65fdcf0a1f8be204931be4c0fa93c5e8b2",
+    "Nat.le.refl": "f6053b810147c95166978d3c97fb58eefbd2469b30b34673e33755e6f7413f14",
+    "Nat.le.step": "3ba2a1c28f8a8fda82b48bcd5baa3066652a2cee090d1ef38cf6a6a941aa5010"
+  },
+  "policy": {
+    "axioms": [],
+    "comparator": "strict"
+  },
+  "guards": {
+    "hypotheses": 0,
+    "witness": null,
+    "necessity": [],
+    "nontriviality": null,
+    "non_vacuity_status": "NO_HYPOTHESES",
+    "necessity_status": [],
+    "expected_witness": "",
+    "expected_necessity": []
+  },
+  "guards_satisfied": true,
+  "guard_problems": [],
+  "reviewer": {
+    "attested_by": "Kai Chang (Morris)",
+    "faithful": true,
+    "note": "Constructive policy: a witness must be given without Classical.choice.",
+    "checklist": {
+      "statement_matches_text": true,
+      "no_unintended_convention": true,
+      "quantifier_order_checked": true,
+      "hypotheses_necessary_and_satisfiable": true,
+      "definitions_reviewed": true,
+      "conclusion_not_weakened": true
+    }
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "kai-chang-morris-2026-10",
+    "signed_at": "2026-10-12T10:47:22Z",
+    "value": "661e705ce8af04e02d4d0cdd9ad89a8626903914837ef823cfc478c847f23b9db940c8719500f8c882ebe16baf53e8e9677c0158100a8df2a4ead982fca9640a"
+  }
+}

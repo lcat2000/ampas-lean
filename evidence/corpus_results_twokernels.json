@@ -1,0 +1,1105 @@
+{
+  "results": [
+    {
+      "submission": "Genuine.lean",
+      "module": "Genuine",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 326,
+        "total": 326,
+        "errors": [],
+        "inductive_specs_assumed": 70,
+        "verified": {
+          "Ampas.Claims.add_comm_nat": true,
+          "Ampas.Claims.sub_add_cancel_nat": true,
+          "Ampas.Claims.even_add_even": true,
+          "Ampas.Claims.dvd_trans_nat": true,
+          "Ampas.Claims.exists_greater": true,
+          "Ampas.Claims.div_self_pos": true
+        },
+        "summary": "326/326 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "ADD",
+          "theorem": "Ampas.Claims.add_comm_nat",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), a + b = b + a",
+            "solution_pp": "∀ (a b : Nat), Eq (instHAdd.hAdd a b) (instHAdd.hAdd b a)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "a + b = b + a over Nat; standard.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        },
+        {
+          "claim": "SUB",
+          "theorem": "Ampas.Claims.sub_add_cancel_nat",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), b ≤ a → a - b + b = a",
+            "solution_pp": "∀ (a b : Nat), instLENat.le b a → Eq (instHAdd.hAdd (instHSub.hSub a b) b) a",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The hypothesis b <= a is required because Nat subtraction truncates at 0; without it the claim is false (a=0,b=1). This is a Lean-convention trap: a statement without the hypothesis would be a different, false claim.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        },
+        {
+          "claim": "EVEN",
+          "theorem": "Ampas.Claims.even_add_even",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (a + b)",
+            "solution_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (instHAdd.hAdd a b)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "IsEven n := exists k, n = 2*k. The reviewer confirms this is the intended meaning of 'even'.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        },
+        {
+          "claim": "DVD",
+          "theorem": "Ampas.Claims.dvd_trans_nat",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b c : Nat), a ∣ b → b ∣ c → a ∣ c",
+            "solution_pp": "∀ (a b c : Nat), Nat.instDvd.dvd a b → Nat.instDvd.dvd b c → Nat.instDvd.dvd a c",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Uses Lean's standard Dvd for Nat.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        },
+        {
+          "claim": "GREATER",
+          "theorem": "Ampas.Claims.exists_greater",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : Nat), ∃ m, n < m",
+            "solution_pp": "∀ (n : Nat), Exists fun m => instLTNat.lt n m",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Constructive policy: a witness must be given without Classical.choice.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        },
+        {
+          "claim": "DIV",
+          "theorem": "Ampas.Claims.div_self_pos",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : Nat), 0 < n → n / n = 1",
+            "solution_pp": "∀ (n : Nat), instLTNat.lt 0 n → Eq (instHDiv.hDiv n n) 1",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The hypothesis 0 < n is required: Lean defines n / 0 = 0, so without it the claim is false (n=0). Lean-convention trap.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "certified_all",
+      "note": "Positive control: genuine proofs of all six arithmetic claims."
+    },
+    {
+      "submission": "PLSol.lean",
+      "module": "PLSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 83,
+        "total": 83,
+        "errors": [],
+        "inductive_specs_assumed": 36,
+        "verified": {
+          "Ampas.Claims.pl_independent": true
+        },
+        "summary": "83/83 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "PL-IND",
+          "theorem": "Ampas.Claims.pl_independent",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
+            "solution_pp": "Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Independence is a statement about the trusted proof system Ampas.PL.Derives, which is part of the reference. A proof of independence for a different (e.g. weaker) proof system is a different statement and the closure check rejects it. The reviewer confirms Derives is the standard classical Hilbert calculus and Independent means underivable-both-ways.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "certified_all",
+      "note": "Genuine propositional-logic independence proof (no axioms)."
+    },
+    {
+      "submission": "ELSol.lean",
+      "module": "ELSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 654,
+        "total": 654,
+        "errors": [],
+        "inductive_specs_assumed": 129,
+        "verified": {
+          "Ampas.Claims.el_comm_independent": true
+        },
+        "summary": "654/654 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "EL-IND",
+          "theorem": "Ampas.Claims.el_comm_independent",
+          "certified": true,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel-checked (both kernels where configured); statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm",
+            "solution_pp": "Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Independence over the trusted equational calculus Ampas.EL.Derives. The second conjunct rules out the vacuous 'independence by inconsistency'. Reviewer confirms the axiom set is the usual monoid presentation.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "certified_all",
+      "note": "Genuine equational-logic independence proof."
+    },
+    {
+      "submission": "A01_kernel_bypass.lean",
+      "module": "A01_kernel_bypass",
+      "compiled": true,
+      "kernel_replay": false,
+      "kernel_replay_independent": false,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "\n[leanchecker]\nleanchecker found a problem in A01_kernel_bypass\nuncaught exception: while replaying declaration 'Ampas.Claims.false_thm':\n(kernel) declaration type mismatch, 'Ampas.Claims.false_thm' has type\n  True\nbut it is expected to have type\n  False\n\n[lean4lean]\n06754682c]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(Lean4Lean.Replay.replayConstant (lean4lean)+0x146) [0x564067546d96]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(Std.DTreeMap.Internal.Impl.forInStep spec at Lean4Lean.Replay.replayConstants (lean4lean)+0xcb) [0x56406754917b]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(Std.DTreeMap.Internal.Impl.forInStep spec at Lean4Lean.Replay.replayConstants (lean4lean)+0x8e) [0x56406754913e]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(Lean4Lean.Replay.replay (lean4lean)+0x2a1) [0x56406754c4c1]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(Lean4Lean.Replay.replayFromImports (lean4lean)+0x4fc) [0x56406754d71c]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(List.forIn'.loop [λ, arity↓] spec at main (lean4lean)+0x11) [0x564067328e01]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(<apply/1>+0x9df) [0x56406eaba03f]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(+0x99d95df) [0x56406ead65df]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(<apply/1>+0x89d) [0x56406eab9efd]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(+0x99b8c25) [0x56406eab5c25]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(+0x99b9a8a) [0x56406eab6a8a]\n/home/claude/digama0/lean4lean/.lake/build/bin/lean4lean(+0x99aa6ec) [0x56406eaa76ec]\n/lib/x86_64-linux-gnu/libc.so.6(+0x9cb84) [0x7f227c89cb84]\n/lib/x86_64-linux-gnu/libc.so.6(+0x129ecc) [0x7f227c929ecc]\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Lean"
+      ],
+      "independent_kernel": {
+        "run": false,
+        "summary": "export failed",
+        "output": "uncaught exception: failed to read file '/home/claude/tools/lean4/lib/lean/Init/Notation.olean.private'\n"
+      },
+      "claims": [
+        {
+          "claim": "ADD",
+          "theorem": "Ampas.Claims.add_comm_nat",
+          "certified": false,
+          "independently_checked": null,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "kernel replay did not succeed (primary or independent kernel)",
+            "the independent kernel did not confirm the proof: export failed"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), a + b = b + a",
+            "solution_pp": "∀ (a b : Nat), Eq (instHAdd.hAdd a b) (instHAdd.hAdd b a)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "a + b = b + a over Nat; standard.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "skipKernelTC bypass; caught at kernel replay."
+    },
+    {
+      "submission": "A02_sorry.lean",
+      "module": "A02_sorry",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-wgz6ul6m/A02_sorry.lean:5:8: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 327,
+        "total": 327,
+        "errors": [],
+        "inductive_specs_assumed": 102,
+        "verified": {
+          "Ampas.Claims.even_add_even": true
+        },
+        "summary": "327/327 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "EVEN",
+          "theorem": "Ampas.Claims.even_add_even",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "sorryAx"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (a + b)",
+            "solution_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (instHAdd.hAdd a b)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "IsEven n := exists k, n = 2*k. The reviewer confirms this is the intended meaning of 'even'.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "sorry."
+    },
+    {
+      "submission": "A03_user_axiom.lean",
+      "module": "A03_user_axiom",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 41,
+        "total": 41,
+        "errors": [],
+        "inductive_specs_assumed": 20,
+        "verified": {
+          "Ampas.Claims.dvd_trans_nat": true
+        },
+        "summary": "41/41 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "DVD",
+          "theorem": "Ampas.Claims.dvd_trans_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: Ampas.Claims.cheat"
+          ],
+          "axioms": [
+            "Ampas.Claims.cheat"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b c : Nat), a ∣ b → b ∣ c → a ∣ c",
+            "solution_pp": "∀ (a b c : Nat), Nat.instDvd.dvd a b → Nat.instDvd.dvd b c → Nat.instDvd.dvd a c",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Uses Lean's standard Dvd for Nat.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "user axiom."
+    },
+    {
+      "submission": "A04_native_lie.lean",
+      "module": "A04_native_lie",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 205,
+        "total": 205,
+        "errors": [],
+        "inductive_specs_assumed": 50,
+        "verified": {
+          "Ampas.Claims.sub_add_cancel_nat": true
+        },
+        "summary": "205/205 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "SUB",
+          "theorem": "Ampas.Claims.sub_add_cancel_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: Ampas.Claims.sub_add_cancel_nat._native.native_decide.ax_1_1",
+            "forbidden: NATIVE_EVALUATION:Ampas.Claims.sub_add_cancel_nat._native.native_decide.ax_1_1"
+          ],
+          "axioms": [
+            "propext",
+            "Ampas.Claims.sub_add_cancel_nat._native.native_decide.ax_1_1"
+          ],
+          "flags": [
+            "NATIVE_EVALUATION:Ampas.Claims.sub_add_cancel_nat._native.native_decide.ax_1_1"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), b ≤ a → a - b + b = a",
+            "solution_pp": "∀ (a b : Nat), instLENat.le b a → Eq (instHAdd.hAdd (instHSub.hSub a b) b) a",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The hypothesis b <= a is required because Nat subtraction truncates at 0; without it the claim is false (a=0,b=1). This is a Lean-convention trap: a statement without the hypothesis would be a different, false claim.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "native_decide with a lying implemented_by; NATIVE_EVALUATION."
+    },
+    {
+      "submission": "A05_redefine.lean",
+      "module": "A05_redefine",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 29,
+        "total": 29,
+        "errors": [],
+        "inductive_specs_assumed": 14,
+        "verified": {
+          "Ampas.Claims.even_add_even": true
+        },
+        "summary": "29/29 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "EVEN",
+          "theorem": "Ampas.Claims.even_add_even",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "statement rests on redefined or missing constants: Ampas.IsEven",
+            "statement uses constants outside the reference: True.rec, True, True.intro"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [
+              "Ampas.IsEven"
+            ],
+            "closure_missing": [],
+            "closure_ok": false,
+            "extra_constants": [
+              "True.rec",
+              "True",
+              "True.intro"
+            ],
+            "kernel_defeq": null,
+            "reference_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (a + b)",
+            "solution_pp": "∀ (a b : Nat), Ampas.IsEven a → Ampas.IsEven b → Ampas.IsEven (instHAdd.hAdd a b)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "IsEven n := exists k, n = 2*k. The reviewer confirms this is the intended meaning of 'even'.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "redefines IsEven; closure check."
+    },
+    {
+      "submission": "A06_wrong_statement.lean",
+      "module": "A06_wrong_statement",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 28,
+        "total": 28,
+        "errors": [],
+        "inductive_specs_assumed": 14,
+        "verified": {
+          "Ampas.Claims.add_comm_nat": true
+        },
+        "summary": "28/28 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "ADD",
+          "theorem": "Ampas.Claims.add_comm_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (a b : Nat), a + b = b + a",
+            "solution_pp": "∀ (a : Nat), Eq (instHAdd.hAdd a a) (instHAdd.hAdd a a)",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "a + b = b + a over Nat; standard.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "weaker statement."
+    },
+    {
+      "submission": "A07_vacuous_hyp.lean",
+      "module": "A07_vacuous_hyp",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 1374,
+        "total": 1374,
+        "errors": [],
+        "inductive_specs_assumed": 182,
+        "verified": {
+          "Ampas.Claims.div_self_pos": true
+        },
+        "summary": "1374/1374 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "DIV",
+          "theorem": "Ampas.Claims.div_self_pos",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (n : Nat), 0 < n → n / n = 1",
+            "solution_pp": "∀ (n : Nat), instLTNat.lt 0 n → Eq n (instHAdd.hAdd n 1) → Eq (instHDiv.hDiv n n) 1",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The hypothesis 0 < n is required: Lean defines n / 0 = 0, so without it the claim is false (n=0). Lean-convention trap.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "extra false hypothesis."
+    },
+    {
+      "submission": "A08_axiom_kind.lean",
+      "module": "A08_axiom_kind",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 27,
+        "total": 27,
+        "errors": [],
+        "inductive_specs_assumed": 14,
+        "verified": {
+          "Ampas.Claims.add_comm_nat": true
+        },
+        "summary": "27/27 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "ADD",
+          "theorem": "Ampas.Claims.add_comm_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "declared as axiom, not a theorem",
+            "axioms outside the policy: Ampas.Claims.add_comm_nat"
+          ],
+          "axioms": [
+            "Ampas.Claims.add_comm_nat"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b : Nat), a + b = b + a",
+            "solution_pp": "∀ (a b : Nat), Eq (instHAdd.hAdd a b) (instHAdd.hAdd b a)",
+            "strict_equal": true
+          },
+          "kind": "axiom",
+          "review": {
+            "faithful": true,
+            "note": "a + b = b + a over Nat; standard.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "declared as an axiom."
+    },
+    {
+      "submission": "A09_hidden_sorry.lean",
+      "module": "A09_hidden_sorry",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-hah53c04/A09_hidden_sorry.lean:6:16: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 331,
+        "total": 331,
+        "errors": [],
+        "inductive_specs_assumed": 104,
+        "verified": {
+          "Ampas.Claims.dvd_trans_nat": true
+        },
+        "summary": "331/331 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "DVD",
+          "theorem": "Ampas.Claims.dvd_trans_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "sorryAx"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (a b c : Nat), a ∣ b → b ∣ c → a ∣ c",
+            "solution_pp": "∀ (a b c : Nat), Nat.instDvd.dvd a b → Nat.instDvd.dvd b c → Nat.instDvd.dvd a c",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Uses Lean's standard Dvd for Nat.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "transitive sorry."
+    },
+    {
+      "submission": "A10_choice_for_constructive.lean",
+      "module": "A10_choice_for_constructive",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 148,
+        "total": 148,
+        "errors": [],
+        "inductive_specs_assumed": 49,
+        "verified": {
+          "Ampas.Claims.exists_greater": true
+        },
+        "summary": "148/148 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "GREATER",
+          "theorem": "Ampas.Claims.exists_greater",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: Classical.choice, Quot.sound, propext"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : Nat), ∃ m, n < m",
+            "solution_pp": "∀ (n : Nat), Exists fun m => instLTNat.lt n m",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Constructive policy: a witness must be given without Classical.choice.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "sound but uses Classical.choice, forbidden by the constructive policy."
+    },
+    {
+      "submission": "A11_bogus_independence.lean",
+      "module": "A11_bogus_independence",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-22vyxvyg/A11_bogus_independence.lean:6:8: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 336,
+        "total": 336,
+        "errors": [],
+        "inductive_specs_assumed": 110,
+        "verified": {
+          "Ampas.Claims.pl_bogus_independent": true
+        },
+        "summary": "336/336 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "PL-BOGUS",
+          "theorem": "Ampas.Claims.pl_bogus_independent",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "sorryAx"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "Ampas.PL.Independent Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1))",
+            "solution_pp": "Ampas.PL.Independent Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1))",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "control": "unprovable",
+            "note": "No sound submission can certify this; it exists to confirm the pipeline does not certify a false statement that is merely well-typed.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "false independence claim; cannot compile a sound proof."
+    },
+    {
+      "submission": "A12_notation_hijack.lean",
+      "module": "A12_notation_hijack",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init"
+      ],
+      "independent_kernel": {
+        "run": true,
+        "ok": true,
+        "checked": 8,
+        "total": 8,
+        "errors": [],
+        "inductive_specs_assumed": 5,
+        "verified": {
+          "Ampas.Claims.dvd_trans_nat": true
+        },
+        "summary": "8/8 declarations re-checked"
+      },
+      "claims": [
+        {
+          "claim": "DVD",
+          "theorem": "Ampas.Claims.dvd_trans_nat",
+          "certified": false,
+          "independently_checked": true,
+          "review_status": "FROZEN_OK",
+          "reasons": [
+            "statement uses constants outside the reference: True.rec, Ampas.Claims.mydvd, True, True.intro",
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [
+              "True.rec",
+              "Ampas.Claims.mydvd",
+              "True",
+              "True.intro"
+            ],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (a b c : Nat), a ∣ b → b ∣ c → a ∣ c",
+            "solution_pp": "∀ (a b c : Nat), Ampas.Claims.mydvd a b → Ampas.Claims.mydvd b c → Ampas.Claims.mydvd a c",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Uses Lean's standard Dvd for Nat.",
+            "reviewer": "Kai Chang (Morris)",
+            "attested_at": "2026-10-12"
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "custom relation under hijacked notation."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# AMPAS — Mathlib tier (optional).
+#
+# Separate from the core project on purpose: a claim stated over Mathlib's own
+# definitions (here `Nat.Prime`) pulls Mathlib into the trusted set and into
+# that claim's freeze. Keeping it here means the core claims cannot acquire
+# that dependency by accident. The core package is required by path, so
+# AmpasRef.Defs exists in exactly one place.
+#
+# Mathlib is pinned by revision, and the same revision is recorded with its
+# dependency revisions in ../reference/mathlib_pin.json.
+name = "ampasMathlib"
+version = "0.3.0"
+defaultTargets = ["AmpasRefMathlib"]
+
+[[require]]
+name = "ampas"
+path = ".."
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "db584cd6d46c92f209a44c0f1c829460d327499d"
+
+[[lean_lib]]
+name = "AmpasRefMathlib"
+srcDir = "src"
+roots = ["AmpasRef.ChallengeMathlib", "AmpasRef.ChallengeFermat", "AmpasRef.GuardsFermat"]

@@ -1,0 +1,51 @@
+{
+  "round": "external-validation-fermat",
+  "note": "External validation: Fermat's false assertion (c. 1640) and Euler's true refutation (1732). Neither statement was invented for this suite.",
+  "submissions": [
+    {
+      "file": "fermat/EulerSol.lean",
+      "module": "EulerSol",
+      "claims": [
+        "FERMAT-F5"
+      ],
+      "expected": "certified_all",
+      "note": "Euler's refutation, proved from the factorization 641 * 6700417."
+    },
+    {
+      "file": "fermat/FermatAttempt.lean",
+      "module": "FermatAttempt",
+      "claims": [
+        "FERMAT-CLAIM"
+      ],
+      "expected": "rejected",
+      "note": "Fermat's false claim: the cases he checked, then `sorry` for the rest."
+    },
+    {
+      "file": "fermat/FermatAxiom.lean",
+      "module": "FermatAxiom",
+      "claims": [
+        "FERMAT-CLAIM"
+      ],
+      "expected": "rejected",
+      "note": "Same false claim, no sorry: the gap is moved into an axiom."
+    },
+    {
+      "file": "fermat/FermatWeaker.lean",
+      "module": "FermatWeaker",
+      "claims": [
+        "FERMAT-CLAIM"
+      ],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, but of the RESTRICTED statement (n <= 3) filed under the general claim. The formalization-fidelity failure mode."
+    },
+    {
+      "file": "fermat/FermatF5Wrong.lean",
+      "module": "FermatF5Wrong",
+      "claims": [
+        "FERMAT-F5"
+      ],
+      "expected": "rejected",
+      "note": "Targets Euler's true statement but proves it for 2^32, not 2^32+1."
+    }
+  ]
+}

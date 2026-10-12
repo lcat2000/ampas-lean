@@ -1,0 +1,214 @@
+{
+  "results": [
+    {
+      "submission": "A13_mathlib_redefine.lean",
+      "module": "A13_mathlib_redefine",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 20,
+        "total": 20,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 14,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "20/20 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "Init"
+      ],
+      "claims": [
+        {
+          "claim": "PRIMES",
+          "theorem": "Ampas.Claims.infinitude_of_primes",
+          "certified": false,
+          "reasons": [
+            "statement rests on redefined or missing constants: Nat.Prime, Nat.instCommMonoid._proof_1, Monoid.npow_zero._autoParam, Semigroup, Monoid, Units.val, Semigroup.rec, MulOne.toOne"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [
+              "Nat.Prime"
+            ],
+            "closure_missing": [
+              "Nat.instCommMonoid._proof_1",
+              "Monoid.npow_zero._autoParam",
+              "Semigroup",
+              "Monoid",
+              "Units.val",
+              "Semigroup.rec",
+              "MulOne.toOne",
+              "Semigroup.toMul",
+              "Monoid.toMulOneClass",
+              "Nat.instMonoid",
+              "NPow.rec",
+              "Semigroup.mk",
+              "IsUnit",
+              "Units",
+              "Irreducible.mk",
+              "Irreducible",
+              "MulOne.mk",
+              "Monoid.npow_succ._autoParam",
+              "NPow.npow",
+              "MulOne.toMul",
+              "Monoid.mk",
+              "NPow.toPow",
+              "Monoid.rec",
+              "MulOneClass.toMulOne",
+              "CommMonoid.toMonoid",
+              "Monoid.one_mul",
+              "MulOneClass.mk",
+              "Units.mk",
+              "Nat.instCommMonoid",
+              "Monoid.toSemigroup",
+              "MulOneClass.rec",
+              "CommMonoid.rec",
+              "Monoid.toOne",
+              "MulOne.rec",
+              "Monoid.mul_one",
+              "MulOne",
+              "Irreducible.rec",
+              "MulOneClass",
+              "NPow.mk",
+              "CommMonoid",
+              "CommMonoid.mk",
+              "NPow",
+              "Units.rec"
+            ],
+            "closure_ok": false,
+            "extra_constants": [],
+            "kernel_defeq": null,
+            "reference_pp": "∀ (n : ℕ), ∃ p, n ≤ p ∧ Nat.Prime p",
+            "solution_pp": "∀ (n : Nat), Exists fun p => And (instLENat.le n p) p.Prime",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "attested_by": "Kai Chang (Morris)",
+            "faithful": true,
+            "reviewed_on": "2026-10-12",
+            "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            }
+          },
+          "corroboration": "CONFIRMED",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Shadows Mathlib's Nat.Prime with an always-true predicate; closure check."
+    },
+    {
+      "submission": "PrimesSol.lean",
+      "module": "PrimesSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 2974,
+        "total": 2977,
+        "errors": [
+          [
+            "Nat.Internal.Linear.Poly.denote_reverse",
+            "argument type mismatch applying (((((((congr Nat) Nat) (((((HAdd.hAdd Nat) Nat) Nat) ((instHAdd Nat) instAddNat)) ((Nat.Internal.Linear.Poly.denote fv74758) ((List.reverse ((Prod Nat) Nat.Internal.Linear.Var)) fv74762)))) (((((HAdd.hAdd Nat) Nat) Nat) ((instHAdd Nat) instAddNat)) ((Nat.Internal.Linear.Poly.denote fv74758) fv74762))) ((Nat.Internal.Linear.Poly.denote fv74758) (((List.cons ((Prod Nat) Nat.Internal.Linear.Var)) fv74761) (List.nil ((Prod Nat) Nat.Internal.Linear.Var))))) ((((((HMul.hMul Nat) Nat) Nat) ((instHMul Nat) instMulNat)) (((Prod.fst Nat) Nat.Internal.Linear.Var) fv74761)) ((Nat.Internal.Linear.Var.denote fv74758) (((Prod.snd Nat) Nat.Internal.Linear.Var) fv74761)))) ((((((congrArg Nat) ((n:Nat) -> Nat)) ((Nat.Internal.Linear.Poly.denote fv74758) ((List.reverse ((Prod Nat) Nat.Internal.Linear.Var)) fv74762))) ((Nat.Internal.Linear.Poly.denote fv74758) fv74762)) ((((HAdd.hAdd Nat) Nat) Nat) ((instHAdd Nat) instAddNat))) fv74763)):\n  expected (((Eq Nat) ((Nat.Internal.Linear.Poly.denote fv74758) (((List.cons ((Prod Nat) Nat.Internal.Linear.Var)) fv74761) (List.nil ((Prod Nat) Nat.Internal.Linear.Var))))) ((((((HMul.hMul Nat) Nat) Nat) ((instHMul Nat) instMulNat)) (((Prod.fst Nat) Nat.Internal.Linear.Var) fv74761)) ((Nat.Internal.Linear.Var.denote fv74758) (((Prod.snd Nat) Nat.Internal.Linear.Var) fv74761))))\n  got      (((Eq Nat) ((((((HAdd.hAdd Nat) Nat) Nat) ((instHAdd Nat) instAddNat)) ((((((HMul.hMul Nat) Nat) Nat) ((instHMul Nat) instMulNat)) (((Prod.fst Nat) Nat.Internal.Linear.Var) fv74761)) ((Nat.Internal.Linear.Var.denote fv74758) (((Prod.snd Nat) Nat.Internal.Linear.Var) fv74761)))) (((OfNat.ofNat Nat) 0) (instOfNatNat 0)))) ((((((HMul.hMul Nat) Nat) Nat) ((instHMul Nat) instMulNat)) (((Prod.fst Nat) Nat.Internal.Linear.Var) fv74761)) ((Nat.Internal.Linear.Var.denote fv74758) (((Prod.snd Nat) Nat.Internal.Linear.Var) fv74761))))"
+          ],
+          [
+            "Nat.Internal.Linear.ExprCnstr.denote_toNormPoly",
+            "argument type mismatch applying (id (((Eq Sort 0) (((Eq Sort 0) ((Nat.Internal.Linear.PolyCnstr.denote fv76807) (Nat.Internal.Linear.ExprCnstr.toNormPoly (((Nat.Internal.Linear.ExprCnstr.mk fv76812) fv76813) fv76814)))) ((Nat.Internal.Linear.ExprCnstr.denote fv76807) (((Nat.Internal.Linear.ExprCnstr.mk fv76812) fv76813) fv76814)))) ((Iff ((((cond Sort 0) fv76812) ((Nat.Internal.Linear.Poly.denote_eq fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))))) ((Nat.Internal.Linear.Poly.denote_le fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814))))))) ((((cond Sort 0) fv76812) (((Eq Nat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814))) ((((LE.le Nat) instLENat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814)))))):\n  expected (((Eq Sort 0) (((Eq Sort 0) ((Nat.Internal.Linear.PolyCnstr.denote fv76807) (Nat.Internal.Linear.ExprCnstr.toNormPoly (((Nat.Internal.Linear.ExprCnstr.mk fv76812) fv76813) fv76814)))) ((Nat.Internal.Linear.ExprCnstr.denote fv76807) (((Nat.Internal.Linear.ExprCnstr.mk fv76812) fv76813) fv76814)))) ((Iff ((((cond Sort 0) fv76812) ((Nat.Internal.Linear.Poly.denote_eq fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))))) ((Nat.Internal.Linear.Poly.denote_le fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814))))))) ((((cond Sort 0) fv76812) (((Eq Nat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814))) ((((LE.le Nat) instLENat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814)))))\n  got      (((Eq Sort 0) (((Eq Sort 0) ((((cond Sort 0) fv76812) ((Nat.Internal.Linear.Poly.denote_eq fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))))) ((Nat.Internal.Linear.Poly.denote_le fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814))))))) ((((cond Sort 0) fv76812) (((Eq Nat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814))) ((((LE.le Nat) instLENat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814))))) ((Iff ((((cond Sort 0) fv76812) ((Nat.Internal.Linear.Poly.denote_eq fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))))) ((Nat.Internal.Linear.Poly.denote_le fv76807) ((((Prod.mk Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) (((Prod.fst Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814)))) (((Prod.snd Nat.Internal.Linear.Poly) Nat.Internal.Linear.Poly) ((Nat.Internal.Linear.Poly.cancel (Nat.Internal.Linear.Expr.toNormPoly fv76813)) (Nat.Internal.Linear.Expr.toNormPoly fv76814))))))) ((((cond Sort 0) fv76812) (((Eq Nat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814))) ((((LE.le Nat) instLENat) ((Nat.Internal.Linear.Expr.denote fv76807) fv76813)) ((Nat.Internal.Linear.Expr.denote fv76807) fv76814)))))"
+          ],
+          [
+            "Prod.instLawfulBEq",
+            "argument type mismatch applying (((LawfulBEq.mk ((Prod fv90204) fv90205)) ((((instBEqProd fv90204) fv90205) fv90206) fv90207)) ((((((Prod.instReflBEq fv90204) fv90205) fv90206) fv90207) (((LawfulBEq.toReflBEq fv90204) fv90206) fv90208)) (((LawfulBEq.toReflBEq fv90205) fv90207) fv90209))):\n  expected ((a:((Prod fv90204) fv90205)) -> ((b:((Prod fv90204) fv90205)) -> ((a._@._internal._hyg.0:(((Eq Bool) ((((BEq.beq ((Prod fv90204) fv90205)) ((((instBEqProd fv90204) fv90205) fv90206) fv90207)) #1) #0)) Bool.true)) -> (((Eq ((Prod fv90204) fv90205)) #2) #1))))\n  got      ((a:((Prod fv90204) fv90205)) -> ((b:((Prod fv90204) fv90205)) -> ((h:(((Eq Bool) ((Bool.and ((((BEq.beq fv90204) fv90206) (((Prod.fst fv90204) fv90205) #1)) (((Prod.fst fv90204) fv90205) #0))) ((((BEq.beq fv90205) fv90207) (((Prod.snd fv90204) fv90205) #1)) (((Prod.snd fv90204) fv90205) #0)))) Bool.true)) -> (((Eq ((Prod fv90204) fv90205)) #2) #1))))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.Internal.Linear.Poly.denote_reverse",
+          "Nat.Internal.Linear.ExprCnstr.denote_toNormPoly",
+          "Prod.instLawfulBEq"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "introduced_assumptions": [],
+        "baseline_assumptions": 375,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "2974/2977 re-checked; 3 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "Init",
+        "Mathlib.Data.Nat.Prime.Infinite"
+      ],
+      "claims": [
+        {
+          "claim": "PRIMES",
+          "theorem": "Ampas.Claims.infinitude_of_primes",
+          "certified": true,
+          "reasons": [
+            "kernel-checked; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), ∃ p, n ≤ p ∧ Nat.Prime p",
+            "solution_pp": "∀ (n : Nat), Exists fun p => And (instLENat.le n p) (Nat.Prime p)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "attested_by": "Kai Chang (Morris)",
+            "faithful": true,
+            "reviewed_on": "2026-10-12",
+            "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            }
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "certified_all",
+      "note": "Euclid's theorem via Mathlib's Nat.exists_infinite_primes."
+    }
+  ]
+}

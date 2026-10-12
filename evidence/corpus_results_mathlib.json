@@ -1,0 +1,161 @@
+{
+  "results": [
+    {
+      "submission": "A13_mathlib_redefine.lean",
+      "module": "A13_mathlib_redefine",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "Init"
+      ],
+      "claims": [
+        {
+          "claim": "PRIMES",
+          "theorem": "Ampas.Claims.infinitude_of_primes",
+          "certified": false,
+          "reasons": [
+            "statement rests on redefined or missing constants: Nat.Prime, Nat.instCommMonoid._proof_1, Monoid.npow_zero._autoParam, Semigroup, Monoid, Units.val, Semigroup.rec, MulOne.toOne"
+          ],
+          "axioms": [],
+          "flags": [],
+          "statement": {
+            "closure_differing": [
+              "Nat.Prime"
+            ],
+            "closure_missing": [
+              "Nat.instCommMonoid._proof_1",
+              "Monoid.npow_zero._autoParam",
+              "Semigroup",
+              "Monoid",
+              "Units.val",
+              "Semigroup.rec",
+              "MulOne.toOne",
+              "Semigroup.toMul",
+              "Monoid.toMulOneClass",
+              "Nat.instMonoid",
+              "NPow.rec",
+              "Semigroup.mk",
+              "IsUnit",
+              "Units",
+              "Irreducible.mk",
+              "Irreducible",
+              "MulOne.mk",
+              "Monoid.npow_succ._autoParam",
+              "NPow.npow",
+              "MulOne.toMul",
+              "Monoid.mk",
+              "NPow.toPow",
+              "Monoid.rec",
+              "MulOneClass.toMulOne",
+              "CommMonoid.toMonoid",
+              "Monoid.one_mul",
+              "MulOneClass.mk",
+              "Units.mk",
+              "Nat.instCommMonoid",
+              "Monoid.toSemigroup",
+              "MulOneClass.rec",
+              "CommMonoid.rec",
+              "Monoid.toOne",
+              "MulOne.rec",
+              "Monoid.mul_one",
+              "MulOne",
+              "Irreducible.rec",
+              "MulOneClass",
+              "NPow.mk",
+              "CommMonoid",
+              "CommMonoid.mk",
+              "NPow",
+              "Units.rec"
+            ],
+            "closure_ok": false,
+            "extra_constants": [],
+            "kernel_defeq": null,
+            "reference_pp": "∀ (n : ℕ), ∃ p, n ≤ p ∧ Nat.Prime p",
+            "solution_pp": "∀ (n : Nat), Exists fun p => And (instLENat.le n p) p.Prime",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "attested_by": "Kai Chang (Morris)",
+            "faithful": true,
+            "reviewed_on": "2026-10-12",
+            "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            }
+          }
+        }
+      ],
+      "error": "",
+      "expected": "rejected",
+      "note": "Shadows Mathlib's Nat.Prime with an always-true predicate; closure check."
+    },
+    {
+      "submission": "PrimesSol.lean",
+      "module": "PrimesSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": true,
+      "kernel_agreement": "agree",
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "Init",
+        "Mathlib.Data.Nat.Prime.Infinite"
+      ],
+      "claims": [
+        {
+          "claim": "PRIMES",
+          "theorem": "Ampas.Claims.infinitude_of_primes",
+          "certified": true,
+          "reasons": [
+            "kernel-checked by both kernels; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), ∃ p, n ≤ p ∧ Nat.Prime p",
+            "solution_pp": "∀ (n : Nat), Exists fun p => And (instLENat.le n p) (Nat.Prime p)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "attested_by": "Kai Chang (Morris)",
+            "faithful": true,
+            "reviewed_on": "2026-10-12",
+            "note": "Stated with Mathlib's Nat.Prime, whose definition the reviewer read (Irreducible in the monoid of naturals, equivalently 2 <= p with no proper divisor). 'Arbitrarily large' is rendered as a forall-exists with n <= p, which is the standard reading of the infinitude of primes; n < p would also be correct and is implied, since p is prime and so p >= 2.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            }
+          }
+        }
+      ],
+      "error": "",
+      "expected": "certified_all",
+      "note": "Euclid's theorem via Mathlib's Nat.exists_infinite_primes."
+    }
+  ]
+}

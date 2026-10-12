@@ -1,0 +1,13 @@
+{
+  "tool": "lean4lean",
+  "repo": "https://github.com/digama0/lean4lean",
+  "revision": "67f63b0c818920dfaed2ad07ccff187a6a8fe1e3",
+  "declared_toolchain": "leanprover/lean4:v4.33.0-rc2",
+  "built_with": "Lean 4.33.0 (release); the repo declares v4.33.0-rc2",
+  "dependency": {
+    "name": "batteries",
+    "revision": "76e1c118b0700b4ceafe99532e887d6431625e1a"
+  },
+  "binary_sha256_reference_run": "d1be1b1e726cbe6c79e64b95bd33f2f36576444b528a24eaa6fca1270f0572f8",
+  "note": "Independently written kernel ('external checker'). Its deliberate divergences from the C++ kernel are documented upstream in divergences.md; notably it does not implement reduceBool, so native evaluation cannot be reduced by it."
+}

@@ -1,0 +1,23 @@
+# AMPAS — Lean proof-verification suite (core tier).
+#
+# Deliberately Mathlib-free: the core reference statements must not acquire a
+# dependency on a large library. The Mathlib tier is a separate Lake project
+# in mathlib-tier/, so a reviewer can verify everything here without ever
+# building Mathlib.
+name = "ampas"
+version = "0.3.0"
+defaultTargets = ["AmpasRef", "audit"]
+
+[[lean_lib]]
+name = "AmpasRef"
+srcDir = "reference"
+# the trusted reference, listed explicitly so what is in it is never implicit
+roots = ["AmpasRef.Defs", "AmpasRef.Challenge", "AmpasRef.Guards"]
+
+[[lean_exe]]
+name = "audit"
+root = "Audit"
+srcDir = "harness"
+# the auditor loads oleans and inspects environments, so it needs the
+# interpreter's view of Lean itself
+supportInterpreter = true

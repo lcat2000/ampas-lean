@@ -1,0 +1,85 @@
+{
+  "schema": "ampas-formalization-attestation/1",
+  "claim": "PL-IND",
+  "theorem": "Ampas.Claims.pl_independent",
+  "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
+  "frozen_at": "2026-10-12T10:47:22Z",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
+  "closure_sha256": "0793a0f96bd1888471746ad34bafbe5a7dd7922fcdf45eb7f4b9313927db2391",
+  "closure_size": 32,
+  "closure_entries": {
+    "And": "0fd960105532af8aa77145d64c84274c1813b92eede4f3e7b7910f633cb45adc",
+    "Eq": "0c02a2c0311bdc3685c122f816db1291e406e02188ef8c9e73184a5d5ae05dfb",
+    "False": "9716740a567c72ab242de1c00df39d2dda494e893c2691fe1e840f2179ca4ab3",
+    "Nat": "24168e47100587e94f4c6c5601994e97263695388c97186ecfc8b53d45b02e59",
+    "Not": "6ac603a491817267376b1294f723ac75225ff1ba5a2fd092deb857d56eeb24bb",
+    "OfNat": "22cb7b0a7b9160dff9e2cf6f216ef58850e33ba7744594d1a6050a5b802d9f95",
+    "instOfNatNat": "9231f34f2999ea4c4d4907b6d0206fb4e71e2e686d3bf0ba0eb923828372d025",
+    "And.intro": "b53fe9f09630df194adf4d46a18d54fad8f11b099244625beee71c393e0dd186",
+    "And.rec": "2c00b51bfb6ccf8d6219cfe3c358ce3f3165ed0daca68eaed758f620796b2cf1",
+    "Eq.rec": "5bb45d2c8ea9a31c50880827660a67c683bde55b69c903ffd96add5565355265",
+    "Eq.refl": "9329cc8083e1cf0f0b1f368a751c51d9caeca6c7a2fb836f0347f614d33c290b",
+    "False.rec": "5b6abfa560a6d1d62854a2a35e89b8fe111fb28ccd2d2667e673b98f40030a3a",
+    "Nat.rec": "1252112dedc66f32612e13c5d278d3c0499a5fcc9f9ad51599c635f50642f5cd",
+    "Nat.succ": "2a7a99eeaceaabd368458c386a2cd9995236fdda626c63e0e19d4d6546ecbbdb",
+    "Nat.zero": "bc5e9bb5c4dd168070b8902dc9e7da74d50befe261f9e8157ee0ac8b1c39b516",
+    "OfNat.mk": "20499ae2e4cf87246c31eab1343f990f1560eadbf8290f6b4fbcbf31dcfe4e4f",
+    "OfNat.ofNat": "83875824ca9782ad7b8aff0708cf4daf5529e61ea182c16480356757462b9e8c",
+    "OfNat.rec": "fb235b2886b43a6ae009465c6745dc16fec9ba4b5ef1ef540115ac1815290add",
+    "Ampas.PL.Derives": "a2395e36fa6fe0fdfb88ec23007b96b0a2ed7d995a60540541d2ad7864f8ea0f",
+    "Ampas.PL.Fm": "9de1ee5967d874532c0c642208ecab60eda98643757639cd3b764eb1d21cda95",
+    "Ampas.PL.Independent": "6ea03883f584e7724924421c3e15fec2ea07e1c39828aa9619fd91f934265db3",
+    "Ampas.PL.T_imp": "90cecf40eb66e66f190fe0cbc15fcbd8260ef46260e85abcd8b629828efa6952",
+    "Ampas.PL.Derives.a1": "78a334acc0a01a234bfc3ed5a56d5b392c39c77a6b2dacf3c424662cdbb5dcbe",
+    "Ampas.PL.Derives.a2": "32757bb35b41bdca939f719a971a39352ab06eb833f07472ea5c2db42ef6940f",
+    "Ampas.PL.Derives.a3": "0bbf4ac5dc9787cba68307bdce8f7050a3857336de9f524fc7dc7ba9e8a986f1",
+    "Ampas.PL.Derives.hyp": "10619434002e3d59660928e809279ada9ef3306783db8449b154df093e91202a",
+    "Ampas.PL.Derives.mp": "1a5c6326aa78ba9e670401beb6dfcb99b5062b3553bc4bea5f02f40253af50f6",
+    "Ampas.PL.Derives.rec": "aca6652173c0870f19f220ca8c6530b944cabae43be196c3918817973f78fe6a",
+    "Ampas.PL.Fm.imp": "a0ab746449d64d4c6f7929ba98e677885f7b1e88a5370b258d3ea3b94247934d",
+    "Ampas.PL.Fm.neg": "cff32d2d8c1009bb24ceae11f28c5d829fc621c70b0ee8cc25eb45dd2d3222b1",
+    "Ampas.PL.Fm.rec": "f3da5b237093b02270f866336630728f44bdc38b8b74e5c3294b8099deb9a42e",
+    "Ampas.PL.Fm.var": "89770bd33e6dbc5e77d50f60763d2b007811de0750a77a58855fccb47d83684c"
+  },
+  "policy": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "comparator": "strict"
+  },
+  "guards": {
+    "hypotheses": 0,
+    "witness": null,
+    "necessity": [],
+    "nontriviality": null,
+    "non_vacuity_status": "NO_HYPOTHESES",
+    "necessity_status": [],
+    "expected_witness": "",
+    "expected_necessity": []
+  },
+  "guards_satisfied": true,
+  "guard_problems": [],
+  "reviewer": {
+    "attested_by": "Kai Chang (Morris)",
+    "faithful": true,
+    "note": "Independence is a statement about the trusted proof system Ampas.PL.Derives, which is part of the reference. A proof of independence for a different (e.g. weaker) proof system is a different statement and the closure check rejects it. The reviewer confirms Derives is the standard classical Hilbert calculus and Independent means underivable-both-ways.",
+    "checklist": {
+      "statement_matches_text": true,
+      "no_unintended_convention": true,
+      "quantifier_order_checked": true,
+      "hypotheses_necessary_and_satisfiable": true,
+      "definitions_reviewed": true,
+      "conclusion_not_weakened": true
+    }
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "kai-chang-morris-2026-10",
+    "signed_at": "2026-10-12T10:47:22Z",
+    "value": "379fb130bfc81637f403139681158294ee064b5473e49b9d9fab221b15aa90d9b3898b881ccd6cd10d49f78f714e15b63a25366ffee173ecde80571f7de02c03"
+  }
+}

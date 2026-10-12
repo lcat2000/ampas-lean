@@ -1,0 +1,51 @@
+{
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.Challenge",
+  "claims": {
+    "ADD": {
+      "theorem": "Ampas.Claims.add_comm_nat",
+      "statement_sha256": "e607817d5a67f7bae72bed198d42acc6585a984fea6ef81178e78222e63adcc4",
+      "signoff_sha256": "cd88095622fda672df104aa60fdec5f0af477605cb80d27b5c427abfd5251837"
+    },
+    "SUB": {
+      "theorem": "Ampas.Claims.sub_add_cancel_nat",
+      "statement_sha256": "90b3d3eebded1b6603b70432962a59c18e75688a06c4587fa0b7da5b099d8cd2",
+      "signoff_sha256": "ca220a2ce0b3d0be9cfe1333cdaa7b354023d52352e66ace2a64bd49ab1fabcf"
+    },
+    "EVEN": {
+      "theorem": "Ampas.Claims.even_add_even",
+      "statement_sha256": "fd8508c42fad27e6472102c284105f7aa2f2c48241a08f72bed0e2c2dbec6404",
+      "signoff_sha256": "7b874f3a3fbf63109ed6b6285ec70be39b459c61e1c67f3c7eb3971086cfd5f2"
+    },
+    "DVD": {
+      "theorem": "Ampas.Claims.dvd_trans_nat",
+      "statement_sha256": "01c00872795a1dcfaeac038d6cebdf81c4f5191404a5d0b02a08624d4e2df2e0",
+      "signoff_sha256": "ef50091f58e0741d03e7d7e60dc0b48d1345e9b546a156428ee52d4d306e4230"
+    },
+    "GREATER": {
+      "theorem": "Ampas.Claims.exists_greater",
+      "statement_sha256": "d24f5b76d1e44a6fa21deb70cb5393261ec288189a1297ff0e0143fc68352b81",
+      "signoff_sha256": "9fafd66daf5415fc74105918df640f2fb773f6cc76a579ed03095d1883c93931"
+    },
+    "DIV": {
+      "theorem": "Ampas.Claims.div_self_pos",
+      "statement_sha256": "eb42a1978f667caa2834f64dc9f9024ec41e3d50f1fdb4f8fb57f845d6b9e5c1",
+      "signoff_sha256": "ec1d0ffa166e320e09f0c29e822a7444a75544a11fa1fbd69b9d0494be1cafc3"
+    },
+    "PL-IND": {
+      "theorem": "Ampas.Claims.pl_independent",
+      "statement_sha256": "9e0b8c5a3da26c066dfa7fbb0e8631ca78a2d1771aff481ea79cf7846314faff",
+      "signoff_sha256": "841a60ef0204dad8798206bc550c794a7b13698ada003f729611ee84509af5a0"
+    },
+    "EL-IND": {
+      "theorem": "Ampas.Claims.el_comm_independent",
+      "statement_sha256": "f4d2f3a5f47f292821e41dc6498cfa0123a1fb0c973c0a1dadb6df3b91cb3546",
+      "signoff_sha256": "9116b6277f6740ea111a34ca006b5a205f85658c4c340d867f0e9f8a08e7841c"
+    },
+    "PL-BOGUS": {
+      "theorem": "Ampas.Claims.pl_bogus_independent",
+      "statement_sha256": "1453381b152df84a11fbeb49e40c39afe9e7a5a0d9167d5e4a5b0b0ec4fd7dfa",
+      "signoff_sha256": "40392cff03a009390c0a7d95d82ddcd2573d5a07225935547296555330ae57e3"
+    }
+  }
+}
