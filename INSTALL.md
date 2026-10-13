@@ -23,16 +23,30 @@ dropped — git does not track it on Windows, so a commit made there loses mode
 `git update-index --chmod=+x scripts/<file>`. `tests/test_portability.py`
 fails on this, so a clone whose bits are intact will say so.
 
+**If you commit from Windows, set these two once** — otherwise every commit
+drops the executable bit on eleven scripts and may carry CRLF into files whose
+bytes are hashed:
+
+```powershell
+git config core.fileMode false     # stop recording 755 -> 644
+git add --renormalize .            # LF in the working tree, per .gitattributes
+```
+
 ### Windows
 
 Install elan with PowerShell (7.4.1 or later; `$PSVersionTable.PSVersion`
 tells you). The commands are from elan's own README:
 
 ```powershell
-curl -O --location https://elan.lean-lang.org/elan-init.ps1
+Invoke-WebRequest https://elan.lean-lang.org/elan-init.ps1 -OutFile elan-init.ps1
 powershell -ExecutionPolicy Bypass -f elan-init.ps1
-del elan-init.ps1
+Remove-Item elan-init.ps1
 ```
+
+(elan's own README gives this as `curl -O --location …`. In PowerShell `curl`
+may be an alias for `Invoke-WebRequest`, which reads `-O --location` as a
+filename and writes a file called `--location` — which then gets committed by
+the next `git add -A`. Use the line above, or `curl.exe` explicitly.)
 
 On Windows PowerShell 5.1 the script may not run; take the release zip from
 [leanprover/elan releases](https://github.com/leanprover/elan/releases)

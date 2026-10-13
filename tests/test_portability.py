@@ -162,3 +162,61 @@ def test_executable_checks_do_not_trust_os_access_on_windows(path):
         assert 'os.name == "nt"' in window or "usable_binary" in window, (
             f"{path.name}: {call} gates an execution without excluding "
             f"Windows, where it is always true for an existing file")
+
+
+def test_the_checksum_manifest_is_usable_on_any_platform():
+    """SHA256SUMS must use POSIX separators and every entry must resolve and
+    match.
+
+    Written on Windows, `str(rel)` produced `.github\\workflows\\verify.yml`
+    and 126 of 139 entries resolved nowhere else. A checksum manifest that
+    cannot be checked is worse than none, because it looks like it was
+    checked. This test runs in seconds and catches both halves: the
+    separators, and the hashes.
+    """
+    import hashlib
+    txt = (ROOT / "SHA256SUMS").read_text(encoding="utf-8")
+    assert "\\" not in txt, (
+        "SHA256SUMS contains a backslash, so it was written on Windows with "
+        "platform separators; re-run scripts/sha256sums.py")
+    # The manifest describes the COMMITTED state, so a file with uncommitted
+    # local edits is expected to differ and is not a finding. In CI the tree
+    # is clean, so nothing is excused there.
+    import subprocess
+    dirty = set()
+    try:
+        r = subprocess.run(["git", "status", "--porcelain"], cwd=str(ROOT),
+                           capture_output=True, text=True, encoding="utf-8",
+                           timeout=60)
+        if r.returncode == 0:
+            dirty = {line[3:].strip().strip('"') for line in r.stdout.splitlines()}
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+    problems = []
+    entries = [l for l in txt.splitlines() if l.strip()]
+    for line in entries:
+        digest, _, rel = line.partition("  ")
+        f = ROOT / rel
+        if not f.is_file():
+            problems.append(f"missing: {rel}")
+        elif hashlib.sha256(f.read_bytes()).hexdigest() != digest and rel not in dirty:
+            problems.append(f"changed: {rel}")
+    assert not problems, (
+        f"{len(problems)} of {len(entries)} entries do not check out:\n  "
+        + "\n  ".join(problems[:12])
+        + "\nre-run scripts/sha256sums.py if these are intended changes")
+
+
+def test_no_stray_files_at_the_repository_root():
+    """A file named `--location` was committed once: PowerShell's `curl` is an
+    alias for Invoke-WebRequest, which read `-O --location` as a filename, and
+    `git add -A` took it. Anything at the root that is not a known artifact is
+    almost certainly that kind of accident."""
+    allowed_suffixes = {".md", ".toml", ".json", ".txt", ".yml", ".yaml"}
+    allowed_names = {"LICENSE", "NOTICE", "SHA256SUMS", "lean-toolchain",
+                     "requirements.txt", ".gitignore", ".gitattributes"}
+    stray = [f.name for f in sorted(ROOT.iterdir())
+             if f.is_file() and f.name not in allowed_names
+             and f.suffix not in allowed_suffixes]
+    assert not stray, f"unexplained files at the repository root: {stray}"

@@ -30,12 +30,16 @@ def main() -> int:
                 continue
             if rel.name.startswith(".tmp_") or rel.name == "audit":
                 continue
-            if str(rel) in seen:
+            if rel.as_posix() in seen:
                 continue
-            seen.add(str(rel))
+            seen.add(rel.as_posix())
             files.append((rel, f))
-    lines = [f"{hashlib.sha256(f.read_bytes()).hexdigest()}  {rel}"
-             for rel, f in sorted(files, key=lambda t: str(t[0]))]
+    # POSIX separators always. `str(rel)` uses the platform's, so a manifest
+    # written on Windows named `.github\\workflows\\verify.yml` and 126 of its
+    # 139 entries resolved nowhere else -- a checksum file that cannot be
+    # checked is worse than none, because it looks like it was.
+    lines = [f"{hashlib.sha256(f.read_bytes()).hexdigest()}  {rel.as_posix()}"
+             for rel, f in sorted(files, key=lambda t: t[0].as_posix())]
     (ROOT / "SHA256SUMS").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{len(lines)} files -> SHA256SUMS")
     return 0
