@@ -128,7 +128,8 @@ def _audit(request: dict) -> dict:
     # the sign-off verification used to be reachable only for the core
     # catalogue.
     extra = os.environ.get("AMPAS_EXTRA_LEAN_PATH", "")
-    env["LEAN_PATH"] = ":".join([str(TRUSTED_OLEAN)] + ([extra] if extra else []))
+    env["LEAN_PATH"] = os.pathsep.join(
+        [str(TRUSTED_OLEAN)] + ([extra] if extra else []))
     try:
         r = subprocess.run(audit_cmd() + [str(req)], capture_output=True, text=True, encoding="utf-8",
                            env=env, timeout=600)

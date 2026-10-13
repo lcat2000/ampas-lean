@@ -11,11 +11,22 @@
 # from-source build and reference/mathlib_pin.json says so. Try the cache
 # first; falling back to source changes nothing about the result.
 set -euo pipefail
+# `python3` does not exist in Git Bash on Windows -- the python.org installer
+# ships python.exe and the py launcher. Pick whichever is there, so a reviewer
+# on Windows is not stopped by the name of an interpreter.
+PY=${PYTHON:-}
+if [ -z "$PY" ]; then
+  for c in python3 python py; do
+    if command -v "$c" >/dev/null 2>&1; then PY=$c; break; fi
+  done
+fi
+if [ -z "$PY" ]; then echo "no python interpreter found (tried python3, python, py)" >&2; exit 1; fi
+
 cd "$(dirname "$0")/../mathlib-tier"
 
 echo "== resolving dependencies at the pinned revisions"
 lake update -R 2>/dev/null || lake update
-python3 ../scripts/check_mathlib_pin.py
+"$PY" ../scripts/check_mathlib_pin.py
 
 echo "== trying the prebuilt cache"
 if lake exe cache get 2>/dev/null; then

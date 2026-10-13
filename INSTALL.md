@@ -23,6 +23,36 @@ dropped — git does not track it on Windows, so a commit made there loses mode
 `git update-index --chmod=+x scripts/<file>`. `tests/test_portability.py`
 fails on this, so a clone whose bits are intact will say so.
 
+### Windows
+
+Install elan with PowerShell (7.4.1 or later; `$PSVersionTable.PSVersion`
+tells you). The commands are from elan's own README:
+
+```powershell
+curl -O --location https://elan.lean-lang.org/elan-init.ps1
+powershell -ExecutionPolicy Bypass -f elan-init.ps1
+del elan-init.ps1
+```
+
+On Windows PowerShell 5.1 the script may not run; take the release zip from
+[leanprover/elan releases](https://github.com/leanprover/elan/releases)
+instead, unpack it and run the installer inside. Either way, open a new shell
+afterwards so `elan` is on PATH. `lean-toolchain` pins the version and elan
+installs it on first use from this directory, so there is nothing else to
+choose.
+
+The shell scripts need bash — use Git Bash, which comes with Git for Windows
+(they find `python` when `python3` does not exist). To avoid bash entirely,
+the two steps that matter can be run directly:
+
+```powershell
+lake build AmpasRef                                   # the trusted reference
+$env:AMPAS_TRUSTED_OLEAN = "$PWD\.lake\build\lib\lean"
+$env:PYTHONUTF8 = "1"                                 # belt and braces
+python harness/ampas_review.py freeze                 # re-freeze the records
+python scripts/sign_attestations.py $HOME\.ampas\<key>.pem <key-id>
+```
+
 **On Windows**, the parts that need no sandbox do work: the formalization
 sign-off (`keygen`, `sign`, `scripts/sign_attestations.py`) and most of tier 0.
 Three tier-0 tests import the driver and are skipped, because verifying a
@@ -45,7 +75,7 @@ that is hardest to fake and easiest to check.
 ## Tiers 0–1 — the pinned Lean toolchain
 
 ```bash
-# install elan if you do not have it
+# install elan if you do not have it (Linux/macOS)
 curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
 source "$HOME/.elan/env"
 

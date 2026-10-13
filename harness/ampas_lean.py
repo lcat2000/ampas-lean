@@ -350,7 +350,7 @@ def trusted_fingerprint() -> dict:
     files = sorted(TRUSTED_OLEAN.rglob("*.olean")) + [audit_fingerprint_path(),
                                                       LEAN_BIN / "lean",
                                                        LEAN_BIN / "leanchecker"]
-    for extra in filter(None, EXTRA_LEAN_PATH.split(":")):
+    for extra in filter(None, EXTRA_LEAN_PATH.split(os.pathsep)):
         files += sorted(Path(extra).rglob("*.olean"))
     files += sorted((LEAN_ROOT / "lib" / "lean" / "Init").rglob("*.olean"))
     files.append(LEAN_ROOT / "lib" / "lean" / "Init.olean")
@@ -387,7 +387,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
         # and writes only into its own build dir
         lean_path = f"{TRUSTED_OLEAN}:{build}"
         if EXTRA_LEAN_PATH:
-            lean_path = f"{lean_path}:{EXTRA_LEAN_PATH}"
+            lean_path = f"{lean_path}{os.pathsep}{EXTRA_LEAN_PATH}"
         src = work / f"{module.replace('.', '/')}.lean"
         src.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(sub_path, src)

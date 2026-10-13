@@ -468,7 +468,7 @@ def _lean_env(extra_path: str = "") -> dict:
                             str(ROOT / ".lake" / "build" / "lib" / "lean"))]
     if extra_path:
         paths.append(extra_path)
-    env["LEAN_PATH"] = ":".join(paths)
+    env["LEAN_PATH"] = os.pathsep.join(paths)
     return env
 
 
@@ -506,7 +506,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
 
     # kernel replay, in both modes, exactly as a submission gets
     env2 = _lean_env()
-    env2["LEAN_PATH"] = env2["LEAN_PATH"] + ":" + str(REFUT_DIR)
+    env2["LEAN_PATH"] = env2["LEAN_PATH"] + os.pathsep + str(REFUT_DIR)
     for flag, key in ((None, "kernel_replay"), ("--fresh", "kernel_replay_fresh")):
         cmd = [str(_lean() / "bin" / "leanchecker")] + ([flag] if flag else []) + [mod]
         rc, msg = _run(cmd, env2)

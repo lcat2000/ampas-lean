@@ -8,6 +8,17 @@
 # Afterwards ./scripts/verify.sh runs the highest tier your machine supports.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# `python3` does not exist in Git Bash on Windows -- the python.org installer
+# ships python.exe and the py launcher. Pick whichever is there, so a reviewer
+# on Windows is not stopped by the name of an interpreter.
+PY=${PYTHON:-}
+if [ -z "$PY" ]; then
+  for c in python3 python py; do
+    if command -v "$c" >/dev/null 2>&1; then PY=$c; break; fi
+  done
+fi
+if [ -z "$PY" ]; then echo "no python interpreter found (tried python3, python, py)" >&2; exit 1; fi
+
 ROOT=$PWD
 
 say() { printf '\n== %s\n' "$*"; }
@@ -16,8 +27,10 @@ say "Lean toolchain"
 if ! command -v lake >/dev/null 2>&1; then
   if ! command -v elan >/dev/null 2>&1; then
     echo "elan not found. Install it, then re-run:"
-    echo "  curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y"
-    echo '  source "$HOME/.elan/env"'
+    echo "  Linux/macOS: curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y"
+    echo '               source "$HOME/.elan/env"'
+    echo "  Windows:     curl -O --location https://elan.lean-lang.org/elan-init.ps1"
+    echo "               powershell -ExecutionPolicy Bypass -f elan-init.ps1"
     exit 1
   fi
 fi
@@ -50,7 +63,7 @@ say "Third-check provenance baseline"
 # reference run; if yours differs, your toolchain built different oleans and
 # that is worth knowing before you read any verdict.
 mkdir -p build
-LEAN_PATH="$TRUSTED" python3 harness/make_baseline.py \
+LEAN_PATH="$TRUSTED" "$PY" harness/make_baseline.py \
   build/kernel_baseline.json AmpasRef.Guards AmpasRef.Challenge
 if cmp -s build/kernel_baseline.json reference/kernel_baseline.json; then
   echo "baseline matches the committed reference-run baseline"

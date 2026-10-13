@@ -53,7 +53,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
                             str(ROOT / ".lake" / "build" / "lib" / "lean"))]
     if extra_path:
         paths.append(extra_path)
-    env["LEAN_PATH"] = ":".join(p for p in paths if p)
+    env["LEAN_PATH"] = os.pathsep.join(p for p in paths if p)
     started = time.monotonic()
     try:
         r = subprocess.run(
