@@ -207,19 +207,31 @@ C3／C4 判定：□ 接受　□ 不接受
 
 不接受的維持原狀或退回 `faithful: null`，由我依你的理由修正陳述或 guard。
 
-然後**你**在自己機器上跑（私鑰不能離開你的機器，否則簽章一樣不歸屬任何人）：
+然後**你**在自己機器上簽。私鑰不能離開你的機器——否則簽章一樣不歸屬任何人，那就回到它原本的問題。
+
+**這一步不需要 Lean。** `sign` 只讀已經凍結好的簽核檔、簽章、寫回去；它不碰稽核器也不碰核心。所以你只要 Python 加一個套件：
 
 ```bash
-python3 harness/ampas_review.py keygen \
-  --private ~/.ampas/kai-ed25519.pem --public reference/reviewer_key.json \
-  --key-id kai-chang-2026-10
+pip install cryptography
+mkdir -p ~/.ampas && chmod 700 ~/.ampas
 
-export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
-python3 harness/ampas_review.py freeze
-python3 harness/ampas_review.py sign --key ~/.ampas/kai-ed25519.pem --key-id kai-chang-2026-10
-python3 harness/ampas_review.py verify
+python3 harness/ampas_review.py keygen \
+  --private ~/.ampas/ampas-reviewer.pem \
+  --public  reference/reviewer_key.json \
+  --key-id  kai-chang-2026-10 \
+  --custody "Held by Kai Chang (Morris) / lcat2000 on their own machine; never in a build container, never committed."
+
+python3 harness/ampas_review.py sign \
+  --key ~/.ampas/ampas-reviewer.pem --key-id kai-chang-2026-10
+
+python3 scripts/sha256sums.py
+git add -A && git commit -m "Sign the attestations with a key in the reviewer's custody" && git push
 ```
 
-`freeze` 一定要重跑：review 欄位是在凍結時寫進簽核紀錄的，`sign` 只簽現成的紀錄。
+`--custody` 會把「誰保管這把私鑰」寫進公開的金鑰紀錄。那件事從金鑰本身看不出來，而它正是簽章有沒有意義的全部所在，所以不該留給讀者猜。
+
+**驗證交給 CI。** `verify` 需要 Lean（它要重新推導 closure），但你 push 之後 CI 就會跑——它有 Lean，會用你的新公鑰重新驗一遍全部簽核。綠了就表示簽章對、凍結沒漂移。
+
+**私鑰請自己備份。** 弄丟了只能重產一把再重簽一次；沒有災難，但紀錄裡會多一次金鑰輪替。
 
 **部分完成是合理的結果。** 只升級 B 組三條、其餘維持 `delegated`，比全部一次點頭誠實得多——而且 B 組正是最可能出錯、也最需要第二雙眼睛的地方。

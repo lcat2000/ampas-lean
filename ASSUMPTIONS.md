@@ -157,7 +157,11 @@ Still trusted, with nothing in this repository checking it:
   limits — not a VM, not a container.
 - **The OS, the hardware, the Python interpreter, the C toolchain.**
 - **The signing key.** A demonstration key; real deployment needs custody and a
-  binding to the reviewer's identity.
+  binding to the reviewer's identity. Custody is not derivable from key
+  material, so `keygen --custody` records it in the public key file at the
+  moment the key is made, and defaults to a stated `UNDECLARED` rather than to
+  silence. `reference/reviewer_key.json` says `NONE`: this key was generated in
+  the container that built the repository and is held by nobody.
 
 ## A5. Resource limits can make a run inconclusive, and that is not a rejection
 

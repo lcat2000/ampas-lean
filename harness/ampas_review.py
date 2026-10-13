@@ -250,7 +250,7 @@ def load_public(pem: str):
     return serialization.load_pem_public_key(pem.encode())
 
 
-def keygen(priv_path: Path, pub_path: Path, key_id: str):
+def keygen(priv_path: Path, pub_path: Path, key_id: str, custody: str | None = None):
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
     from cryptography.hazmat.primitives import serialization
     k = Ed25519PrivateKey.generate()
@@ -260,10 +260,22 @@ def keygen(priv_path: Path, pub_path: Path, key_id: str):
     os.chmod(priv_path, 0o600)
     pub_pem = k.public_key().public_bytes(
         serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo).decode()
-    pub_path.write_text(json.dumps({"key_id": key_id, "algorithm": "Ed25519",
-                                    "public_key_pem": pub_pem}, indent=2))
-    print(f"private key -> {priv_path} (keep out of the package)")
+    # Who holds the private key is the whole value of a signature, and it is
+    # not derivable from the key material -- so it is recorded here, in the
+    # public record, at the moment the key is made. A key generated in a
+    # build container and held by nobody authenticates a record's integrity
+    # and attributes NOTHING to a person; one held by a named reviewer binds
+    # the sign-off to them. The difference must not be left for a reader to
+    # guess from the key id.
+    rec = {"key_id": key_id, "algorithm": "Ed25519", "public_key_pem": pub_pem}
+    rec["custody"] = custody or (
+        "UNDECLARED — no custody was stated when this key was generated. Treat "
+        "the signature as attesting record integrity only, and as attributing "
+        "nothing to any person, until this field says who holds the private key.")
+    pub_path.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+    print(f"private key -> {priv_path} (keep out of the package; never commit it)")
     print(f"public key  -> {pub_path}")
+    print(f"custody     -> {rec['custody'][:72]}...")
 
 
 def cmd_freeze(args):
@@ -437,8 +449,11 @@ def main(argv):
     s.add_argument("--key-id", required=True); s.set_defaults(fn=cmd_sign)
     v = sub.add_parser("verify"); v.add_argument("--out"); v.set_defaults(fn=cmd_verify)
     k = sub.add_parser("keygen"); k.add_argument("--private", required=True)
+    k.add_argument("--custody", help="who holds the private key, in one line; "
+                                     "recorded in the public key file")
     k.add_argument("--public", required=True); k.add_argument("--key-id", required=True)
-    k.set_defaults(fn=lambda a: keygen(Path(a.private), Path(a.public), a.key_id) or 0)
+    k.set_defaults(fn=lambda a: keygen(Path(a.private), Path(a.public), a.key_id,
+                                       getattr(a, "custody", None)) or 0)
     args = ap.parse_args(argv)
     return args.fn(args)
 

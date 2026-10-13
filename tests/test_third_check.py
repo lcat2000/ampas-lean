@@ -266,7 +266,8 @@ def test_the_signing_key_does_not_claim_to_be_a_persons():
     k = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
     assert "kai" not in k["key_id"].lower(), (
         "the key id names a person, implying custody that does not exist")
-    assert k.get("custody", "").startswith("NONE")
+    assert k.get("custody", "").startswith("NONE") or \
+           k.get("custody", "").startswith("UNDECLARED")
     assert "attributes NOTHING to a person" in k.get("note", "")
 
 
