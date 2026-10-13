@@ -3,7 +3,7 @@
   "claim": "DIV",
   "theorem": "Ampas.Claims.div_self_pos",
   "text": "For every positive natural number n, n / n = 1.",
-  "frozen_at": "2026-10-12T16:07:26Z",
+  "frozen_at": "2026-10-13T07:16:23Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
@@ -179,15 +179,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:26Z",
-    "value": "55f60e9104921d3848d0a511e07a39d0c702004c439fad60d0c3d211031e0b1a1d239de4fc87e739eb665b18ead6eef74e42132fcd32670f0fac2541e7721c0c"
+    "signed_at": "2026-10-13T07:16:23Z",
+    "value": "7140b117b3a32aa3adcc49f311a04c9ceae3d02cf5b26ba3fa8c28d891907de76080a2593c17fde81475ca855c74b69d46cdfe0adec82913bc16c0a443ab5206"
   }
 }

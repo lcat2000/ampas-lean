@@ -3,7 +3,7 @@
   "claim": "PL-AXIOM-IND",
   "theorem": "Ampas.Claims.pl_a3_independent",
   "text": "In the Hilbert system of AmpasRef.Defs, the A3 instance for p0 and p1 ((¬p0 → ¬p1) → (p1 → p0)) is not derivable from axioms A1 and A2 by modus ponens alone. Since a derivable schema would give every instance, this shows A3 is an independent axiom of the calculus.",
-  "frozen_at": "2026-10-12T16:07:26Z",
+  "frozen_at": "2026-10-13T07:16:23Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "1326b4b4ba1a48838d08350af9c4e82cfe10d45010b9a31d08ea1d2573e9e056",
@@ -80,7 +80,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:26Z",
-    "value": "2e43a508da18f1d9f2b92df78d0ea0e8ddbd6e558ab083f1c2ccf542e62df54fc8e1d590609e987eb3eab8476ac5653eed80c3c93e0e4713e145aeded4e3e70a"
+    "signed_at": "2026-10-13T07:16:23Z",
+    "value": "1ad08bea2f545eb3bd5a049c5e9c2bf6bcf74bc3b2abfa65938c928fe4a688fa5fa0ddacb013769474307956a85d675a0b111b69e2fd4d9b2846c4777d75f607"
   }
 }

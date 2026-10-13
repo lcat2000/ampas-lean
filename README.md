@@ -133,10 +133,15 @@ evidence for each.
 - **Key management is out of scope, and the signature attributes nothing to a
   person.** The key here was generated in the container that built this
   repository and is held by nobody: it shows a record is unaltered, no more.
-- **The fidelity judgements are not independently reviewed.** All 13 were
-  reviewed by the same assistant that wrote the harness
-  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)); the owner's confirmation is
-  recorded as delegated, not personal.
+- **Most fidelity judgements are still not independently reviewed.** All 13
+  were reviewed by the same assistant that wrote the harness
+  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **6 of 13** have since been
+  read and confirmed personally by the repository owner — the six arithmetic
+  claims, whose closures contain no project-defined constants. The remaining
+  7, including all three independence claims where fidelity depends entirely
+  on the embedded calculus being what it says, are still recorded as
+  **delegated**. Per-claim status is in `reference/claims*.json`
+  (`confirmation.mode`).
 - **`unreviewed/` is not part of the deliverable** and nothing loads it. See its
   README.
 

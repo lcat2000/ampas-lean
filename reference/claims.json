@@ -42,10 +42,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       }
     },
     {
@@ -74,10 +74,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       },
       "guards": {
         "witness": "Ampas.Guards.sub_witness",
@@ -112,10 +112,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       },
       "guards": {
         "witness": "Ampas.Guards.even_witness",
@@ -151,10 +151,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       },
       "guards": {
         "witness": "Ampas.Guards.dvd_witness",
@@ -186,10 +186,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       }
     },
     {
@@ -218,10 +218,10 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
       },
       "guards": {
         "witness": "Ampas.Guards.div_witness",

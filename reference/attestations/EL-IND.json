@@ -3,7 +3,7 @@
   "claim": "EL-IND",
   "theorem": "Ampas.Claims.el_comm_independent",
   "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not make the theory inconsistent (x = y stays underivable).",
-  "frozen_at": "2026-10-12T16:07:26Z",
+  "frozen_at": "2026-10-13T07:16:23Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
@@ -115,7 +115,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:26Z",
-    "value": "85d0caaa579ae57020f601a1750cb7d9944ed939ac2a978d3af870e252c57c5d661b4e38105efcef90dd39b1da21be2acbead19cef744c1119a70075f42e6909"
+    "signed_at": "2026-10-13T07:16:23Z",
+    "value": "0470a685c75c11eb2bd1a3023e4f3be099dad96e578707b400cb557cb3e36271ae373ea1624f6827d432d1c180012b4be24f9e158fa5240dc746f708d8f51f08"
   }
 }

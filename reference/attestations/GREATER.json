@@ -3,7 +3,7 @@
   "claim": "GREATER",
   "theorem": "Ampas.Claims.exists_greater",
   "text": "Every natural number has a strictly greater natural number.",
-  "frozen_at": "2026-10-12T16:07:26Z",
+  "frozen_at": "2026-10-13T07:16:23Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
@@ -60,15 +60,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:26Z",
-    "value": "0a3377eb8a8aa3dc18906bf1fc01a5e34f538670e91e3808323248b0139518297d84ffd4725d31f22a5c755efe4c2b2a4ca4a27922e885959198133741980f0c"
+    "signed_at": "2026-10-13T07:16:23Z",
+    "value": "5194560fac8b3dc58f924945e2593dca1a6ce0c765bfb94107dbf495e732c2acdd99f33c3fbdf852e328ae2705fb9345c110b1fb8f49bfd2427c9c34e2465202"
   }
 }

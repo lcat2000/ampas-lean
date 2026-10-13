@@ -3,7 +3,7 @@
   "claim": "DVD",
   "theorem": "Ampas.Claims.dvd_trans_nat",
   "text": "Divisibility of natural numbers is transitive.",
-  "frozen_at": "2026-10-12T16:07:26Z",
+  "frozen_at": "2026-10-13T07:16:23Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
@@ -103,15 +103,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「SUB 與 DIV 的條件為等式在 Lean 自然數語義下成立所必要，且原文已明示，沒有擅自弱化原始主張。偶數定義符合通常數學慣例，包含 0。此判定以實際使用的 IsEven 確為所列定義為前提。」 — 該前提已機器驗證：`ampas_review.py verify` 從當下的 AmpasRef.Defs 重新推導 closure 並與凍結雜湊相符（10 份簽核 0 failures），所以工作表所列的 IsEven 即為 EVEN 凍結紀錄中的定義；且 tests/test_review_drift.py 證明替換 IsEven、陳述文字不變時會被偵測並指名該常數。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:26Z",
-    "value": "94a2949097bb7050a05554cd66f16a5cb771d4b13cf09d218f801a6e9c1b9268df0ffb59c1361bcc6b12a186438934284cea0383f238bd61568b35bce7e0d308"
+    "signed_at": "2026-10-13T07:16:23Z",
+    "value": "cdcec0c857e32d88296016bc37c6618faacd6a84d71b32561f7bd04d62f3344a749147d7e8bcae43bd626a63ad976c1922692665c68e87fdbe0dbb439000ec01"
   }
 }
