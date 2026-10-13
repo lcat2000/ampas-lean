@@ -24,6 +24,10 @@ jobs:
         # What a clean search result is allowed to mean, checked against the
         # committed records: no Lean, no box re-run, seconds.
         run: python3 -m pytest tests/test_counterexample.py -q
+      - name: derivation-search records
+        # PL-BOGUS must be recorded as refuted with the kernel's own verdict,
+        # and a NO_DERIVATION result must carry the universe it searched.
+        run: python3 -m pytest tests/test_derivation_search.py -q
       - name: portability
         # No file read may depend on the machine's locale, and no step of the
         # signing path may need a POSIX shell. Both were found by a reviewer

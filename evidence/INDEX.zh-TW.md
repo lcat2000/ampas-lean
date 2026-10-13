@@ -30,3 +30,20 @@
 是 `checked_points` 對 `box_size`：前提不成立的點對結論毫無發言權，判定不出來的
 點也一樣，所以真正檢查到陳述的只有剩下那些。驗證案例是 FERMAT-CLAIM，它必須回
 報 REFUTED、witness 為 `[5]`。
+
+## derivation_search.json — 有界推導搜尋
+
+`build/derivation_search.json`，重現 `reference/derivation_search.json`，
+產生的見證檔在 `build/refutations/`。
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    python3 harness/derivation_search.py --out build/derivation_search.json
+
+針對數值搜尋碰不到的那四條獨立性主張。PL-BOGUS 必須回報 REFUTED，而要看的欄位
+在 `kernel` 底下：`kernel_replay` 與 `kernel_replay_fresh`（elaborate 過不等於
+核心檢查過），以及 `statement_check.negates_frozen_statement_structurally`——
+沒有這一項，一份「反駁」可能反駁的是跟凍結陳述相鄰的另一條陳述，那就是
+`FermatWeaker` 的失效模式反過來用。`axioms: []` 表示這份反駁什麼公理都沒用到。
+
+另外三條，先讀 `bound` 再讀 `outcome`：NO_DERIVATION 的意思是「在那個範圍內沒找
+到」，僅此而已。完整說明見 ASSUMPTIONS A1c。

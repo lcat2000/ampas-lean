@@ -133,6 +133,53 @@ machine-reproducible half of each finding (library code, both kernels accept,
 reproduces with no submission involved), and the judgement that this is
 incompleteness rather than a missed soundness problem is still outstanding.
 
+### A1c. The bounded derivation search, and what a negative result is worth
+
+Four claims state that certain DERIVATIONS do not exist: PL-IND, EL-IND,
+PL-AXIOM-IND and PL-BOGUS. `PL.Derives`, `PL.DerivesPos` and `EL.Derives` are
+inductively defined predicates with no decision procedure, so the numeric
+search of A1b reports them NOT_SEARCHABLE and contributes nothing. A
+counterexample to such a claim is a derivation, so
+`harness/derivation_search.py` enumerates derivations instead of values:
+forward chaining over modus ponens for the propositional claims, congruence
+closure for the equational one.
+
+**The searcher is not trusted.** It finds candidates. Each one is emitted as a
+Lean term proving the negation of the frozen statement, compiled, replayed
+through the kernel in both modes, and checked by
+`harness/CheckRefutation.lean` — which verifies that the refutation's type is
+`Not` applied to *the frozen statement*, that it is a theorem, that it rests
+on no `sorryAx`, and that its statement mentions no constant the trusted
+reference does not define. That last check matters for the same reason the
+statement comparator matters: a refutation of an adjacent statement is exactly
+the `FermatWeaker` failure mode pointed the other way. A bug in the searcher
+can therefore lose a refutation; it cannot manufacture one.
+
+**What it established.** PL-BOGUS is a declared-false control, and until now
+nothing in this repository proved it false — only that no submission could
+prove it true, which is a different and much weaker thing. The search finds
+the Łukasiewicz derivation of `p1 → p1` in five steps; the kernel accepts the
+refutation **with no axioms at all**, and the statement check confirms it
+negates the frozen statement structurally and up to definitional equality. The
+waiver that used to stand in for this is gone.
+
+**What a NO_DERIVATION result is worth: much less.** For PL-IND,
+PL-AXIOM-IND and EL-IND it means no derivation was found within a stated
+universe — for the propositional ones, instantiating the axiom schemas over a
+48-formula universe for three rounds, around 200,000 formulas derived; for the
+equational one, congruence closure over a 238,148-term universe. The schemas
+range over infinitely many formulas, so this is not a proof of independence
+and must not be read as one. **Those three claims are already proved** by
+kernel-checked submissions in the corpus, which is where their truth comes
+from. The search's value for them is as a cross-check in the other direction:
+if it ever found a derivation, either the search or a certified independence
+proof would be wrong, and the kernel-checked witness would say which.
+
+**The equational search cannot produce a witness.** Congruence closure here
+does not produce a proof tree, so a derivation it found could not be handed to
+the kernel. That outcome is recorded `DERIVATION_FOUND_BUT_UNVERIFIED` and is
+a finding for a human, never a refutation. It has not occurred.
+
 ## A2. Kernel soundness — and cross-checking is weaker evidence than it looks
 
 **Assumed:** that Lean's kernel is sound, or that two independent kernels do

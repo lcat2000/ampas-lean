@@ -301,6 +301,21 @@ def cex_records(cat: dict) -> dict:
     return {r["claim"]: r for r in json.loads(p.read_text(encoding="utf-8")).get("searches", [])}
 
 
+def derivation_records() -> dict:
+    """The bounded derivation search's results, keyed by claim.
+
+    Separate from the numeric search because it is a different kind of
+    evidence: a REFUTED here means the Lean kernel accepted a proof that the
+    frozen statement is false, checked against that statement rather than an
+    adjacent one. A NO_DERIVATION means only that no derivation was found
+    within a stated universe.
+    """
+    p = ROOT / "reference" / "derivation_search.json"
+    if not p.exists():
+        return {}
+    return {r["claim"]: r for r in json.loads(p.read_text(encoding="utf-8")).get("searches", [])}
+
+
 def cex_gate(cid: str, claim: dict, derived: dict, rec: dict | None) -> dict:
     """Decide whether a statement may be frozen, given its search record.
 
@@ -330,13 +345,31 @@ def cex_gate(cid: str, claim: dict, derived: dict, rec: dict | None) -> dict:
             f"{rec.get('witness')}. It is not annotated as a false-claim "
             f"control, so this is not a control that was meant to be false: "
             f"either the statement is wrong or the claim text is.")
-    if declared_false and rec["outcome"] != "REFUTED" and not rec.get("falsity_not_searchable"):
-        raise SystemExit(
-            f"{cid}: annotated as a false-claim control, but the search did not "
-            f"refute it ({rec['outcome']}). Either the box is too small, the "
-            f"annotation is wrong, or the falsity is out of this search\'s reach "
-            f"-- in which case say so in reference/counterexample_bounds.json "
-            f"under \"falsity_not_searchable\".")
+    if declared_false and rec["outcome"] != "REFUTED":
+        # The numeric search could not refute it. A kernel-checked DERIVATION
+        # refutation counts instead, and is better evidence than the numeric
+        # search would have been: a proof the kernel accepted, rather than a
+        # point in a box.
+        drv = derivation_records().get(cid) or {}
+        kernel_refuted = drv.get("outcome") == "REFUTED"
+        if kernel_refuted:
+            sc = (drv.get("kernel") or {}).get("statement_check") or {}
+            if not sc.get("negates_frozen_statement_structurally"):
+                raise SystemExit(
+                    f"{cid}: a derivation refutation is on record but it does not "
+                    f"negate this frozen statement; re-run "
+                    f"harness/derivation_search.py")
+            rec["refuted_by"] = "bounded derivation search, checked by the Lean kernel"
+            rec["refutation_decl"] = (drv.get("kernel") or {}).get("refutation_decl")
+        elif not rec.get("falsity_not_searchable"):
+            raise SystemExit(
+                f"{cid}: annotated as a false-claim control, but nothing refutes "
+                f"it (numeric search: {rec['outcome']}; derivation search: "
+                f"{drv.get('outcome', 'none on record')}). Either a bound is too "
+                f"small, the annotation is wrong, or the falsity is out of both "
+                f"searches' reach -- in which case say so in "
+                f"reference/counterexample_bounds.json under "
+                f"\"falsity_not_searchable\".")
     # `seconds` is wall-clock, so it differs on every run; a content-addressed
     # record that nobody can reproduce byte-for-byte is worse than one without
     # the timing. It stays in the search record file, not in the signature.

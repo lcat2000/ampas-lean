@@ -1,0 +1,129 @@
+{
+  "searched_on": "2026-10-13",
+  "searches": [
+    {
+      "claim": "PL-BOGUS",
+      "frozen_decl": "Ampas.Claims.pl_bogus_independent",
+      "expected": "REFUTED",
+      "why": "A declared-false control. p1 → p1 is derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails.",
+      "bound": {
+        "formula_universe": 5,
+        "rounds": 1,
+        "axiom_instances": 175,
+        "formulas_derived": 219,
+        "fragment": "A1,A2,A3,MP"
+      },
+      "derivation": [
+        {
+          "rule": "a2",
+          "formula": "(.imp (.imp (.var 1) (.imp (.imp (.var 0) (.var 1)) (.var 1))) (.imp (.imp (.var 1) (.imp (.var 0) (.var 1))) (.imp (.var 1) (.var 1))))"
+        },
+        {
+          "rule": "a1",
+          "formula": "(.imp (.var 1) (.imp (.imp (.var 0) (.var 1)) (.var 1)))"
+        },
+        {
+          "rule": "mp",
+          "formula": "(.imp (.imp (.var 1) (.imp (.var 0) (.var 1))) (.imp (.var 1) (.var 1)))"
+        },
+        {
+          "rule": "a1",
+          "formula": "(.imp (.var 1) (.imp (.var 0) (.var 1)))"
+        },
+        {
+          "rule": "mp",
+          "formula": "(.imp (.var 1) (.var 1))"
+        }
+      ],
+      "kernel": {
+        "witness_file": "build/refutations/PL_BOGUS_refutation.lean",
+        "steps": 5,
+        "refutation_decl": "Ampas.Refutations.pl_bogus_refuted",
+        "elaborates": true,
+        "kernel_replay": true,
+        "kernel_replay_fresh": true,
+        "statement_check": {
+          "axioms": [],
+          "foreign_statement_constants": [],
+          "frozen_decl": "Ampas.Claims.pl_bogus_independent",
+          "is_theorem": true,
+          "negates_frozen_statement_structurally": true,
+          "negates_frozen_statement_up_to_defeq": true,
+          "refutation_decl": "Ampas.Refutations.pl_bogus_refuted",
+          "uses_sorry": false
+        }
+      },
+      "outcome": "REFUTED",
+      "seconds": 136.1,
+      "consistency": "OK"
+    },
+    {
+      "claim": "PL-IND",
+      "frozen_decl": "Ampas.Claims.pl_independent",
+      "expected": "NO_DERIVATION",
+      "why": "True, and already proved in the corpus (PLSol.lean) by a valuation argument the kernel checked. The search is a cross-check: a derivation here would mean either the search or that certified proof is wrong, and the witness would say which.",
+      "bound": {
+        "formula_universe": 48,
+        "rounds": 3,
+        "axiom_instances": 115200,
+        "formulas_derived": 213267,
+        "fragment": "A1,A2,A3,MP"
+      },
+      "outcome": "NO_DERIVATION",
+      "seconds": 9.8,
+      "consistency": "OK"
+    },
+    {
+      "claim": "PL-AXIOM-IND",
+      "frozen_decl": "Ampas.Claims.pl_a3_independent",
+      "expected": "NO_DERIVATION",
+      "why": "True: A3 is not derivable from A1, A2 and modus ponens. Proved in the corpus. The search looks for a positive derivation of the A3 instance and must not find one.",
+      "bound": {
+        "formula_universe": 48,
+        "rounds": 3,
+        "axiom_instances": 112896,
+        "formulas_derived": 203764,
+        "fragment": "A1,A2,MP"
+      },
+      "outcome": "NO_DERIVATION",
+      "seconds": 9.0,
+      "consistency": "OK"
+    },
+    {
+      "claim": "EL-IND",
+      "frozen_decl": "Ampas.Claims.el_comm_independent",
+      "expected": "NO_DERIVATION",
+      "why": "True, and proved in the corpus. Note what the second part is NOT: a pure equational theory always has a one-element model, so it can never be inconsistent -- what independence excludes here is trivialization, x = y becoming derivable.",
+      "bound": {
+        "parts": [
+          {
+            "part": "monoid does not derive commutativity",
+            "derivable": false,
+            "bound": {
+              "term_universe": 238148,
+              "substitution_pool": 20,
+              "axiom_instances": 8040,
+              "universe_capped": false,
+              "term_depth": 3
+            }
+          },
+          {
+            "part": "monoid plus commutativity does not collapse x = y",
+            "derivable": false,
+            "bound": {
+              "term_universe": 238148,
+              "substitution_pool": 20,
+              "axiom_instances": 8440,
+              "universe_capped": false,
+              "term_depth": 3
+            }
+          }
+        ],
+        "method": "congruence closure"
+      },
+      "outcome": "NO_DERIVATION",
+      "seconds": 21.9,
+      "consistency": "OK"
+    }
+  ]
+}

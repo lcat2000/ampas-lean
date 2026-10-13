@@ -70,8 +70,10 @@ note "sign-off, guards and drift detection"
 run python3 harness/ampas_review.py verify --out build/review_verification.json
 note "bounded counterexample search against the frozen statements (reproduces reference/counterexample_search.json)"
 run python3 harness/counterexample.py --out build/counterexample_search.json
+note "bounded derivation search: PL-BOGUS must be refuted, and the kernel must accept the witness"
+run python3 harness/derivation_search.py --out build/derivation_search.json
 run python3 -m pytest tests/test_math_verification.py tests/test_review_drift.py \
-      tests/test_third_check.py tests/test_counterexample.py \
+      tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_portability.py -q
 RAN="$RAN 1"
 

@@ -42,8 +42,7 @@
       "bound": 0,
       "exists_bound": 8,
       "timeout_seconds": 60,
-      "falsity_not_searchable": "PL-BOGUS is false because p1 -> p1 IS derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails. That is a fact about derivability in an inductively defined calculus, not about any finite box of numbers: `PL.Derives` has no Decidable instance and a bounded numeric search cannot reach it. Refuting it mechanically needs a bounded DERIVATION search, which this program does not implement (ROADMAP 5.1). Until then the falsity of this control rests on the reviewer's reading, and this search contributes nothing to it.",
-      "why": "No Nat variable; the search is expected to be NOT_SEARCHABLE and the waiver above says why."
+      "why": "No Nat variable, so the numeric search is NOT_SEARCHABLE: PL.Derives is an inductively defined predicate. Its falsity is established instead by the bounded DERIVATION search (reference/derivation_search.json), whose witness the Lean kernel accepted -- so the waiver that used to sit here, saying the falsity rested on the reviewer's reading, is no longer needed."
     }
   }
 }

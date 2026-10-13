@@ -47,6 +47,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
+| Derivation search | the 4 out of reach | PL-BOGUS refuted — kernel-accepted, no axioms; 3 NO_DERIVATION over a stated universe |
 | Tests | 101 | all pass from a clean checkout (112 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
@@ -118,6 +119,16 @@ evidence for each.
 - **Formalization fidelity is not machine-decided.** Freezing, signing and
   guards make a human judgement auditable, attributable and resistant to silent
   drift. They do not make it correct.
+- **A bounded derivation search refuted one claim and corroborates three.**
+  The four independence claims are out of the numeric search's reach, so
+  derivations are enumerated instead. PL-BOGUS — a control the catalogue
+  declares false — is now **refuted by a derivation the Lean kernel accepted
+  with no axioms**, checked against the frozen statement itself; previously
+  nothing here proved it false, only that nobody could prove it true. The
+  other three come back NO_DERIVATION over a stated universe, which is **not**
+  a proof of independence: their truth comes from kernel-checked proofs in the
+  corpus, and the search is a cross-check. ASSUMPTIONS A1c is precise about
+  the difference.
 - **The counterexample search is not evidence of truth.** It refuses to let a
   demonstrably false statement be frozen, which is worth having and is how
   Fermat's claim dies here. But "no counterexample" means no counterexample

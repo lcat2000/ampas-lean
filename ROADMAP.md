@@ -157,16 +157,17 @@ resource in the whole pipeline.
    claims, whose predicates are inductively defined and have no decision
    procedure.
 
-   The gap it leaves, and the next piece: a **bounded derivation search** for
-   those four. `PL.Derives` is an inductive predicate, so refuting PL-BOGUS
-   mechanically means enumerating derivations from the axiom schemas to some
-   depth and finding the proof of `p1 → p1` that makes its independence claim
-   false. That would turn the one false-claim control the numeric search
-   cannot touch into a machine-refuted one, and the same machinery would give
-   the PL/EL independence claims a bounded-model check instead of nothing.
-   Until then those four rest on the reviewer's reading alone, which
-   `reference/counterexample_bounds.json` states as a waiver rather than
-   leaving it to be inferred.
+   *Also done, 2026-10-13* — the **bounded derivation search** that closes
+   the gap for those four: `harness/derivation_search.py`, with the kernel as
+   the checker (`harness/CheckRefutation.lean`). PL-BOGUS, the one false-claim
+   control the numeric search cannot touch, is now refuted by a derivation the
+   kernel accepted with no axioms, verified to negate the frozen statement
+   rather than an adjacent one; its waiver is gone. The other three come back
+   NO_DERIVATION over a stated universe, which is a cross-check and not a
+   proof — ASSUMPTIONS A1c says why. The equational search still cannot
+   produce a witness (congruence closure here is not proof-producing), so a
+   hit there would be a finding for a human rather than a refutation; that is
+   the remaining piece of this item.
 2. **Formalization triangulation.** Have two or more independent parties (or
    models) formalize the same natural-language claim without seeing each
    other's work, then *prove the statements equivalent in Lean*. A disagreement

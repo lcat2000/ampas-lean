@@ -44,3 +44,23 @@ ASSUMPTIONS A1b. The number to look at first is `checked_points` against
 and points that could not be decided say nothing either, so only the remainder
 actually exercised the statement. The validation case is FERMAT-CLAIM, which
 must come back REFUTED with witness `[5]`.
+
+## derivation_search.json — bounded derivation search
+
+`build/derivation_search.json`, reproducing `reference/derivation_search.json`,
+plus the generated witnesses in `build/refutations/`.
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    python3 harness/derivation_search.py --out build/derivation_search.json
+
+The four independence claims, which the numeric search cannot reach.
+PL-BOGUS must come back REFUTED, and the fields to read are under `kernel`:
+`kernel_replay` and `kernel_replay_fresh` (elaboration is not the kernel), and
+`statement_check.negates_frozen_statement_structurally` — without that, a
+refutation might be about a statement adjacent to the frozen one, which is the
+`FermatWeaker` failure mode pointed the other way. `axioms: []` means the
+refutation rests on nothing at all.
+
+For the other three, read `bound` before reading `outcome`: NO_DERIVATION
+means nothing was found inside that universe, and nothing more. ASSUMPTIONS
+A1c is the full statement of what it is and is not worth.
