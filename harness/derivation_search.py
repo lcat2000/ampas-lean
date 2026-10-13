@@ -460,6 +460,11 @@ def _lean():
     return _lean_root()
 
 
+def _bin(name: str):
+    from ampas_lean import lean_exe
+    return lean_exe(name)
+
+
 def _lean_env(extra_path: str = "") -> dict:
     env = dict(os.environ)
     root = _lean()
@@ -497,7 +502,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
     env = _lean_env()
     out: dict = {"witness_file": str(path.relative_to(ROOT)), "steps": len(steps),
                  "refutation_decl": f"Ampas.Refutations.{decl}"}
-    rc, msg = _run([str(_lean() / "bin" / "lean"), "-o", str(REFUT_DIR / f"{mod}.olean"),
+    rc, msg = _run([str(_bin("lean")), "-o", str(REFUT_DIR / f"{mod}.olean"),
                     str(path)], env)
     out["elaborates"] = rc == 0
     if rc != 0:
@@ -508,7 +513,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
     env2 = _lean_env()
     env2["LEAN_PATH"] = env2["LEAN_PATH"] + os.pathsep + str(REFUT_DIR)
     for flag, key in ((None, "kernel_replay"), ("--fresh", "kernel_replay_fresh")):
-        cmd = [str(_lean() / "bin" / "leanchecker")] + ([flag] if flag else []) + [mod]
+        cmd = [str(_bin("leanchecker"))] + ([flag] if flag else []) + [mod]
         rc, msg = _run(cmd, env2)
         out[key] = rc == 0
         if rc != 0:
@@ -522,7 +527,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
         "refutation_module": mod,
         "refutation_decl": f"Ampas.Refutations.{decl}"}), encoding="utf-8")
     try:
-        rc, msg = _run([str(_lean() / "bin" / "lean"), "--run",
+        rc, msg = _run([str(_bin("lean")), "--run",
                         str(ROOT / "harness" / "CheckRefutation.lean"), str(req)], env2)
         if rc == 0 and msg:
             try:

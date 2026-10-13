@@ -87,13 +87,49 @@ def require_lean() -> None:
 AUDIT_BIN = Path(os.environ.get("AMPAS_AUDIT_BIN", HERE / "audit"))
 
 
+
+def lean_exe(name: str) -> Path:
+    """The toolchain's `name` binary, with the platform's extension.
+
+    On Windows these are `lean.exe` and `leanchecker.exe`. Building the path
+    without the suffix is not merely untidy: it produced
+
+        OSError: [WinError 193] %1 is not a valid Win32 application
+
+    from inside subprocess, which tells a reader nothing about what was
+    wrong. So the probe is explicit, and when it fails it names what it
+    looked for.
+    """
+    require_lean()
+    base = _lean_root() / "bin" / name
+    candidates = [base.with_name(base.name + ".exe"), base] if os.name == "nt" else [base]
+    for c in candidates:
+        if c.is_file():
+            return c
+    raise SystemExit(
+        f"no Lean `{name}` binary under {base.parent}. Looked for: "
+        + ", ".join(c.name for c in candidates)
+        + ". Set LEAN_ROOT to the toolchain prefix (`lean --print-prefix`).")
+
+
+def _usable_binary(p: Path) -> bool:
+    """`os.access(X_OK)` is true for ANY existing file on Windows, so it
+    cannot tell a native executable from the Linux ELF that a previous build
+    on another machine may have left behind. Require the extension there."""
+    if not p.is_file():
+        return False
+    if os.name == "nt":
+        return p.suffix.lower() in (".exe", ".bat", ".cmd")
+    return os.access(p, os.X_OK)
+
+
 def audit_cmd() -> list[str]:
     """The compiled auditor if present, otherwise `lean --run` on its source
     (slower, but needs no C toolchain). See harness/ampas_lean.py."""
-    if AUDIT_BIN.exists() and os.access(AUDIT_BIN, os.X_OK):
+    if _usable_binary(AUDIT_BIN):
         return [str(AUDIT_BIN)]
     require_lean()
-    return [str(LEAN_ROOT / "bin" / "lean"), "--run", str(HERE / "Audit.lean")]
+    return [str(lean_exe("lean")), "--run", str(HERE / "Audit.lean")]
 
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))
 ATTEST_DIR = ROOT / "reference" / "attestations"

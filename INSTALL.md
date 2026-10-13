@@ -84,10 +84,12 @@ pip install -r requirements.txt    # pytest + cryptography
 ./scripts/verify.sh 1      # ~6 minutes
 ```
 
-`bootstrap.sh` prints three `declaration uses 'sorry'` warnings while building
-`AmpasRef`. **Those are expected.** The reference statements are deliberately
-unproved — they are the statements a submission has to prove, and a `sorry`
-stub is how they are frozen without presupposing a proof.
+`bootstrap.sh` prints one `declaration uses 'sorry'` warning per frozen
+statement while building `AmpasRef` — ten for the core catalogue. **Those are
+expected.** The reference statements are deliberately unproved: they are the
+statements a submission has to prove, and a `sorry` stub is how they are
+frozen without presupposing a proof. (This said "three" until 2026-10-14,
+left over from a round with three claims.)
 
 What tier 1 runs:
 

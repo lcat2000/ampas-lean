@@ -39,8 +39,9 @@ lean --version
 echo "toolchain pinned by ./lean-toolchain: $(cat lean-toolchain)"
 
 say "Trusted reference (reference/AmpasRef)"
-# The three `sorry` warnings are expected: the reference statements are
-# deliberately unproved. They are the statements a submission must prove.
+# One `sorry` warning per frozen statement is expected: the reference
+# statements are deliberately unproved. They are the statements a submission
+# must prove.
 lake build AmpasRef
 TRUSTED="$ROOT/.lake/build/lib/lean"
 test -f "$TRUSTED/AmpasRef/Guards.olean"

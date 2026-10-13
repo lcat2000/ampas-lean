@@ -97,6 +97,43 @@ def require_lean() -> None:
             "toolchain. (Tier 0 of the verification needs no Lean: "
             "python3 -m pytest tests/test_third_check.py -q -k 'not pipeline')")
 LEAN_BIN = LEAN_ROOT / "bin"
+
+
+def lean_exe(name: str) -> Path:
+    """The toolchain's `name` binary, with the platform's extension.
+
+    On Windows these are `lean.exe` and `leanchecker.exe`. Building the path
+    without the suffix is not merely untidy: it produced
+
+        OSError: [WinError 193] %1 is not a valid Win32 application
+
+    from inside subprocess, which tells a reader nothing about what was
+    wrong. So the probe is explicit, and when it fails it names what it
+    looked for. This is the one definition; the other harness modules import
+    it from here.
+    """
+    require_lean()
+    base = _lean_root() / "bin" / name
+    candidates = ([base.with_name(base.name + ".exe"), base] if os.name == "nt"
+                  else [base])
+    for c in candidates:
+        if c.is_file():
+            return c
+    raise SystemExit(
+        f"no Lean `{name}` binary under {base.parent}. Looked for: "
+        + ", ".join(c.name for c in candidates)
+        + ". Set LEAN_ROOT to the toolchain prefix (`lean --print-prefix`).")
+
+
+def usable_binary(p: Path) -> bool:
+    """`os.access(X_OK)` is true for ANY existing file on Windows, so it
+    cannot tell a native executable from a Linux ELF left behind by a build on
+    another machine. Require the extension there."""
+    if not p.is_file():
+        return False
+    if os.name == "nt":
+        return p.suffix.lower() in (".exe", ".bat", ".cmd")
+    return os.access(p, os.X_OK)
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))
 AUDIT_BIN = Path(os.environ.get("AMPAS_AUDIT_BIN", HERE / "audit"))
 
@@ -110,19 +147,19 @@ def audit_cmd() -> list[str]:
     executable fails outright on some Lean distributions (a conda build
     records placeholder library paths); docs/build-notes.md has the fix.
     """
-    if AUDIT_BIN.exists() and os.access(AUDIT_BIN, os.X_OK):
+    if usable_binary(AUDIT_BIN):
         return [str(AUDIT_BIN)]
     require_lean()
     src = HERE / "Audit.lean"
     if not src.exists():
         raise SystemExit(f"auditor not found: no executable at {AUDIT_BIN} and no {src}")
-    return [str(LEAN_BIN / "lean"), "--run", str(src)]
+    return [str(lean_exe("lean")), "--run", str(src)]
 
 
 def audit_fingerprint_path() -> Path:
     """What to hash as "the auditor" in the trusted fingerprint: the compiled
     binary if it is what runs, otherwise its source."""
-    if AUDIT_BIN.exists() and os.access(AUDIT_BIN, os.X_OK):
+    if usable_binary(AUDIT_BIN):
         return AUDIT_BIN
     return HERE / "Audit.lean"
 
@@ -348,8 +385,8 @@ def trusted_fingerprint() -> dict:
     the reference oleans, the auditor, the Lean and leanchecker binaries,
     and the Init oleans of the toolchain."""
     files = sorted(TRUSTED_OLEAN.rglob("*.olean")) + [audit_fingerprint_path(),
-                                                      LEAN_BIN / "lean",
-                                                       LEAN_BIN / "leanchecker"]
+                                                      lean_exe("lean"),
+                                                      lean_exe("leanchecker")]
     for extra in filter(None, EXTRA_LEAN_PATH.split(os.pathsep)):
         files += sorted(Path(extra).rglob("*.olean"))
     files += sorted((LEAN_ROOT / "lib" / "lean" / "Init").rglob("*.olean"))
@@ -363,7 +400,7 @@ def baseline(module: str = "AmpasRef.Challenge") -> dict:
     require_lean()
     import time
     t0 = time.time()
-    r = _run([str(LEAN_BIN / "leanchecker"), "--fresh", module], ROOT, str(TRUSTED_OLEAN),
+    r = _run([str(lean_exe("leanchecker")), "--fresh", module], ROOT, str(TRUSTED_OLEAN),
              None, {"LEAN_NUM_THREADS": LEAN_THREADS}, limits=False, wall=1800)
     return {"module": module, "ok": r.returncode == 0, "returncode": r.returncode,
             "seconds": round(time.time() - t0, 1), "output": (r.stdout + r.stderr)[-1000:]}
@@ -403,7 +440,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
                                kernel_agreement="not_run", third_check={"run": False},
                                kernel_replay_fresh=False, compile_stderr="")
         before = trusted_fingerprint()
-        cc = _run([str(LEAN_BIN / "lean"), "-o", str(olean), str(src)], work, lean_path, as_user)
+        cc = _run([str(lean_exe("lean")), "-o", str(olean), str(src)], work, lean_path, as_user)
         if trusted_fingerprint() != before:
             res.error = "TRUSTED_ARTIFACT_MODIFIED during compilation"
             return res
@@ -421,7 +458,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
             return res
         res.compiled = True
         # kernel replay: the olean is in build, so leanchecker finds it there
-        kc = _run([str(LEAN_BIN / "leanchecker"), module], work, lean_path, as_user)
+        kc = _run([str(lean_exe("leanchecker")), module], work, lean_path, as_user)
         res.kernel_replay = kc.returncode == 0
         if _exhausted(kc):
             res.resource_exhausted.append(f"leanchecker ({_why(kc)})")
@@ -494,7 +531,7 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
     if not roots:
         return {"run": False, "summary": "no theorems to check"}
     exp = work / "closure.export"
-    r = _run([str(LEAN_BIN / "lean"), "--run", str(HERE / "Export.lean"), module, str(exp)]
+    r = _run([str(lean_exe("lean")), "--run", str(HERE / "Export.lean"), module, str(exp)]
              + roots, work, lean_path, as_user, mem=EXPORT_MEM_BYTES)
     if r.returncode != 0 or not exp.exists():
         return {"run": False, "summary": "export failed",

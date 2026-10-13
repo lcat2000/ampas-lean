@@ -122,3 +122,43 @@ def test_the_shell_scripts_are_executable():
         "not executable (a Windows commit drops mode 755):\n  "
         + "\n  ".join(bad)
         + "\nrestore with: git update-index --chmod=+x " + " ".join(bad))
+
+
+@pytest.mark.parametrize("path", SOURCES, ids=lambda p: p.name)
+def test_lean_binaries_are_resolved_not_concatenated(path):
+    """Nothing may build a toolchain binary path by string concatenation.
+
+    `LEAN_ROOT / "bin" / "lean"` has no extension, and on Windows the
+    executables are lean.exe and leanchecker.exe. Running the extensionless
+    path failed inside subprocess with
+
+        OSError: [WinError 193] %1 is not a valid Win32 application
+
+    which says nothing a reader can act on. `lean_exe()` in
+    harness/ampas_lean.py probes for the platform's name and, when it cannot
+    find one, says what it looked for.
+    """
+    src = path.read_text(encoding="utf-8")
+    bad = [line.strip()[:90] for line in src.splitlines()
+           if ('"bin" / "lean' in line or "'bin' / 'lean" in line
+               or 'LEAN_BIN / "lean' in line)
+           and "def lean_exe" not in line and "base = " not in line]
+    assert not bad, (
+        f"{path.name}: a Lean binary path built without the platform's "
+        f"extension; use lean_exe(name):\n  " + "\n  ".join(bad))
+
+
+@pytest.mark.parametrize("path", SOURCES, ids=lambda p: p.name)
+def test_executable_checks_do_not_trust_os_access_on_windows(path):
+    """`os.access(p, os.X_OK)` is true for ANY existing file on Windows, so it
+    cannot tell a native binary from the Linux ELF a build on another machine
+    may have left in the tree -- which is how a compiled auditor came to be
+    handed to CreateProcess."""
+    src = path.read_text(encoding="utf-8")
+    for call in _calls(src, "os.access("):
+        if "X_OK" not in call:
+            continue
+        window = src[max(0, src.find(call) - 400):src.find(call) + len(call)]
+        assert 'os.name == "nt"' in window or "usable_binary" in window, (
+            f"{path.name}: {call} gates an execution without excluding "
+            f"Windows, where it is always true for an existing file")

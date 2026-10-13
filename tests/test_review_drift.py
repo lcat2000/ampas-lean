@@ -19,6 +19,22 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "harness"))
 import ampas_lean as A  # noqa: E402
 LEAN_ROOT = A.LEAN_ROOT   # detected once in the harness, not hardcoded
+# The platform's actual binary name: lean.exe on Windows. Built by the one
+# helper that probes for it, so these tests fail the same way the harness
+# would rather than with WinError 193.
+from ampas_lean import lean_exe as _lean_exe
+
+
+def LEAN_EXE_FN():
+    return _lean_exe("lean")
+
+
+class _LeanExe:
+    def __str__(self):
+        return str(LEAN_EXE_FN())
+
+
+LEAN_EXE = _LeanExe()
 REF = ["Defs", "Challenge", "Guards"]
 # where `lake build AmpasRef` puts the trusted oleans; AMPAS_TRUSTED_OLEAN may
 # point elsewhere, so honour it and fall back to the Lake layout
@@ -52,7 +68,7 @@ def _rebuild(suite: Path):
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"
     env["LEAN_PATH"] = str(suite / TRUSTED_REL)
     for m in REF:
-        subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o",
+        subprocess.run([str(LEAN_EXE), "-o",
                         str(suite / TRUSTED_REL / "AmpasRef" / f"{m}.olean"),
                         str(suite / "reference" / "AmpasRef" / f"{m}.lean")],
                        capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
@@ -153,11 +169,11 @@ def test_redefining_a_definition_also_breaks_the_guards(tmp_path):
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"
     env["LEAN_PATH"] = str(suite / TRUSTED_REL)
     for m in ["Defs", "Challenge"]:
-        subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o",
+        subprocess.run([str(LEAN_EXE), "-o",
                         str(suite / TRUSTED_REL / "AmpasRef" / f"{m}.olean"),
                         str(suite / "reference" / "AmpasRef" / f"{m}.lean")],
                        capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
-    g = subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o", str(tmp_path / "g.olean"),
+    g = subprocess.run([str(LEAN_EXE), "-o", str(tmp_path / "g.olean"),
                         str(suite / "reference" / "AmpasRef" / "Guards.lean")],
                        capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
     assert g.returncode != 0, "the guards must stop compiling when IsEven is redefined"

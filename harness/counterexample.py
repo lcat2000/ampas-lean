@@ -36,6 +36,11 @@ def lean_root() -> Path:
     return _lean_root()
 
 
+def lean_binary(name: str) -> Path:
+    from ampas_lean import lean_exe
+    return lean_exe(name)
+
+
 def search_one(module: str, decl: str, bound: int, exists_bound: int,
                extra_path: str, timeout: int) -> dict:
     req = ROOT / ".cex_req.json"
@@ -57,7 +62,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
     started = time.monotonic()
     try:
         r = subprocess.run(
-            [str(root / "bin" / "lean"), "--run", str(ROOT / "harness" / "Counterexample.lean"),
+            [str(lean_binary("lean")), "--run", str(ROOT / "harness" / "Counterexample.lean"),
              str(req)],
             capture_output=True, text=True, encoding="utf-8", env=env, timeout=timeout, cwd=str(ROOT))
     except subprocess.TimeoutExpired:
