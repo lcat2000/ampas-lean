@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.pl_independent",
   "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
@@ -64,6 +64,13 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "outcome": "NOT_SEARCHABLE",
+    "reason": "conclusion Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1): inside a negation: no Decidable instance for Ampas.PL.Derives Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
+    "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -88,7 +95,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "36cf96730b65be2ddc5173f0731cf4bd556e7c43f86b471bac57656efbf63a0a1ed0d5dac58f81e0a664d1f99974a62faa6cf61f80b6158cbf5661520571c200"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "f1e39e6d5cf188424632b361d7c5836e49c947b15a5ada35fa6ff05c9151b6772a33b838c748b7e04a621b5a3b5d7a07d01e362f0e7781f176eb77867af68908"
   }
 }

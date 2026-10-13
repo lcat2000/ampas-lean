@@ -1,0 +1,48 @@
+{
+  "catalogue": "reference/claims_fermat.json",
+  "reference_module": "AmpasRef.ChallengeFermat",
+  "searched_on": "2026-10-13",
+  "searches": [
+    {
+      "bound": 5,
+      "box_size": 6,
+      "conclusion_exact": true,
+      "data_variables": 1,
+      "decl": "Ampas.Claims.fermat_all_prime",
+      "exists_bound": 8,
+      "hypotheses": 0,
+      "mode": "refutation",
+      "one_sided_hypotheses": 0,
+      "outcome": "REFUTED",
+      "unresolved_points": 0,
+      "witness": [
+        5
+      ],
+      "checked_points": 6,
+      "seconds": 6.4,
+      "claim": "FERMAT-CLAIM",
+      "statement_sha256": "5948dd88e7005ce34f454c3c79e55a7d8fc201d320b8222b8924c8c06322e215",
+      "declared_false_control": true,
+      "consistency": "OK"
+    },
+    {
+      "bound": 0,
+      "box_size": 1,
+      "conclusion_exact": true,
+      "data_variables": 0,
+      "decl": "Ampas.Claims.fermat_f5_not_prime",
+      "exists_bound": 8,
+      "hypotheses": 1,
+      "mode": "refutation",
+      "one_sided_hypotheses": 0,
+      "outcome": "NO_COUNTEREXAMPLE",
+      "unresolved_points": 0,
+      "checked_points": 1,
+      "seconds": 6.4,
+      "claim": "FERMAT-F5",
+      "statement_sha256": "85554187c6362837dc0aefd0c269fef5d2faadb1eeb889489857571a7bbbe458",
+      "declared_false_control": false,
+      "consistency": "OK"
+    }
+  ]
+}

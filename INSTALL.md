@@ -52,6 +52,8 @@ What tier 1 runs:
 - `harness/ablation.py`, which prints *which layer* caught each attack;
 - the formalization sign-off: freeze, guards, Ed25519 signature, drift
   detection;
+- the bounded counterexample search over the frozen statements, which should
+  reproduce `reference/counterexample_search.json`;
 - the three test suites (63 tests collected; what runs depends on the
   tier — the Mathlib fixtures skip without `AMPAS_MATHLIB_PATH`).
 
@@ -113,7 +115,21 @@ the theorem with the reference's exact name (`Ampas.Claims.even_add_even` for
 latter holds the `sorry` stubs.
 
 To add a claim of your own you also have to write the reference statement, its
-guards, and the sign-off; `docs/review-formalization.md` is the process.
+guards, and the sign-off; `docs/review-formalization.md` is the process. The
+freeze will refuse the statement until a counterexample search has run against
+it:
+
+```bash
+python3 harness/counterexample.py --out reference/counterexample_search.json
+python3 harness/ampas_review.py freeze
+```
+
+Set the claim's box in `reference/counterexample_bounds.json` if the default
+(each `Nat` variable over 0…24, existential witnesses hunted to 96) is wrong
+for it — too large a box can be slower than you expect, because the search
+*evaluates* the statement at every point. What the result is allowed to mean
+is in ASSUMPTIONS A1b; the one-line version is that finding a counterexample
+is decisive and finding none is not.
 
 ## Running without the sandbox
 

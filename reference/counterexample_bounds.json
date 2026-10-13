@@ -1,0 +1,49 @@
+{
+  "_comment": [
+    "Per-claim search boxes for harness/counterexample.py. These live here, in",
+    "the reference tree, because the box a 'no counterexample' result came from",
+    "is part of what that result means: over [0, bound] in each Nat variable,",
+    "with existential witnesses hunted up to exists_bound. A small bound is not",
+    "dishonest, but it must be visible, so raising or lowering one is a change",
+    "to the committed record and shows up in review.",
+    "",
+    "A bound is not free. The search EVALUATES the statement's decision",
+    "procedure at every point of the box, so a claim about primality of",
+    "2^(2^n)+1 cannot be searched past n = 5 on any ordinary machine: n = 6 is",
+    "2^64+1, whose trial division is ~2^32 steps. That is why FERMAT-CLAIM's",
+    "bound is 5 and not 24 -- and n = 5 is exactly where the claim dies, which",
+    "is the whole point of the pair."
+  ],
+  "default": {
+    "bound": 24,
+    "exists_bound": 96,
+    "timeout_seconds": 300
+  },
+  "claims": {
+    "FERMAT-CLAIM": {
+      "bound": 5,
+      "exists_bound": 8,
+      "timeout_seconds": 300,
+      "why": "F_6 = 2^64+1 cannot be decided by the trial division in Nat.Prime's instance. The historical counterexample is at n = 5, inside this box."
+    },
+    "FERMAT-F5": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 300,
+      "why": "The statement has no Nat variable: it is about one number. The box is the single empty tuple."
+    },
+    "PRIMES": {
+      "bound": 60,
+      "exists_bound": 256,
+      "timeout_seconds": 600,
+      "why": "The conclusion is an unbounded existential (a prime at least n), so the search can only CONFIRM it by finding a witness; exists_bound has to exceed the largest prime gap below the bound."
+    },
+    "PL-BOGUS": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 60,
+      "falsity_not_searchable": "PL-BOGUS is false because p1 -> p1 IS derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails. That is a fact about derivability in an inductively defined calculus, not about any finite box of numbers: `PL.Derives` has no Decidable instance and a bounded numeric search cannot reach it. Refuting it mechanically needs a bounded DERIVATION search, which this program does not implement (ROADMAP 5.1). Until then the falsity of this control rests on the reviewer's reading, and this search contributes nothing to it.",
+      "why": "No Nat variable; the search is expected to be NOT_SEARCHABLE and the waiver above says why."
+    }
+  }
+}

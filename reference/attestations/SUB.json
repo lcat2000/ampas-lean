@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.sub_add_cancel_nat",
   "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
@@ -100,6 +100,23 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 625,
+    "conclusion_exact": true,
+    "data_variables": 2,
+    "exists_bound": 96,
+    "hypotheses": 1,
+    "mode": "refutation",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "vacuous_points": 300,
+    "checked_points": 325,
+    "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -124,7 +141,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "dce6723670204a398f155794e43e714de915e36bde89161fc7b2475557372d1236fa6a60f35085a4215aa1af7309f7565ff6394438278358169c8f485687a40d"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "47d437b15842c24a4b4855a9086a6485ffdf497465f9da0147f93a6f9b363f866eba5f4e2e318827b908e6621a94d56d6ea29d84962457361868c335d98b2d03"
   }
 }

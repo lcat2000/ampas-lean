@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.fermat_f5_not_prime",
   "text": "TRUE (Euler, 1732): the Fermat number with index 5, F_5 = 2^(2^5) + 1, is not prime. (It equals 4294967297 = 641 * 6700417; the factorization is the evidence, and the statement asserts only compositeness. \"Index 5\" rather than \"the fifth\": counting from F_0 it is the sixth term of the sequence. Wording corrected on the reviewer's finding, 2026-10-13.)",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:54Z",
+  "frozen_at": "2026-10-13T14:12:19Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeFermat",
   "statement_sha256": "85554187c6362837dc0aefd0c269fef5d2faadb1eeb889489857571a7bbbe458",
@@ -378,6 +378,22 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 0,
+    "box_size": 1,
+    "conclusion_exact": true,
+    "data_variables": 0,
+    "exists_bound": 8,
+    "hypotheses": 1,
+    "mode": "refutation",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "checked_points": 1,
+    "statement_sha256": "85554187c6362837dc0aefd0c269fef5d2faadb1eeb889489857571a7bbbe458",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -402,7 +418,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:54Z",
-    "value": "3b215ff523d91aee9db71a96e8eb25b6521c1244e5b7fb838dc9c1521f5e26840474b96c16c99ed854ac5ae6a8cf44e015a45306ae282af96c4591b3efd1ea00"
+    "signed_at": "2026-10-13T14:12:19Z",
+    "value": "08c5e9ade7b3d7a5876853cdf095c65a91a192e334a97130880ee3d29a6ced8fc807ea5fe3f3c07dd3df9c241b78459e2f8b0421df9fcc169fd7cf98d9433207"
   }
 }

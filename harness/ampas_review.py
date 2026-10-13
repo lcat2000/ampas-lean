@@ -121,7 +121,14 @@ def _audit(request: dict) -> dict:
     req.write_text(json.dumps(request))
     env = dict(os.environ)
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"
-    env["LEAN_PATH"] = str(TRUSTED_OLEAN)
+    # AMPAS_EXTRA_LEAN_PATH after the trusted directory, never before it: at
+    # tier 3 the trusted directory is the merged one holding every AmpasRef
+    # module, and the extra entries carry Mathlib. Without them the auditor
+    # cannot even load a Mathlib-backed reference, which is why the freeze and
+    # the sign-off verification used to be reachable only for the core
+    # catalogue.
+    extra = os.environ.get("AMPAS_EXTRA_LEAN_PATH", "")
+    env["LEAN_PATH"] = ":".join([str(TRUSTED_OLEAN)] + ([extra] if extra else []))
     try:
         r = subprocess.run(audit_cmd() + [str(req)], capture_output=True, text=True,
                            env=env, timeout=600)
@@ -278,12 +285,72 @@ def keygen(priv_path: Path, pub_path: Path, key_id: str, custody: str | None = N
     print(f"custody     -> {rec['custody'][:72]}...")
 
 
+def cex_path(cat: dict) -> Path:
+    """Where this catalogue's committed counterexample-search record lives."""
+    sub = cat.get("counterexample_search")
+    if sub:
+        return ROOT / sub
+    stem = CATALOGUE.stem.replace("claims", "counterexample_search")
+    return ROOT / "reference" / f"{stem}.json"
+
+
+def cex_records(cat: dict) -> dict:
+    p = cex_path(cat)
+    if not p.exists():
+        return {}
+    return {r["claim"]: r for r in json.loads(p.read_text()).get("searches", [])}
+
+
+def cex_gate(cid: str, claim: dict, derived: dict, rec: dict | None) -> dict:
+    """Decide whether a statement may be frozen, given its search record.
+
+    The search cannot establish that a statement is true, and it says nothing
+    about fidelity. What it can do is refuse to let a statement that is
+    demonstrably FALSE be frozen as though it were a claim -- and catch the
+    reverse, a statement annotated as a false control that nothing mechanical
+    disagrees with. Both are findings about the catalogue, not about the
+    search, so both block.
+    """
+    declared_false = (claim.get("control") or {}).get("target_claim_is_true") is False
+    if rec is None:
+        raise SystemExit(
+            f"{cid}: no counterexample search on record. Run\n"
+            f"    python3 harness/counterexample.py --out {cex_path(catalogue())}\n"
+            f"before freezing. A statement that has never been attacked is not "
+            f"ready to be signed (ROADMAP 5.1).")
+    if rec.get("statement_sha256") != derived["statement_sha256"]:
+        raise SystemExit(
+            f"{cid}: the counterexample search was run against a DIFFERENT "
+            f"statement (searched {str(rec.get('statement_sha256'))[:12]}, "
+            f"current {derived['statement_sha256'][:12]}). The statement changed "
+            f"after it was searched; re-run harness/counterexample.py.")
+    if rec["outcome"] == "REFUTED" and not declared_false:
+        raise SystemExit(
+            f"{cid}: the frozen statement is FALSE -- counterexample "
+            f"{rec.get('witness')}. It is not annotated as a false-claim "
+            f"control, so this is not a control that was meant to be false: "
+            f"either the statement is wrong or the claim text is.")
+    if declared_false and rec["outcome"] != "REFUTED" and not rec.get("falsity_not_searchable"):
+        raise SystemExit(
+            f"{cid}: annotated as a false-claim control, but the search did not "
+            f"refute it ({rec['outcome']}). Either the box is too small, the "
+            f"annotation is wrong, or the falsity is out of this search\'s reach "
+            f"-- in which case say so in reference/counterexample_bounds.json "
+            f"under \"falsity_not_searchable\".")
+    # `seconds` is wall-clock, so it differs on every run; a content-addressed
+    # record that nobody can reproduce byte-for-byte is worse than one without
+    # the timing. It stays in the search record file, not in the signature.
+    return {k: v for k, v in rec.items()
+            if k not in ("claim", "decl", "seconds")}
+
+
 def cmd_freeze(args):
     cat = catalogue()
     derived = derive(cat)
     AD = attest_dir(cat)
     AD.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    cex = cex_records(cat)
     for cid, d in derived.items():
         ok, problems = guards_ok(d)
         if not ok and not args.allow_guard_failure:
@@ -292,6 +359,9 @@ def cmd_freeze(args):
                              f"--allow-guard-failure to record the failure)")
         claim = next(c for c in cat["claims"] if c["id"] == cid)
         review = claim.get("review", {})
+        # Inside the record, so the signature covers it: what was attacked,
+        # over what box, and with what result.
+        cex_block = cex_gate(cid, claim, d, cex.get(cid))
         rec = {
             "schema": "ampas-formalization-attestation/1",
             "claim": cid,
@@ -315,6 +385,7 @@ def cmd_freeze(args):
             "guards": d["guards"],
             "guards_satisfied": ok,
             "guard_problems": problems,
+            "counterexample_search": cex_block,
             # Three separate things, because conflating them is how a record
             # comes to assert a judgement nobody made. `prepared_by` is the
             # machine-reproducible part (hashes, guard types, closure list);
@@ -390,6 +461,23 @@ def cmd_verify(args):
         if rec["statement_sha256"] != d["statement_sha256"]:
             failures.append(f"{cid}: STATEMENT DRIFT - the reference statement changed "
                             f"since sign-off")
+        # 2b. the counterexample search inside the signed record must be
+        # about the statement that is there NOW. The signature proves the
+        # record was not altered; it cannot notice that the statement moved
+        # out from under a clean search result.
+        cexb = rec.get("counterexample_search")
+        if cexb is None:
+            failures.append(f"{cid}: the attestation records no counterexample search")
+        else:
+            if cexb.get("statement_sha256") != d["statement_sha256"]:
+                failures.append(
+                    f"{cid}: SEARCH DRIFT - the counterexample search in this "
+                    f"attestation was run against a different statement")
+            if cexb.get("outcome") == "REFUTED" and \
+                    (d.get("control") or {}).get("target_claim_is_true") is not False:
+                failures.append(
+                    f"{cid}: the statement is refuted by counterexample "
+                    f"{cexb.get('witness')} and is not a declared false-claim control")
         # 3. everything the statement rests on
         if rec["closure_sha256"] != d["closure_sha256"]:
             old, new = rec.get("closure_entries", {}), d["closure_entries"]

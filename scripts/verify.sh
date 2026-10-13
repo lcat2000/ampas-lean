@@ -68,8 +68,10 @@ for r in rows:
     print(f\"     {r['attack']:28}{r['verdict']:9} {', '.join(r['signals'])}\")"
 note "sign-off, guards and drift detection"
 run python3 harness/ampas_review.py verify --out build/review_verification.json
+note "bounded counterexample search against the frozen statements (reproduces reference/counterexample_search.json)"
+run python3 harness/counterexample.py --out build/counterexample_search.json
 run python3 -m pytest tests/test_math_verification.py tests/test_review_drift.py \
-      tests/test_third_check.py -q
+      tests/test_third_check.py tests/test_counterexample.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }
@@ -110,6 +112,10 @@ if [ -f "$MT/.lake/build/lib/lean/AmpasRef/ChallengeMathlib.olean" ]; then
         --out build/corpus_mathlib.json >/dev/null \
     && run python3 scripts/check_expectations.py build/corpus_mathlib.json
 
+  note "counterexample search over the Mathlib claim"
+  AMPAS_CLAIMS="$ROOT/reference/claims_mathlib.json" \
+    run python3 harness/counterexample.py --out build/counterexample_search_mathlib.json
+
   note "external validation: Fermat's false claim (1640) vs Euler's refutation (1732)"
   LEAN_PATH="$AMPAS_TRUSTED_OLEAN:$MLPATH" python3 harness/make_baseline.py \
       build/kernel_baseline_fermat.json AmpasRef.GuardsFermat AmpasRef.ChallengeFermat >/dev/null
@@ -118,6 +124,10 @@ if [ -f "$MT/.lake/build/lib/lean/AmpasRef/ChallengeMathlib.olean" ]; then
   run python3 harness/ampas_lean.py corpus/manifest_fermat.json \
         --out build/fermat_validation.json >/dev/null \
     && run python3 scripts/check_expectations.py build/fermat_validation.json
+  # the search's own external validation: Fermat's claim must die at n = 5,
+  # and Euler's refutation of it must not
+  note "counterexample search over the validation pair"
+  run python3 harness/counterexample.py --out build/counterexample_search_fermat.json
   unset AMPAS_CLAIMS
   RAN="$RAN 3"
 else

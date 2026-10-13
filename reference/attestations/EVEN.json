@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.even_add_even",
   "text": "The sum of two even natural numbers is even.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
@@ -94,6 +94,26 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 625,
+    "conclusion_exact": false,
+    "data_variables": 2,
+    "exists_bound": 96,
+    "first_unresolved": [
+      0,
+      1
+    ],
+    "hypotheses": 2,
+    "mode": "verification_only",
+    "one_sided_hypotheses": 2,
+    "outcome": "NO_COUNTEREXAMPLE_PARTIAL",
+    "unresolved_points": 456,
+    "checked_points": 169,
+    "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -118,7 +138,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "58d6cb5c87ef3e36c9200782f730eb2b97785b10f8efa18915202c28daef12fb1ad57458b26d93fb19e60ea14b89371d105ce0676414c263cca15f1d98aff805"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "7993a04397c94c90f42c9076d1e4975716c77d9ba326315db600292aeade3c2772b34be3f9a7cd83266426aa9e6b7b9e5e00105326a85f4b19d25c5229cab206"
   }
 }

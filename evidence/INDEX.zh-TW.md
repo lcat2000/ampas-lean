@@ -17,3 +17,16 @@
 | `corpus_results_mathlib.json` | 第二輪的 Mathlib 紀錄 | 歷史 |
 
 歷史檔案保留是為了可比對：第二輪與第三輪的差異應該只有第三道檢查的欄位，判定本身不該變。
+
+## counterexample_search*.json — 有界反例搜尋
+
+`build/counterexample_search.json`（核心）、`..._mathlib.json`、`..._fermat.json`，
+重現已登錄的 `reference/counterexample_search*.json`。
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    python3 harness/counterexample.py --out build/counterexample_search.json
+
+各欄位的意思、以及「乾淨結果」到底能代表什麼，見 ASSUMPTIONS A1b。先看的數字
+是 `checked_points` 對 `box_size`：前提不成立的點對結論毫無發言權，判定不出來的
+點也一樣，所以真正檢查到陳述的只有剩下那些。驗證案例是 FERMAT-CLAIM，它必須回
+報 REFUTED、witness 為 `[5]`。

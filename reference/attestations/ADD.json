@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.add_comm_nat",
   "text": "Addition of natural numbers is commutative.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
@@ -63,6 +63,22 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 625,
+    "conclusion_exact": true,
+    "data_variables": 2,
+    "exists_bound": 96,
+    "hypotheses": 0,
+    "mode": "refutation",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "checked_points": 625,
+    "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -87,7 +103,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "eb858188ca4b15291f8ea30dccc8ddcdafb3e832c8935ae6a8245be7da79133093800b77408dbcb0cbbf2c28a6a655574f9faa2eef1ea5a97fbca219016d0501"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "e549ab6dfa568c601045190632ca64d60143ffe42a7c889de95fe3fb19c836181c2b3548f10b0fe0637ec5d92e110b0bab84aeefac4c00c6c1a1d730a98a6c05"
   }
 }

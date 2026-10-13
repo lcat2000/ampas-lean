@@ -10,7 +10,7 @@
     "why_false": "p1 -> p1 is derivable from A1 and A2 by modus ponens alone, so the first conjunct of Independent fails and the conjunction is false.",
     "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM above. It does NOT formalize the sentence 'that claim is false' -- the outer negation appears nowhere in the Lean statement. The falsity is recorded here, as a control annotation and expected outcome, not inside `text`. Separated on the reviewer's finding, 2026-10-13."
   },
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
@@ -70,6 +70,14 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "outcome": "NOT_SEARCHABLE",
+    "reason": "conclusion Ampas.PL.Independent Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1)): inside a negation: no Decidable instance for Ampas.PL.Derives Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1))",
+    "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
+    "declared_false_control": true,
+    "consistency": "OK",
+    "falsity_not_searchable": "PL-BOGUS is false because p1 -> p1 IS derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails. That is a fact about derivability in an inductively defined calculus, not about any finite box of numbers: `PL.Derives` has no Decidable instance and a bounded numeric search cannot reach it. Refuting it mechanically needs a bounded DERIVATION search, which this program does not implement (ROADMAP 5.1). Until then the falsity of this control rests on the reviewer's reading, and this search contributes nothing to it."
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -94,7 +102,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "457f5c71d0ab623ba7ff1535b16685f274e944929d1ac4dd9e7076ff312977b1a0ca66178bb61be16f4718fbd0ff61767337fa16960a305cf5db9e89fa2d910e"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "2b8b740c89947f2a554528b7944482c586731afd262e52087c260bb71123a3f166d8b74f1919e1af91a9886dc6b46e5510840b12ab28c6896671a0467fe0b502"
   }
 }

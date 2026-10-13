@@ -36,11 +36,56 @@ make that judgement *auditable*:
   a statement weakened by an unnecessary hypothesis — and the guards' *types*
   are computed by the auditor from the statement itself, so a guard cannot be a
   proof of something weaker;
+- a **bounded counterexample search** runs against the frozen statement
+  before it can be frozen at all, and its result is carried inside the signed
+  record (see below);
 - the record is signed (Ed25519) and re-derived on every verification run.
 
 **What remains assumed:** guards exclude vacuity and over-strong hypotheses.
 They do not exclude "this statement is about something else". That is the
 boundary of Lean verification, not a gap in this implementation.
+
+### A1b. What the counterexample search does and does not establish
+
+`harness/counterexample.py` tries to falsify each frozen statement over a
+committed box of small values before the statement can be frozen
+(`reference/counterexample_bounds.json` holds the boxes, in the reference tree
+rather than as a default in code, because the box is part of what a result
+means). The outcome is cross-checked against the claim's own `control`
+annotation, and both directions block a freeze: a statement that is refuted
+but is not annotated as a false-claim control, and a statement annotated as
+false that the search cannot refute without a stated reason why it cannot.
+
+What it establishes: a statement that is **outright false** is caught cheaply,
+before a reviewer's attention is spent on it. Fermat's claim dies at n = 5, in
+milliseconds of evaluation — the record is
+`reference/counterexample_search_fermat.json`, witness `[5]`.
+
+What it does **not** establish, and these are the ways to misread it:
+
+- **It is not evidence of truth.** "No counterexample" means no counterexample
+  *in that box*. With the box set to n ≤ 4 — exactly the evidence Fermat
+  himself had — the search reports nothing found, which is why the gate
+  distrusts an unrefuted false-claim control.
+- **It says nothing about fidelity.** A faithful formalization of a false
+  claim and an unfaithful formalization of a true one are both refutable, and
+  the search cannot tell them apart. A1 is unchanged by it.
+- **It refuses to guess, and a refusal is a gap, not a pass.** Where a
+  hypothesis or conclusion cannot be decided, the point is reported
+  UNRESOLVED and the count is in the record; where the conclusion cannot be
+  decided at all the claim comes back NOT_SEARCHABLE with the reason. Four of
+  the ten core claims are in that position: `PL.Derives` and `EL.Derives` are
+  inductively defined predicates with no decision procedure, so the search
+  contributes **nothing** to the PL/EL claims, including to the falsity of the
+  PL-BOGUS control. Refuting that one mechanically needs a bounded derivation
+  search, which does not exist here (ROADMAP 5.1).
+- **A one-sided test's `false` is not a `false`.** `IsEven n` is
+  `∃ k, n = 2 * k`, which the search handles by hunting a witness up to a
+  bound: finding one proves the hypothesis, failing to find one proves
+  nothing. So EVEN's box of 625 points has 169 genuinely checked and 456
+  unresolved, and the record says so rather than reporting a clean sweep.
+- **A search killed by the clock has reached no verdict**, and is recorded
+  INCONCLUSIVE, per A5.
 
 **Evidence it matters:** the external validation pair. `FermatWeaker` contains
 no `sorry`, no added axiom, every line genuinely proved, and both kernels
@@ -48,14 +93,20 @@ accept it — it proves the restricted statement `∀ n, n ≤ 3 → …` while 
 under the general claim. Only the statement comparator rejects it.
 
 **Current status — read this before relying on any attestation.** All 13
-fidelity judgements were made by the **same assistant that wrote the
-harness** (`reviewed_by`), with the owner's approval recorded as
-**delegated** rather than personal (`confirmation.mode`). The reasoning for
-each is in `REVIEW-CHECKLIST.md` so it can be disagreed with. This is
-honestly recorded, and it is **not independent review**: the party that built
-the checks also judged whether the statements say what they claim. Independent
-review of the claims you rely on is the single highest-value thing an outside
-reader can add.
+fidelity judgements were *prepared* by the **same assistant that wrote the
+harness** (`reviewed_by`), which is the structural weakness: the party that
+built the checks also judged whether the statements say what they claim. All
+13 have since been read and confirmed personally by the repository owner
+(`confirmation.mode: personally_reviewed`), who did not write the harness.
+That reading produced five corrections rather than a ratification — they are
+listed in `REVIEW-CHECKLIST.md`, and the two false-claim controls were
+restructured because of one of them.
+
+What is still missing, in order of how much it matters: the signature over
+all 13 records is a demonstration key generated in the build container and
+held by nobody, so **cryptographically no attestation is bound to any
+person**; the reviewer judged the definitions as given, without re-running
+Lean; and one reader is not open review.
 
 Until round 3 this was worse: a single `attested_by` field was filled with the
 owner's name for 11 records the assistant had prepared, asserting he had

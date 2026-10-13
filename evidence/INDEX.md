@@ -29,3 +29,18 @@ notice if they were not.
 **Note on paths.** The recorded files contain absolute paths from the machine
 that produced them (`/home/claude/...`). They are a record of that run, not
 configuration; nothing reads them back.
+
+## counterexample_search*.json — bounded counterexample search
+
+`build/counterexample_search.json` (core), `..._mathlib.json`, `..._fermat.json`,
+reproducing the committed `reference/counterexample_search*.json`.
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    python3 harness/counterexample.py --out build/counterexample_search.json
+
+What each field means, and what a clean result is allowed to mean, is in
+ASSUMPTIONS A1b. The number to look at first is `checked_points` against
+`box_size`: points where a hypothesis failed say nothing about the conclusion,
+and points that could not be decided say nothing either, so only the remainder
+actually exercised the statement. The validation case is FERMAT-CLAIM, which
+must come back REFUTED with witness `[5]`.

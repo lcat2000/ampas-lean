@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.exists_greater",
   "text": "Every natural number has a strictly greater natural number.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
@@ -45,6 +45,22 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 25,
+    "conclusion_exact": false,
+    "data_variables": 1,
+    "exists_bound": 96,
+    "hypotheses": 0,
+    "mode": "verification_only",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "checked_points": 25,
+    "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -69,7 +85,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "86cbced9dc4c41b8611fd3753a283288eb0f99adbdfadb022aafd7750e41d7d0b2cf11ebda89b61ad19a5a5033c7a8c4dd61d508a8c9ccab87b9f45fb30cc60b"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "79b6973716a1023e72427290f4dc20656e1d2be63be538897aba96e98638323d10abbff6f25160c9499ba3e69bf42bfdeb81a5fd2dc1a3cb1bc6818b22c67c03"
   }
 }

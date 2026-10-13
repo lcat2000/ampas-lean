@@ -33,6 +33,7 @@ statements. It goes through:
 | **Axiom audit** | Transitive axioms against a per-claim policy; flags `sorryAx`, native evaluation, `opaque` in statements, `unsafe`, `partial` |
 | **Closure check** | Every constant the statement depends on, **including definition bodies**, compared against the reference |
 | **Statement comparator** | The elaborated statement against the frozen one, structurally or up to kernel definitional equality |
+| **Counterexample search** | Before a statement can be frozen, a bounded search tries to falsify it, and the result is signed into the record. Fermat's claim dies at n = 5 |
 | **Formalization sign-off** | A content-addressed freeze, machine-derived guard theorems, an Ed25519 signature, and drift detection |
 
 The last row is the one that cannot be automated, and the repository does not
@@ -45,7 +46,8 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and independently caught the kernel-bypass attack |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
-| Tests | 52 | all pass from a clean checkout (63 collected; the Mathlib fixtures skip below tier 3) |
+| Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
+| Tests | 67 | all pass from a clean checkout (78 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -116,6 +118,16 @@ evidence for each.
 - **Formalization fidelity is not machine-decided.** Freezing, signing and
   guards make a human judgement auditable, attributable and resistant to silent
   drift. They do not make it correct.
+- **The counterexample search is not evidence of truth.** It refuses to let a
+  demonstrably false statement be frozen, which is worth having and is how
+  Fermat's claim dies here. But "no counterexample" means no counterexample
+  *in a committed box of small values* — with the box set to the evidence
+  Fermat himself had, n ≤ 4, it finds nothing — and it says nothing whatever
+  about whether a statement means what its text says. It reaches four of the
+  thirteen claims not at all, because `PL.Derives` and `EL.Derives` have no
+  decision procedure; those records say NOT_SEARCHABLE with the reason rather
+  than passing quietly. ASSUMPTIONS A1b has the full list of ways to misread
+  a clean result.
 - **Multiple kernels agreeing is weaker evidence than it looks.** In 2026
   several Lean kernel soundness bugs surfaced; for one of them, cross-checking
   with an independent kernel *also accepted* the illicit proof because of that
@@ -161,10 +173,11 @@ evidence for each.
 
 ```
 reference/     frozen statements, guards, claim catalogues, attestations,
-               provenance baselines, pins, adjudications
+               provenance baselines, pins, adjudications, counterexample
+               search boxes and their recorded results
 corpus/        test data: genuine submissions, 13 attacks, the Fermat pair
-harness/       the driver, the Lean auditor, the third checker, baseline and
-               ablation tools
+harness/       the driver, the Lean auditor, the third checker, the
+               counterexample searcher, baseline and ablation tools
 tests/         51 tests, including the offline scope tests and forgery vectors
 scripts/       bootstrap and tiered verification
 evidence/      results of the recorded run, with an index of what each file is

@@ -1,0 +1,26 @@
+{
+  "catalogue": "reference/claims_mathlib.json",
+  "reference_module": "AmpasRef.ChallengeMathlib",
+  "searched_on": "2026-10-13",
+  "searches": [
+    {
+      "bound": 60,
+      "box_size": 61,
+      "conclusion_exact": false,
+      "data_variables": 1,
+      "decl": "Ampas.Claims.infinitude_of_primes",
+      "exists_bound": 256,
+      "hypotheses": 0,
+      "mode": "verification_only",
+      "one_sided_hypotheses": 0,
+      "outcome": "NO_COUNTEREXAMPLE",
+      "unresolved_points": 0,
+      "checked_points": 61,
+      "seconds": 5.4,
+      "claim": "PRIMES",
+      "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
+      "declared_false_control": false,
+      "consistency": "OK"
+    }
+  ]
+}

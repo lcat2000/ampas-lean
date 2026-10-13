@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.dvd_trans_nat",
   "text": "Divisibility of natural numbers is transitive.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
@@ -88,6 +88,23 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 15625,
+    "conclusion_exact": true,
+    "data_variables": 3,
+    "exists_bound": 96,
+    "hypotheses": 2,
+    "mode": "refutation",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "vacuous_points": 15313,
+    "checked_points": 312,
+    "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -112,7 +129,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "58e0d2a3a05535bccc9def1f8ad5e60e9a256013b00ed71b010c5d736a5ebe5fe33424144afd05ab62f93f2d32a27f8e09025c03973a2c10cca9bdfce6f8cf07"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "2ea1ae8403e0ed829f0e7d164c2287e9b474f4e0bfc7e04c79273378b6ae0ead0fcea387b6c739282fb0fa437705e92efb3442e634389bac2a6b36bad927f80d"
   }
 }

@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.div_self_pos",
   "text": "For every positive natural number n, n / n = 1.",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
@@ -164,6 +164,23 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 24,
+    "box_size": 25,
+    "conclusion_exact": true,
+    "data_variables": 1,
+    "exists_bound": 96,
+    "hypotheses": 1,
+    "mode": "refutation",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "vacuous_points": 1,
+    "checked_points": 24,
+    "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -188,7 +205,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "23c56c1e03b863bddaeee5a2103710a946e3c9f1f1af36821a7dff873cc7af5c23d742ac1d34b7cd96327df8835d522ea68b208e4f3e56a13d72a164429c580a"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "4a2f513f05e5b4391f96a7416912e581564961a112c38aa7207c5793b2381eeb23e62113528ef59cbe69ded34c634f883a760d59f6886b08822a2c58266b4400"
   }
 }

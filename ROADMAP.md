@@ -146,11 +146,27 @@ resource in the whole pipeline.
 
 **Approaches worth trying, cheapest first:**
 
-1. **Counterexample search against the frozen statement.** Before accepting a
-   reference statement, search for a witness that falsifies it (`decide` over
-   small cases, `Plausible`/property testing). Fermat's claim would have been
-   caught by this at $n = 5$ in milliseconds. It cannot establish fidelity, but
-   it is a cheap filter against statements that are outright false.
+1. **Counterexample search against the frozen statement.** *Done,
+   2026-10-13* — `harness/Counterexample.lean` and `harness/counterexample.py`.
+   A statement can no longer be frozen without a search on record, the result
+   is carried inside the signed attestation, and the search is bound to the
+   statement hash so an edited statement cannot inherit a clean result.
+   Fermat's claim is refuted at n = 5 as predicted. What it does not do is in
+   ASSUMPTIONS A1b; the short version is that it is not evidence of truth, it
+   says nothing about fidelity, and it contributes nothing to the four PL/EL
+   claims, whose predicates are inductively defined and have no decision
+   procedure.
+
+   The gap it leaves, and the next piece: a **bounded derivation search** for
+   those four. `PL.Derives` is an inductive predicate, so refuting PL-BOGUS
+   mechanically means enumerating derivations from the axiom schemas to some
+   depth and finding the proof of `p1 → p1` that makes its independence claim
+   false. That would turn the one false-claim control the numeric search
+   cannot touch into a machine-refuted one, and the same machinery would give
+   the PL/EL independence claims a bounded-model check instead of nothing.
+   Until then those four rest on the reviewer's reading alone, which
+   `reference/counterexample_bounds.json` states as a waiver rather than
+   leaving it to be inferred.
 2. **Formalization triangulation.** Have two or more independent parties (or
    models) formalize the same natural-language claim without seeing each
    other's work, then *prove the statements equivalent in Lean*. A disagreement
@@ -165,8 +181,8 @@ resource in the whole pipeline.
    at the specific binders — would make a careless attestation visible.
 
 **Done when:** a statement cannot be frozen without a counterexample search
-having run, and the triangulation protocol has been tried on at least one
-claim.
+having run — reached — and the triangulation protocol has been tried on at
+least one claim — not reached.
 
 ## 6. Scale the corpus, and stop writing it ourselves
 

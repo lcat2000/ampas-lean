@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.el_comm_independent",
   "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not trivialize the theory: x = y remains underivable. (Not \"inconsistent\": a pure equational theory always has a one-element model, so inconsistency in the usual sense is unreachable. The degenerate case the second conjunct excludes is trivialization -- every equation becoming derivable, which substitution would give from x = y.)",
   "control": null,
-  "frozen_at": "2026-10-13T07:28:08Z",
+  "frozen_at": "2026-10-13T14:12:04Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
@@ -92,6 +92,13 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "outcome": "NOT_SEARCHABLE",
+    "reason": "conclusion Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm: inside a negation: no Decidable instance for Ampas.EL.Derives Ampas.EL.monoid Ampas.EL.comm.lhs Ampas.EL.comm.rhs",
+    "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -116,7 +123,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:08Z",
-    "value": "5f0e46b5dd96a16308855245bd3ee0359ad20882ce2c68cb9cb7b78edc6b8a152547c569a594604f9cacff09c4d9ba9847021aaf1e92d3edef106371bbb07d02"
+    "signed_at": "2026-10-13T14:12:04Z",
+    "value": "6a419e4b0e8f9ebdd03ea757263ee64140e14cf0a70ab87e86e34208ed1fc0088a099738045a61d3b340dd0112bfe2e76191775cad85bae3252c60f56aa63e0c"
   }
 }

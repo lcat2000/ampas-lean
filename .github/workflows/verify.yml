@@ -20,6 +20,10 @@ jobs:
       - run: pip install -r requirements.txt
       - name: third-check scope and record integrity
         run: python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
+      - name: counterexample-search records
+        # What a clean search result is allowed to mean, checked against the
+        # committed records: no Lean, no box re-run, seconds.
+        run: python3 -m pytest tests/test_counterexample.py -q
 
   # Tier 1 is the real verification: the whole core corpus through compile,
   # kernel replay, the third check and the auditor, plus the sign-off and its

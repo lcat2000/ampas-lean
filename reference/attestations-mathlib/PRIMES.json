@@ -3,7 +3,8 @@
   "claim": "PRIMES",
   "theorem": "Ampas.Claims.infinitude_of_primes",
   "text": "There are arbitrarily large prime numbers: for every natural number n there is a prime p with n <= p (Euclid's theorem).",
-  "frozen_at": "2026-10-13T07:28:24Z",
+  "control": null,
+  "frozen_at": "2026-10-13T14:12:10Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeMathlib",
   "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
@@ -376,6 +377,22 @@
   },
   "guards_satisfied": true,
   "guard_problems": [],
+  "counterexample_search": {
+    "bound": 60,
+    "box_size": 61,
+    "conclusion_exact": false,
+    "data_variables": 1,
+    "exists_bound": 256,
+    "hypotheses": 0,
+    "mode": "verification_only",
+    "one_sided_hypotheses": 0,
+    "outcome": "NO_COUNTEREXAMPLE",
+    "unresolved_points": 0,
+    "checked_points": 61,
+    "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
+    "declared_false_control": false,
+    "consistency": "OK"
+  },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
@@ -400,7 +417,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:28:24Z",
-    "value": "5cccd614cd1c0b7db8f6de6be6bc86934867476e49a9dee6c5b5b31d8b3a0680935addcdb292866f1a0f64898472bd20c3b0d833a503af81ecb8fd3e9bf84101"
+    "signed_at": "2026-10-13T14:12:10Z",
+    "value": "0275fea6ec959fed90e78f6223a22839a70ea0d0cedd4467ff6fd134bc1bd28d55e32b882fb8b7798f3957ff15e5135a85b4469d2664665075165b7541fbd004"
   }
 }
