@@ -102,11 +102,24 @@ That reading produced five corrections rather than a ratification — they are
 listed in `REVIEW-CHECKLIST.md`, and the two false-claim controls were
 restructured because of one of them.
 
-What is still missing, in order of how much it matters: the signature over
-all 13 records is a demonstration key generated in the build container and
-held by nobody, so **cryptographically no attestation is bound to any
-person**; the reviewer judged the definitions as given, without re-running
-Lean; and one reader is not open review.
+As of 2026-10-13 all 13 are also signed by `kai-chang-2026-10`, a key
+generated on the owner's own machine and never present in the container that
+builds this repository, so the records are cryptographically bound to whoever
+holds that key rather than to nobody. That was the largest remaining gap and
+it is closed.
+
+What is still missing, in order of how much it matters:
+
+- **The reviewer did not re-run Lean.** He judged the definitions and
+  statements as given. So the fidelity judgement and the kernel results come
+  from different parties, which is the point — but it also means no single
+  party has checked both.
+- **The key's custody is asserted by its holder.** The public key record says
+  who holds the private key; nothing outside this repository corroborates
+  that. There is no certificate, no web of trust and no signed commit chain
+  binding the key to a GitHub account, so a stranger cannot check the
+  attribution without obtaining the fingerprint through another channel.
+- **One reader is not open review.**
 
 Until round 3 this was worse: a single `attested_by` field was filled with the
 owner's name for 11 records the assistant had prepared, asserting he had
@@ -207,12 +220,13 @@ Still trusted, with nothing in this repository checking it:
 - **The sandbox.** An unprivileged user, read-only trusted oleans and resource
   limits — not a VM, not a container.
 - **The OS, the hardware, the Python interpreter, the C toolchain.**
-- **The signing key.** A demonstration key; real deployment needs custody and a
-  binding to the reviewer's identity. Custody is not derivable from key
-  material, so `keygen --custody` records it in the public key file at the
-  moment the key is made, and defaults to a stated `UNDECLARED` rather than to
-  silence. `reference/reviewer_key.json` says `NONE`: this key was generated in
-  the container that built the repository and is held by nobody.
+- **The signing key's identity.** Custody is not derivable from key material,
+  so `keygen --custody` records it in the public key file at the moment the key
+  is made, and defaults to a stated `UNDECLARED` rather than to silence.
+  `reference/reviewer_key.json` now names the repository owner, and the key was
+  generated on his machine — but that line is an assertion by the party it
+  describes. Binding a key to an identity is outside what this repository can
+  do for itself.
 
 ## A5. Resource limits can make a run inconclusive, and that is not a rejection
 

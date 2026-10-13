@@ -47,7 +47,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
-| Tests | 67 | all pass from a clean checkout (78 collected; the Mathlib fixtures skip below tier 3) |
+| Tests | 101 | all pass from a clean checkout (112 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -142,12 +142,18 @@ evidence for each.
   that produces the olean), the OS and the sandbox are all still trusted.
 - **Mathlib coverage is one claim**, over a 387-olean dependency cone, not the
   whole library.
-- **Key management is out of scope, and the signature attributes nothing to a
-  person.** The key here was generated in the container that built this
-  repository and is held by nobody: it shows a record is unaltered, no more.
-  Custody cannot be read off a key, so the public key record states it and
-  `keygen` refuses to leave it blank — but a stated custody is a claim, not
-  proof of one, and this one states `NONE`.
+- **The signature now binds the records to a key in the reviewer's custody —
+  and custody is a stated claim, not proof of one.** All 13 attestations are
+  signed by `kai-chang-2026-10`, a key generated on the repository owner's own
+  machine and never present in the container that builds this repository; the
+  public key record states that custody, because it cannot be read off a key.
+  What that establishes: the records were signed by whoever holds that private
+  key, and nothing has been altered since. What it does not establish: that
+  the holder is who the record says. There is no external identity binding —
+  no web of trust, no certificate, no signed commit chain tying the key to a
+  GitHub account — so the custody line is an assertion by the same party it
+  describes. Verifying it independently means getting the key's fingerprint
+  from him through some other channel.
 - **Most fidelity judgements are still not independently reviewed.** All 13
   were reviewed by the same assistant that wrote the harness
   ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **All 13** have since been
@@ -162,10 +168,11 @@ evidence for each.
   fields; "the fifth Fermat number" was ambiguous for F₅; and a performance
   claim was asserted without evidence. All corrected.
 
-  **What is still missing:** the signature is a demonstration key held by
-  nobody, so no attestation is cryptographically bound to a person; the
-  reviewer reviewed the definitions as given, without re-running Lean; and one
-  reader is not the same as open review.
+  **What is still missing:** the reviewer judged the definitions as given,
+  without re-running Lean himself, so the fidelity judgements and the kernel
+  results rest on different parties; the key's custody is asserted by its
+  holder and not bound to any external identity; and one reader is not open
+  review.
 - **`unreviewed/` is not part of the deliverable** and nothing loads it. See its
   README.
 
@@ -196,14 +203,12 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 2. Close the third check's inductive-specification gap in the one direction
    that is safe: a positivity check, verified against both Lean kernels rather
    than bolted onto the checker under review.
-3. Bind the attestations to a person. All 13 now record a personal
-   confirmation by the repository owner, but the signature over them is a
-   demonstration key held by nobody, so cryptographically the records are
-   attributable to no one. `keygen --custody` and
-   `scripts/sign_attestations.sh` exist so that step needs no Lean and no
-   expertise; what it needs is a private key generated and kept by the
-   reviewer, which by construction cannot happen in the container that builds
-   this repository.
+3. Bind the signing key to an identity outside this repository. As of
+   2026-10-13 all 13 attestations are signed by a key held by the repository
+   owner rather than by the build container, which was the gap. What is left
+   is that nothing ties that key to him except the record's own say-so: a
+   fingerprint published elsewhere, or signed commits, would make the
+   attribution checkable by a stranger.
 4. Widen review beyond one reader. One confirmation is independent of the
    harness's author — the property that was missing — but it is not open
    review.

@@ -62,7 +62,7 @@ What tier 1 runs:
   detection;
 - the bounded counterexample search over the frozen statements, which should
   reproduce `reference/counterexample_search.json`;
-- the three test suites (63 tests collected; what runs depends on the
+- the five test suites (112 tests collected; what runs depends on the
   tier — the Mathlib fixtures skip without `AMPAS_MATHLIB_PATH`).
 
 ## Tier 2 — the second independent kernel

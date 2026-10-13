@@ -15,12 +15,19 @@ had not. The three roles are now separate fields and
 `harness/ampas_review.py verify` checks them separately, so a record cannot
 pass by naming someone for work they did not do.
 
-**The signature attributes nothing to a person.** `reference/reviewer_key.json`
-is a demonstration key generated inside the container that produced this
-repository and held by nobody. It authenticates that an attestation has not
-been altered since freezing — no more. Its previous id,
-`kai-chang-morris-2026-10`, wrongly implied the owner's custody and was
-replaced for that reason.
+**What the signature attributes, and what it does not.** Since 2026-10-13
+`reference/reviewer_key.json` is `kai-chang-2026-10`, generated on the
+repository owner's own machine and never present in the container that builds
+this repository; its `custody` field says so. A signature with it therefore
+establishes that the record was signed by whoever holds that private key and
+has not been altered since freezing. It does not establish that the holder is
+the person the record names: nothing outside this repository binds the key to
+an identity, and the custody line is an assertion by the party it describes.
+
+Before that it was a demonstration key held by nobody, and before *that* its
+id was `kai-chang-morris-2026-10` — which implied the owner's custody while
+the private key sat in a build container. That id was replaced for the same
+reason this paragraph exists: a key's name is not evidence of who holds it.
 
 **What a reader should do with this document.** It is the reasoning, not an
 authority. Every machine-derived figure in it is reproducible

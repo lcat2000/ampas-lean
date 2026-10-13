@@ -97,13 +97,23 @@ The whole record is signed with a **detached Ed25519 signature**
 this repository). The signature covers every field except itself, so even
 editing the `text` field invalidates it.
 
-**What the signature does not do.** The key shipped here is a demonstration
-key, generated inside the container that produced this repository and held by
-nobody. A signature with it establishes that a record has not been altered
-since freezing, and attributes **nothing to a person** — who reviewed and who
-confirmed are the separate fields above. An earlier key id,
-`kai-chang-morris-2026-10`, wrongly implied the owner's custody and was
-replaced. Real deployment needs a key the reviewer generates and holds.
+**What the signature does and does not do.** Since 2026-10-13 the key is
+`kai-chang-2026-10`, generated on the repository owner's own machine and never
+present in the container that builds this repository; `custody` in the public
+key record states that. So a signature establishes that the record was signed
+by the holder of that key and has not been altered since freezing. It does
+**not** establish that the holder is the person named: no certificate, web of
+trust or signed commit chain binds the key to an identity, and `custody` is an
+assertion by the party it describes. Who reviewed and who confirmed remain the
+separate fields above; the signature does not merge them.
+
+Two earlier states are worth knowing, because both were wrong in instructive
+ways. The key was a demonstration key held by nobody, which attributed
+nothing to anyone — honest, but it made the whole sign-off decorative. Before
+that its id was `kai-chang-morris-2026-10` while the private key sat in a
+build container, which implied custody that did not exist. A key's name is not
+evidence of who holds it, which is why `keygen` now records custody explicitly
+and defaults to a stated `UNDECLARED`.
 
 ### 4. Drift detection
 
