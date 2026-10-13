@@ -48,6 +48,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
 | Derivation search | the 4 out of reach | PL-BOGUS refuted — kernel-accepted, no axioms; 3 NO_DERIVATION over a stated universe |
+| Triangulation | 3 claim pairs | 3 EQUIVALENT, checked against the named statements — and the method's limit proved as a theorem (A1d) |
 | Tests | 170 | all pass from a clean checkout (181 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
@@ -119,6 +120,17 @@ evidence for each.
 - **Formalization fidelity is not machine-decided.** Freezing, signing and
   guards make a human judgement auditable, attributable and resistant to silent
   drift. They do not make it correct.
+- **Triangulation is much weaker than it sounds, and the repository proves
+  it.** Rendering a claim twice and proving the renderings equivalent was the
+  roadmap's most promising idea for checking fidelity. It is not one:
+  equivalence of propositions is vacuous between two *true* statements, so an
+  equivalence proof cannot distinguish a faithful rendering from a different
+  true one. `Ampas.Triangulation.indistinguishable` proves exactly that —
+  "the sum of two evens is even" and "the **product** of two evens is even"
+  are different claims, both true, equivalent in two applications. Three
+  pairs are on record and each rules out a misreading that would have changed
+  its claim's truth value; that is what they are worth, and ASSUMPTIONS A1d
+  says so rather than letting three green lines imply more.
 - **A bounded derivation search refuted one claim and corroborates three.**
   The four independence claims are out of the numeric search's reach, so
   derivations are enumerated instead. PL-BOGUS — a control the catalogue
@@ -190,9 +202,9 @@ evidence for each.
 ## Repository layout
 
 ```
-reference/     frozen statements, guards, claim catalogues, attestations,
-               provenance baselines, pins, adjudications, counterexample
-               search boxes and their recorded results
+reference/     frozen statements, second renderings and their equivalence
+               proofs, guards, claim catalogues, attestations, provenance
+               baselines, pins, adjudications, search boxes and results
 corpus/        test data: genuine submissions, 13 attacks, the Fermat pair
 harness/       the driver, the Lean auditor, the third checker, the
                counterexample searcher, baseline and ablation tools

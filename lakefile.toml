@@ -12,7 +12,8 @@ defaultTargets = ["AmpasRef", "audit"]
 name = "AmpasRef"
 srcDir = "reference"
 # the trusted reference, listed explicitly so what is in it is never implicit
-roots = ["AmpasRef.Defs", "AmpasRef.Challenge", "AmpasRef.Guards"]
+roots = ["AmpasRef.Defs", "AmpasRef.Challenge", "AmpasRef.Guards",
+         "AmpasRef.Alt", "AmpasRef.Triangulation"]
 
 [[lean_exe]]
 name = "audit"

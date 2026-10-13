@@ -180,6 +180,63 @@ does not produce a proof tree, so a derivation it found could not be handed to
 the kernel. That outcome is recorded `DERIVATION_FOUND_BUT_UNVERIFIED` and is
 a finding for a human, never a refutation. It has not occurred.
 
+### A1d. Formalization triangulation, and why it is weaker than it sounds
+
+ROADMAP 5.2 proposed rendering the same natural-language claim twice and
+proving the two renderings equivalent in Lean, so that a divergence localises
+a fidelity problem without anyone reading both. It called this "the most
+promising idea here". **That assessment was wrong, and the reason is a
+one-line theorem.**
+
+**Equivalence of propositions is vacuous between two true statements.** Any
+two theorems are equivalent, whatever they say. So an equivalence proof
+cannot distinguish a faithful rendering of a claim from a *different true*
+one. `Ampas.Triangulation.indistinguishable` proves this inside the
+repository rather than asserting it: "the sum of two even naturals is even"
+and "the **product** of two even naturals is even" are plainly different
+claims, both true, and the equivalence between them is two applications.
+
+What triangulation therefore detects: a second rendering whose error makes it
+**false**. `FermatWeaker`'s restriction to `n ≤ 3` is caught precisely
+because the general claim is false and the restriction is true. That overlaps
+heavily with what the counterexample search (A1b) already does, from a more
+expensive direction.
+
+What it does **not** detect, and this is the part that matters: a rendering
+that is weaker, or about something else, and still true. Those are exactly
+the fidelity errors a reviewer is there to catch, and no amount of
+machine-checked equivalence reaches them.
+
+**What the pairs on record are still worth.** Three are checked
+(`reference/triangulation.json`, results in
+`reference/triangulation_results.json`):
+
+- EVEN is informative. `IsEven n := ∃ k, n = 2 * k` against `n % 2 = 0` are
+  different predicates built from different operations; their agreement is a
+  theorem, and it rules out a misreading of "even" that would have changed
+  the claim's truth value — a definition excluding 0, say.
+- DVD is informative for the same reason: the `Dvd` class against explicit
+  existentials makes "divides" a proof obligation rather than something a
+  reviewer takes on trust.
+- SUB is **weak and labelled weak**: the same equality with the sides
+  swapped, equivalence by `Eq.symm` twice. It is kept because a suite
+  containing only pairs like it would have the same shape as a suite of
+  informative ones and would be evidence of nothing.
+
+**The equivalences are checked, not assumed.**
+`harness/CheckTriangulation.lean` resolves both sides from the environment by
+name and verifies the theorem's type is `Iff` applied to exactly those two
+statements, structurally and up to definitional equality, with no `sorryAx`
+beneath it. An `Iff` between two other propositions compiles perfectly well,
+which is the `FermatWeaker` failure mode pointed at equivalences.
+
+**Provenance: both renderings in every pair were written by the same author**
+— the assistant that wrote the harness — each from the claim's text. That is
+not independent formalization: two renderings by one author can share a
+misreading, and the equivalence proof then confirms only that they share it.
+A genuinely independent second author remains open, and because of the
+finding above it would buy less than ROADMAP 5.2 expected.
+
 ## A2. Kernel soundness — and cross-checking is weaker evidence than it looks
 
 **Assumed:** that Lean's kernel is sound, or that two independent kernels do

@@ -1,0 +1,62 @@
+{
+  "module": "AmpasRef.Triangulation",
+  "timeout_seconds": 600,
+  "method_limit": {
+    "finding": "Equivalence of propositions is vacuous between two TRUE statements. Any two theorems are equivalent, whatever they say, so an equivalence proof cannot distinguish a faithful rendering of a claim from a different true one.",
+    "proved_by": "Ampas.Triangulation.indistinguishable",
+    "demonstration": "`(sum of two evens is even) <-> (product of two evens is even)` is proved in two applications. The two are plainly different claims.",
+    "consequence": "Triangulation detects only a second rendering whose error makes it FALSE -- which is largely what harness/counterexample.py already does. ROADMAP 5.2 called this 'the most promising idea here'; that assessment was wrong, and the correction is recorded in ROADMAP 5 and ASSUMPTIONS A1d rather than left for a reader to notice.",
+    "what_remains": "Each pair still rules out a misreading of that claim that would have changed its truth value, and each equivalence is a kernel-checked obligation rather than a reviewer's assurance that two renderings say the same thing. That is worth having and is less than it sounds like."
+  },
+  "provenance_note": "Both renderings in every pair below were written by the same author (the assistant that wrote the harness), each from the claim's text. That is NOT independent formalization: two renderings by one author can share a misreading, and an equivalence proof then confirms only that they share it. A genuinely independent second author remains open, and because of the finding above it would buy less than ROADMAP 5.2 expected.",
+  "pairs": [
+    {
+      "claim": "EVEN",
+      "text": "The sum of two even natural numbers is even.",
+      "frozen": "Ampas.Claims.even_add_even",
+      "alternative": "Ampas.Alt.even_add_even_mod",
+      "equivalence": "Ampas.Triangulation.even_equiv",
+      "expect": "EQUIVALENT",
+      "strength": "informative",
+      "why": "The two renderings use different predicates built from different operations: `IsEven n` is `exists k, n = 2 * k`, the alternative is `n % 2 = 0`. Their agreement is a theorem (`isEven_iff_mod`), not an unfolding, so the kernel does real work. It rules out a misreading of 'even' that would have changed the claim's truth value -- e.g. a definition excluding 0.",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      }
+    },
+    {
+      "claim": "DVD",
+      "text": "Divisibility of natural numbers is transitive.",
+      "frozen": "Ampas.Claims.dvd_trans_nat",
+      "alternative": "Ampas.Alt.dvd_trans_explicit",
+      "equivalence": "Ampas.Triangulation.dvd_equiv",
+      "expect": "EQUIVALENT",
+      "strength": "informative",
+      "why": "The frozen statement uses the `Dvd` class; the alternative spells the existentials out. Whether `a | b` means what the claim's 'divides' means is exactly what a reviewer is otherwise asked to take on trust, and this makes it a proof obligation.",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      }
+    },
+    {
+      "claim": "SUB",
+      "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
+      "frozen": "Ampas.Claims.sub_add_cancel_nat",
+      "alternative": "Ampas.Alt.sub_add_cancel_flipped",
+      "equivalence": "Ampas.Triangulation.sub_equiv",
+      "expect": "EQUIVALENT",
+      "strength": "weak -- tests almost nothing",
+      "why": "The same equality with the sides swapped. Its equivalence proof is two applications of `Eq.symm`. Kept deliberately: a suite containing only pairs like this one would have the same shape as a suite of informative pairs and would be evidence of nothing, so one weak pair is labelled as such rather than quietly omitted.",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      }
+    }
+  ]
+}

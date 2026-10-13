@@ -83,9 +83,11 @@ note "bounded counterexample search against the frozen statements (reproduces re
 run "$PY" harness/counterexample.py --out build/counterexample_search.json
 note "bounded derivation search: PL-BOGUS must be refuted, and the kernel must accept the witness"
 run "$PY" harness/derivation_search.py --out build/derivation_search.json
+note "triangulation: each equivalence must relate the two statements on record (ASSUMPTIONS A1d for what that is worth)"
+run "$PY" harness/triangulate.py --out build/triangulation.json
 run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
-      tests/test_portability.py -q
+      tests/test_triangulation.py tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }

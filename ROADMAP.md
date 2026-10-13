@@ -168,11 +168,25 @@ resource in the whole pipeline.
    produce a witness (congruence closure here is not proof-producing), so a
    hit there would be a finding for a human rather than a refutation; that is
    the remaining piece of this item.
-2. **Formalization triangulation.** Have two or more independent parties (or
-   models) formalize the same natural-language claim without seeing each
-   other's work, then *prove the statements equivalent in Lean*. A disagreement
-   localizes a fidelity problem without any human reading both. This is the
-   most promising idea here and it is testable at small scale now.
+2. **Formalization triangulation.** *Tried, 2026-10-14, and it is much
+   weaker than this item claimed.* Two renderings of one claim, proved
+   equivalent in Lean — built, with three pairs on record and the equivalences
+   machine-checked against the named statements
+   (`harness/triangulate.py`, `reference/triangulation.json`).
+
+   **The finding, which supersedes "the most promising idea here":**
+   equivalence of propositions is vacuous between two TRUE statements. Any two
+   theorems are equivalent, whatever they say, so an equivalence proof cannot
+   distinguish a faithful rendering from a different true one.
+   `Ampas.Triangulation.indistinguishable` proves it with "the sum of two
+   evens is even" against "the product of two evens is even". Triangulation
+   therefore detects only a rendering whose error makes it false — largely
+   what item 1's counterexample search already does, more cheaply.
+
+   What is left of the idea: each pair rules out a misreading of that claim
+   that would have changed its truth value, and the obligation is
+   kernel-checked rather than a reviewer's assurance. Worth having; not a
+   fidelity check. ASSUMPTIONS A1d is the full statement.
 3. **Back-translation with a stated protocol.** Render the Lean statement back
    into natural language and compare against the original, with the comparison
    done by someone who has not seen the Lean. Weak evidence, but it raises the

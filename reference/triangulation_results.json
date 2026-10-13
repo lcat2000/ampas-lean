@@ -1,0 +1,85 @@
+{
+  "checked_on": "2026-10-14",
+  "module": "AmpasRef.Triangulation",
+  "method_limit": {
+    "finding": "Equivalence of propositions is vacuous between two TRUE statements. Any two theorems are equivalent, whatever they say, so an equivalence proof cannot distinguish a faithful rendering of a claim from a different true one.",
+    "proved_by": "Ampas.Triangulation.indistinguishable",
+    "demonstration": "`(sum of two evens is even) <-> (product of two evens is even)` is proved in two applications. The two are plainly different claims.",
+    "consequence": "Triangulation detects only a second rendering whose error makes it FALSE -- which is largely what harness/counterexample.py already does. ROADMAP 5.2 called this 'the most promising idea here'; that assessment was wrong, and the correction is recorded in ROADMAP 5 and ASSUMPTIONS A1d rather than left for a reader to notice.",
+    "what_remains": "Each pair still rules out a misreading of that claim that would have changed its truth value, and each equivalence is a kernel-checked obligation rather than a reviewer's assurance that two renderings say the same thing. That is worth having and is less than it sounds like."
+  },
+  "pairs": [
+    {
+      "axioms": [],
+      "both_proved_here": false,
+      "equiv_decl": "Ampas.Triangulation.even_equiv",
+      "is_theorem": true,
+      "left": "Ampas.Claims.even_add_even",
+      "left_proved_here": false,
+      "relates_the_named_statements": true,
+      "relates_up_to_defeq": true,
+      "right": "Ampas.Alt.even_add_even_mod",
+      "right_proved_here": true,
+      "uses_sorry": false,
+      "claim": "EVEN",
+      "outcome": "EQUIVALENT",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      },
+      "strength": "informative",
+      "seconds": 3.1,
+      "consistency": "OK"
+    },
+    {
+      "axioms": [],
+      "both_proved_here": false,
+      "equiv_decl": "Ampas.Triangulation.dvd_equiv",
+      "is_theorem": true,
+      "left": "Ampas.Claims.dvd_trans_nat",
+      "left_proved_here": false,
+      "relates_the_named_statements": true,
+      "relates_up_to_defeq": true,
+      "right": "Ampas.Alt.dvd_trans_explicit",
+      "right_proved_here": true,
+      "uses_sorry": false,
+      "claim": "DVD",
+      "outcome": "EQUIVALENT",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      },
+      "strength": "informative",
+      "seconds": 2.0,
+      "consistency": "OK"
+    },
+    {
+      "axioms": [],
+      "both_proved_here": false,
+      "equiv_decl": "Ampas.Triangulation.sub_equiv",
+      "is_theorem": true,
+      "left": "Ampas.Claims.sub_add_cancel_nat",
+      "left_proved_here": false,
+      "relates_the_named_statements": true,
+      "relates_up_to_defeq": true,
+      "right": "Ampas.Alt.sub_add_cancel_flipped",
+      "right_proved_here": true,
+      "uses_sorry": false,
+      "claim": "SUB",
+      "outcome": "EQUIVALENT",
+      "provenance": {
+        "frozen_by": "the assistant that wrote the harness, round 1",
+        "alternative_by": "the same assistant, 2026-10-14",
+        "independent": false,
+        "saw_the_other": true
+      },
+      "strength": "weak -- tests almost nothing",
+      "seconds": 2.5,
+      "consistency": "OK"
+    }
+  ]
+}
