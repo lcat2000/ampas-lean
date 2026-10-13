@@ -497,7 +497,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
     src = pl_witness_lean(decl, claim, steps, cfg["derives"], cfg["theory_lean"],
                           target, apply)
     path = REFUT_DIR / f"{mod}.lean"
-    path.write_text(src, encoding="utf-8")
+    path.write_text(src, encoding="utf-8", newline="\n")
 
     env = _lean_env()
     out: dict = {"witness_file": str(path.relative_to(ROOT)), "steps": len(steps),
@@ -525,7 +525,7 @@ def check_witness(claim: str, cfg: dict, steps: list[Step], apply: str) -> dict:
         "reference_module": "AmpasRef.Challenge",
         "frozen_decl": cfg["frozen_decl"],
         "refutation_module": mod,
-        "refutation_decl": f"Ampas.Refutations.{decl}"}), encoding="utf-8")
+        "refutation_decl": f"Ampas.Refutations.{decl}"}), encoding="utf-8", newline="\n")
     try:
         rc, msg = _run([str(_bin("lean")), "--run",
                         str(ROOT / "harness" / "CheckRefutation.lean"), str(req)], env2)
@@ -613,7 +613,7 @@ def main(argv: list[str]) -> int:
     out = {"searched_on": time.strftime("%Y-%m-%d"), "searches": results}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n",
-                              encoding="utf-8")
+                              encoding="utf-8", newline="\n")
     print(f"\n-> {args.out}")
     return 1 if any(r["consistency"] != "OK" for r in results) else 0
 

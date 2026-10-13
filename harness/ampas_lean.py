@@ -492,7 +492,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
                "kernel_defeq": defeq_default,
                "theorems": [c["theorem"] for c in claims]}
         req_path = work / "req.json"
-        req_path.write_text(json.dumps(req), encoding="utf-8")
+        req_path.write_text(json.dumps(req), encoding="utf-8", newline="\n")
         if as_user is not None:
             os.chown(req_path, as_user["uid"], as_user["gid"])
         au = _run(audit_cmd() + [str(req_path)], work, lean_path, as_user,
@@ -682,7 +682,7 @@ def main(argv: list[str]) -> int:
             results.append(r_json)
     out = {"results": results}
     if args.out:
-        Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+        Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
     print(json.dumps(out, indent=2, ensure_ascii=False))
     return 0
 

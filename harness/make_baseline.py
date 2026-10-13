@@ -54,7 +54,7 @@ def main(argv):
             f = baseline_fingerprints(env)
             counts[mod] = len(f)
             fps |= f
-    out.write_text(json.dumps(sorted(fps), indent=0) + "\n", encoding="utf-8")
+    out.write_text(json.dumps(sorted(fps), indent=0) + "\n", encoding="utf-8", newline="\n")
     print(f"{len(fps)} distinct assumed declarations -> {out}")
     for m, n in counts.items():
         print(f"  {m}: {n}")

@@ -45,7 +45,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
                extra_path: str, timeout: int) -> dict:
     req = ROOT / ".cex_req.json"
     req.write_text(json.dumps({"module": module, "decl": decl,
-                               "bound": bound, "exists_bound": exists_bound}), encoding="utf-8")
+                               "bound": bound, "exists_bound": exists_bound}), encoding="utf-8", newline="\n")
     env = dict(os.environ)
     root = lean_root()
     env["PATH"] = f"{root / 'bin'}:{env.get('PATH', '')}"
@@ -193,7 +193,7 @@ def main(argv: list[str]) -> int:
            "searched_on": time.strftime("%Y-%m-%d"),
            "searches": results}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
+    Path(args.out).write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"\n-> {args.out}")
     bad = [r for r in results if r["consistency"] != "OK"]
     return 1 if bad else 0

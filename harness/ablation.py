@@ -72,7 +72,7 @@ def main(argv):
     rows.sort(key=lambda d: d["attack"])
     text = json.dumps(rows, indent=1, ensure_ascii=False) + "\n"
     if a.out:
-        Path(a.out).write_text(text, encoding="utf-8")
+        Path(a.out).write_text(text, encoding="utf-8", newline="\n")
     fired = sorted({s for r in rows for s in r["signals"]})
     print(text)
     print(f"{len(rows)} attacks, all rejected: "

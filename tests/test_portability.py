@@ -46,6 +46,32 @@ def _calls(src: str, needle: str) -> list[str]:
 
 
 @pytest.mark.parametrize("path", SOURCES, ids=lambda p: p.name)
+def test_text_file_writes_pin_the_line_ending(path):
+    """Every text write must pass `newline="\\n"`.
+
+    `write_text()` and `open(mode="w")` translate "\\n" to os.linesep when
+    `newline` is not given, so on Windows the harness wrote CRLF into the
+    attestations, the search records and SHA256SUMS itself. Git normalised the
+    committed blobs back to LF, which hid it -- but a manifest regenerated on
+    Windows hashed bytes that exist nowhere in the repository, and the files
+    whose bytes ARE the record disagreed with the record. Output has to be
+    byte-identical on every platform.
+    """
+    src = path.read_text(encoding="utf-8")
+    bad = []
+    for call in _calls(src, ".write_text("):
+        if "newline=" not in call:
+            bad.append(call.split("\n")[0][:80])
+    for call in _calls(src, "open("):
+        if ('"w"' in call or "'w'" in call) and "newline=" not in call \
+                and "encoding=" in call:
+            bad.append(call.split("\n")[0][:80])
+    assert not bad, (
+        f"{path.name}: text written without pinning the line ending, so the "
+        f"bytes differ between platforms:\n  " + "\n  ".join(bad))
+
+
+@pytest.mark.parametrize("path", SOURCES, ids=lambda p: p.name)
 def test_text_file_io_names_its_encoding(path):
     src = path.read_text(encoding="utf-8")
     bad = []

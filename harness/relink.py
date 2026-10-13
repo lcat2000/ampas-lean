@@ -24,7 +24,7 @@ for t in shlex.split(open(rsp, encoding="utf-8").read()):
         args.append("/lib/x86_64-linux-gnu/libuv.so.1"); continue
     args.append(t)
 argfile = rsp + ".fixed"
-open(argfile, "w", encoding="utf-8").write("\n".join(args))
+open(argfile, "w", encoding="utf-8", newline="\n").write("\n".join(args))
 cmd = ["gcc", "-o", out, f"@{argfile}", f"-Wl,-rpath,{sysroot}/lib/lean"]
 r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
 print(r.stdout[-2000:], r.stderr[-2000:])

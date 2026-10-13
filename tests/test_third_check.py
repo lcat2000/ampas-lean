@@ -142,7 +142,7 @@ def test_statement_mode_export_is_refused():
     proofs. The original code counted those as checked and reported 0 errors."""
     src = (FORGE / "forge_large_elim.export").read_text(encoding="utf-8")
     stmt = ROOT / "tests" / "forgeries" / ".tmp_statement_mode.export"
-    stmt.write_text(src.replace("#MODE proof", "#MODE statement"), encoding="utf-8")
+    stmt.write_text(src.replace("#MODE proof", "#MODE statement"), encoding="utf-8", newline="\n")
     try:
         out = run(stmt)
         assert out["checked"] == 0
@@ -164,7 +164,7 @@ def test_unproved_theorem_is_an_error_even_in_proof_mode():
             out_lines.append(ln)
     assert hit
     p = ROOT / "tests" / "forgeries" / ".tmp_thmtype.export"
-    p.write_text("\n".join(out_lines) + "\n", encoding="utf-8")
+    p.write_text("\n".join(out_lines) + "\n", encoding="utf-8", newline="\n")
     try:
         out = run(p)
         assert "bad2" in out["unproved_theorems"]

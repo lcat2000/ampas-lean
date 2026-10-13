@@ -97,7 +97,7 @@ def test_statement_drift_is_caught(tmp_path):
     t = p.read_text(encoding="utf-8")
     assert "∀ a b : Nat, b ≤ a → a - b + b = a" in t
     p.write_text(t.replace("∀ a b : Nat, b ≤ a → a - b + b = a",
-                           "∀ a b : Nat, a - b + b = a"), encoding="utf-8")
+                           "∀ a b : Nat, a - b + b = a"), encoding="utf-8", newline="\n")
     _rebuild(suite)
     r = _verify(suite)
     assert r.returncode != 0
@@ -113,7 +113,7 @@ def test_closure_drift_is_caught_with_the_statement_untouched(tmp_path):
     t = p.read_text(encoding="utf-8")
     assert "def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k" in t
     p.write_text(t.replace("def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k",
-                           "def IsEven (_ : Nat) : Prop := True"), encoding="utf-8")
+                           "def IsEven (_ : Nat) : Prop := True"), encoding="utf-8", newline="\n")
     # the statement of EVEN is untouched
     assert "IsEven a → IsEven b → IsEven (a + b)" in \
         (suite / "reference" / "AmpasRef" / "Challenge.lean").read_text(encoding="utf-8")
@@ -130,7 +130,7 @@ def test_tampering_with_an_attestation_breaks_the_signature(tmp_path):
     p = suite / "reference" / "attestations" / "DIV.json"
     d = json.loads(p.read_text(encoding="utf-8"))
     d["text"] = "For every natural number n, n / n = 1."
-    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
+    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
     r = _verify(suite)
     assert r.returncode != 0
     assert "SIGNATURE INVALID" in r.stdout
@@ -151,7 +151,7 @@ def test_an_incomplete_checklist_is_caught(tmp_path):
     p = suite / "reference" / "attestations" / "EVEN.json"
     d = json.loads(p.read_text(encoding="utf-8"))
     d["reviewer"]["checklist"]["definitions_reviewed"] = False
-    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
+    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
     r = _verify(suite)
     assert r.returncode != 0
     assert "EVEN" in r.stdout
@@ -164,7 +164,7 @@ def test_redefining_a_definition_also_breaks_the_guards(tmp_path):
     p = suite / "reference" / "AmpasRef" / "Defs.lean"
     p.write_text(p.read_text(encoding="utf-8").replace(
         "def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k",
-        "def IsEven (_ : Nat) : Prop := True"))
+        "def IsEven (_ : Nat) : Prop := True"), newline="\n")
     env = dict(os.environ)
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"
     env["LEAN_PATH"] = str(suite / TRUSTED_REL)
