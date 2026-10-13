@@ -2,8 +2,8 @@
   "schema": "ampas-formalization-attestation/1",
   "claim": "EL-IND",
   "theorem": "Ampas.Claims.el_comm_independent",
-  "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not make the theory inconsistent (x = y stays underivable).",
-  "frozen_at": "2026-10-13T07:16:23Z",
+  "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not trivialize the theory: x = y remains underivable. (Not \"inconsistent\": a pure equational theory always has a one-element model, so inconsistency in the usual sense is unreachable. The degenerate case the second conjunct excludes is trivialization -- every equation becoming derivable, which substitution would give from x = y.)",
+  "frozen_at": "2026-10-13T07:22:31Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
@@ -95,7 +95,7 @@
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
-    "note": "Independence over the trusted equational calculus Ampas.EL.Derives. The second conjunct rules out the vacuous 'independence by inconsistency'. Reviewer confirms the axiom set is the usual monoid presentation.",
+    "note": "Independence over the trusted equational calculus Ampas.EL.Derives. The second conjunct rules out independence by TRIVIALIZATION -- not by inconsistency: in pure equational logic a one-element model always exists, so a theory cannot be inconsistent in the model-theoretic sense, and the degenerate case to exclude is that every equation becomes derivable. If x = y were derivable, substitution would make any two terms equal. The earlier wording said \"inconsistent\" and was corrected on the reviewer's finding (2026-10-13). Reviewer also observed that the calculus has no separate constructor for substituting into a DERIVED equation, but that the rule is admissible by induction on derivations (compose substitutions at ax; refl/symm/trans/congr survive substitution), so no inferential power is missing.",
     "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
@@ -107,15 +107,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13），依貼出的定義判定，未重新執行 Lean 核心驗證。原文判定：「所列規則足以表達此語言的等式邏輯；交換律不是單群公理的推論，加入交換律後仍有非單元素模型。」模型依據：兩字母字串單群（串接為乘法、空字串為單位元）滿足公理但 \"ab\" ≠ \"ba\"；自然數加法單群滿足公理與交換律但 0 ≠ 1。審查者指出本演算沒有獨立的「對已推導等式做替換」建構子，但該規則可對推導做歸納證明（ax 合成替換；refl/symm/trans/congr 替換後仍適用），故推理能力無缺。**審查者並指出原 text 用「不一致」措辭不精確**：純等式理論恆有單元素模型，應寫成「理論仍保持非平凡性，並未使所有等式都可導出」。text 與 note 已依此更正。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:16:23Z",
-    "value": "0470a685c75c11eb2bd1a3023e4f3be099dad96e578707b400cb557cb3e36271ae373ea1624f6827d432d1c180012b4be24f9e158fa5240dc746f708d8f51f08"
+    "signed_at": "2026-10-13T07:22:31Z",
+    "value": "b4dcf240abc2fcb713f1a21a0c385bdce85fcee77580c3d5a1303bda5d201b2e7056c0a96ceb742927c0a56d9c72076a8e70bc162f43ba0d2377b4be15646208"
   }
 }

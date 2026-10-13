@@ -3,7 +3,7 @@
   "claim": "PL-IND",
   "theorem": "Ampas.Claims.pl_independent",
   "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
-  "frozen_at": "2026-10-13T07:16:23Z",
+  "frozen_at": "2026-10-13T07:22:31Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
@@ -79,15 +79,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13），依貼出的定義判定，未重新執行 Lean 核心驗證。原文判定：「A1、A2、A3 與 MP 符合標準古典命題邏輯的 Hilbert 系統；原理論確實既不能推出 p1，也不能推出 ¬p1。」審查者另以兩個布林賦值確認兩個合取項各有反模型：p0=假,p1=假 使 p0→p1 為真而 p1 為假；p0=假,p1=真 使 p0→p1 為真而 ¬p1 為假。並指出建構子的 φ ψ χ : Fm 可取任意公式，故三條為公理模式而非特定實例。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:16:23Z",
-    "value": "f44458cc0ccb3dfaed096ce6650f48e101848d62b1b34a650f3857ce43e5bbfd432cf10ee40db7ba58bb4cb5aea155f0d8c3ea255f962f8b8bf039d4ea6e4201"
+    "signed_at": "2026-10-13T07:22:31Z",
+    "value": "15d1172e0e596afcc4bf87cbbddb2ee79f68c1ae93cf358a2b270a9f2938b59b7e512c1f1e3a281a4287a5807d7c232fdd37b26748a5a1a72273218e43b82e07"
   }
 }

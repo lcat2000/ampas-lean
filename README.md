@@ -135,13 +135,14 @@ evidence for each.
   repository and is held by nobody: it shows a record is unaltered, no more.
 - **Most fidelity judgements are still not independently reviewed.** All 13
   were reviewed by the same assistant that wrote the harness
-  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **6 of 13** have since been
-  read and confirmed personally by the repository owner — the six arithmetic
-  claims, whose closures contain no project-defined constants. The remaining
-  7, including all three independence claims where fidelity depends entirely
-  on the embedded calculus being what it says, are still recorded as
-  **delegated**. Per-claim status is in `reference/claims*.json`
-  (`confirmation.mode`).
+  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **9 of 13** have since been
+  read and confirmed personally by the repository owner, including all three
+  independence claims. That review changed the repository: it found the
+  EL-IND text calling a trivialized equational theory "inconsistent" (wrong —
+  a pure equational theory always has a one-element model), and it bounded
+  what the PL-AXIOM-IND nontriviality guard is worth more tightly than this
+  document had. Both are corrected. The remaining 4 are still **delegated**.
+  Per-claim status is in `reference/claims*.json` (`confirmation.mode`).
 - **`unreviewed/` is not part of the deliverable** and nothing loads it. See its
   README.
 

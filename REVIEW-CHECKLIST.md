@@ -164,8 +164,12 @@ statement, so a guard cannot be a proof of something weaker.
 ### EL-IND — `Ampas.Claims.el_comm_independent`
 
 - **Text:** The monoid axioms do not derive commutativity in equational logic,
-  and adding commutativity does not make the theory inconsistent (x = y stays
-  underivable).
+  and adding commutativity does not trivialize the theory: x = y remains
+  underivable. (Corrected on the reviewer's finding, 2026-10-13: the earlier
+  wording said "inconsistent", which is wrong for equational logic — a pure
+  equational theory always has a one-element model, so inconsistency in the
+  model-theoretic sense is unreachable. What the second conjunct excludes is
+  trivialization.)
 - **Statement:** `EL.Independent EL.monoid EL.comm`
 - **Closure:** 60 constants, 30 AMPAS-defined.
 - **Definitions reviewed:**
@@ -214,11 +218,22 @@ statement, so a guard cannot be a proof of something weaker.
   a *nontriviality* guard instead: `Ampas.Guards.pos_nontrivial`, which proves
   `DerivesPos Empty (p0 → p0)` — the A1+A2 fragment still derives something,
   so the independence is not "this calculus proves nothing".
-  **The caveat:** unlike witness and necessity, a nontriviality guard's
-  statement is *chosen by the reviewer*, not computed from the claim. It is
-  kernel-checked, but its relevance is my judgement. I judge it the right
-  degenerate reading to exclude. A reader who wants a different nontriviality
-  property should say so.
+  **The caveat, sharpened by the reviewer (2026-10-13).** Unlike witness and
+  necessity, a nontriviality guard's statement is *chosen*, not computed from
+  the claim; it is kernel-checked, but its relevance is a judgement. The
+  reviewer accepted the guard and then bounded what it is worth, more tightly
+  than this document originally did:
+
+  > 同意它可以排除「空理論下完全沒有可導出公式」；不同意把它當作「演算沒有被不當
+  > 弱化」的充分證據。例如一個只能證明 φ → φ 的極弱系統，也可能通過這個 guard。
+
+  That is right, and it changes where this claim's weight rests. The guard
+  excludes only the emptiest degeneracy — a calculus proving nothing at all.
+  It does **not** establish that the calculus was not weakened in some subtler
+  way, because a system able to prove only `φ → φ` would satisfy it too. What
+  actually carries the claim is the line-by-line identity of `DerivesPos` with
+  `Derives` minus A3, together with the underivability of the A3 instance. The
+  guard is supplementary, and should be read as such.
 - **Is the claim true?** Yes, by the standard separation: interpret ¬ as the
   identity. A1 and A2 do not mention ¬ and remain implicational tautologies;
   modus ponens preserves truth; A3 becomes (p0 → p1) → (p1 → p0), false at
@@ -306,8 +321,8 @@ statement, so a guard cannot be a proof of something weaker.
 | GREATER | none needed | faithful |
 | DIV | witness + necessity, OK | faithful |
 | PL-IND | none needed | faithful |
-| EL-IND | none needed | faithful |
-| PL-AXIOM-IND | nontriviality (reviewer-chosen) | faithful, text tightened |
+| EL-IND | none needed | faithful; text corrected ("inconsistent" → trivialization) |
+| PL-AXIOM-IND | nontriviality (reviewer-chosen, and bounded — see B3) | faithful, text tightened |
 | PL-BOGUS | none needed | faithful **as a false-claim control** |
 | PRIMES | none needed | faithful |
 | FERMAT-CLAIM | none needed | faithful **as a false-claim control** |

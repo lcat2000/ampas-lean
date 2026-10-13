@@ -3,7 +3,7 @@
   "claim": "DVD",
   "theorem": "Ampas.Claims.dvd_trans_nat",
   "text": "Divisibility of natural numbers is transitive.",
-  "frozen_at": "2026-10-13T07:16:23Z",
+  "frozen_at": "2026-10-13T07:22:31Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
@@ -111,7 +111,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:16:23Z",
-    "value": "cdcec0c857e32d88296016bc37c6618faacd6a84d71b32561f7bd04d62f3344a749147d7e8bcae43bd626a63ad976c1922692665c68e87fdbe0dbb439000ec01"
+    "signed_at": "2026-10-13T07:22:31Z",
+    "value": "158afea47721291a00d85688eaf6abf57902bed2a0e4ac43b5e30c58254150c6edd81b80b7fab47ffdfa523f995b102edde52a695befc82f50fff7afd9097209"
   }
 }

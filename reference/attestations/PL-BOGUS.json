@@ -3,7 +3,7 @@
   "claim": "PL-BOGUS",
   "theorem": "Ampas.Claims.pl_bogus_independent",
   "text": "FALSE CLAIM, kept as a control: {p0 -> p1} does not prove p1 -> p1. This is false (p1 -> p1 is a theorem of pure logic), and must never be certified.",
-  "frozen_at": "2026-10-13T07:16:23Z",
+  "frozen_at": "2026-10-13T07:22:31Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
@@ -87,7 +87,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:16:23Z",
-    "value": "5dcdd9f58db4ed22f0eaa378352859dd51bced7e8890ac720df5614560edd8cc6c2e1bffcc270a5f33662dbba416fdc6ae4fe65247152f9ae80b05d1f3f23c01"
+    "signed_at": "2026-10-13T07:22:31Z",
+    "value": "5ef617e1db45b269b594fabce7e0a49a66c3dfda5238d769deb1edbffa9d06825981517b458989f07b98eb133f6c31fdeae411a993e07c26f6cd7518c0689b0c"
   }
 }

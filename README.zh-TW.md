@@ -91,7 +91,7 @@ pip install -r requirements.txt
 - **受信任的基礎縮小了，但沒有消失。** Lean 的 **elaborator**（也就是產生 olean 的那一步）、作業系統、沙箱，全都還在信任範圍內。
 - **Mathlib 只涵蓋一條主張**，依賴錐 387 個 olean，不是整個程式庫。
 - **金鑰管理不在範圍內，而且簽章不代表任何人背書。** 這把金鑰是在建置這個專案的容器裡生成的，沒有任何人保管它。它只能證明一份紀錄沒有被改過，再多就沒有了。
-- **多數忠實度判斷仍未經獨立審查。** 13 條全部由**寫這套管線的同一個助理**審的（見 [REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)）。其中 **6 條**已由擁有者本人逐條讀過並確認——那六條算術主張，它們的 closure 不含任何本專案自訂的常數。其餘 7 條仍記為「委任」，包含三條獨立性主張，而那三條的忠實度**完全**取決於嵌入的演算系統是不是它自稱的那個。逐條狀態在 `reference/claims*.json` 的 `confirmation.mode`。
+- **多數忠實度判斷仍未經獨立審查。** 13 條全部由**寫這套管線的同一個助理**審的（見 [REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)）。其中 **9 條**已由擁有者本人逐條讀過並確認，含三條獨立性主張。那次審查改動了這個專案：它抓到 EL-IND 的 text 把等式理論的「平凡化」誤寫成「不一致」（錯的——純等式理論恆有單元素模型），也把 PL-AXIOM-IND 的 nontriviality guard 的效力界定得比原本更緊。兩處都已更正。其餘 4 條仍記為「委任」。逐條狀態在 `reference/claims*.json` 的 `confirmation.mode`。
 - **`unreviewed/` 不是交付內容**，也沒有任何程式會載入它。說明見該目錄的 README。
 
 ## 目錄結構

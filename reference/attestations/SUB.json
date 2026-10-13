@@ -3,7 +3,7 @@
   "claim": "SUB",
   "theorem": "Ampas.Claims.sub_add_cancel_nat",
   "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
-  "frozen_at": "2026-10-13T07:16:23Z",
+  "frozen_at": "2026-10-13T07:22:31Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
@@ -123,7 +123,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:16:23Z",
-    "value": "0315415a19b68998ae06c690140201708aeffb1ff99d6568c8995bf6cb9514ccf6c3e244ed417be1eab51260ee8b46d68b20ecb67be4b117c916564b26803201"
+    "signed_at": "2026-10-13T07:22:31Z",
+    "value": "211c7c55a47c5b63c8d03d07f5d8c33d5a3cb96db1321b9eeebda85731ae19ef6d8f586a21b12f877bc9513a4283f7fd7c529fd96ced7e3adc1e3462bc3b7e08"
   }
 }
