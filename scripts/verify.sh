@@ -71,7 +71,8 @@ run python3 harness/ampas_review.py verify --out build/review_verification.json
 note "bounded counterexample search against the frozen statements (reproduces reference/counterexample_search.json)"
 run python3 harness/counterexample.py --out build/counterexample_search.json
 run python3 -m pytest tests/test_math_verification.py tests/test_review_drift.py \
-      tests/test_third_check.py tests/test_counterexample.py -q
+      tests/test_third_check.py tests/test_counterexample.py \
+      tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }
