@@ -3,7 +3,8 @@
   "claim": "PL-IND",
   "theorem": "Ampas.Claims.pl_independent",
   "text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
-  "frozen_at": "2026-10-13T07:22:31Z",
+  "control": null,
+  "frozen_at": "2026-10-13T07:28:08Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
@@ -87,7 +88,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:22:31Z",
-    "value": "15d1172e0e596afcc4bf87cbbddb2ee79f68c1ae93cf358a2b270a9f2938b59b7e512c1f1e3a281a4287a5807d7c232fdd37b26748a5a1a72273218e43b82e07"
+    "signed_at": "2026-10-13T07:28:08Z",
+    "value": "36cf96730b65be2ddc5173f0731cf4bd556e7c43f86b471bac57656efbf63a0a1ed0d5dac58f81e0a664d1f99974a62faa6cf61f80b6158cbf5661520571c200"
   }
 }

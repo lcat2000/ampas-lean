@@ -250,9 +250,19 @@ statement, so a guard cannot be a proof of something weaker.
   text states. Its first conjunct (`¬Derives T_imp (p1 → p1)`) is false, since
   p1 → p1 is derivable from A1 and A2 by modus ponens, so the conjunction is
   false and no sound submission can certify it.
-- **What `faithful: true` means here**, since it is easy to misread: the Lean
-  statement says what the text says. The text says the claim is false. Both
-  are consistent; the record is not asserting that p1 → p1 is underivable.
+- **What `faithful: true` means here — restructured on the reviewer's finding
+  (2026-10-13).** The reviewer drew the distinction the record was blurring:
+
+  > 這兩條 Lean 陳述形式化的是被測試的主張 P，不是「P 是假的」這句判斷 ¬P。
+
+  That is correct, and the earlier `text` mixed the two — it stated the claim
+  and then annotated it as false, leaving `faithful: true` ambiguous between
+  "the statement formalizes the claim" and "the statement formalizes the
+  sentence *that claim is false*". It formalizes the former; the outer
+  negation appears nowhere in the Lean. So `text` now carries the target claim
+  only, and a separate `control` block records that the claim is false, why,
+  and that it must never be certified. `faithful` is judged against `text`
+  alone.
 - **Verdict: faithful as a control.**
 
 ### PRIMES — `Ampas.Claims.infinitude_of_primes` (Mathlib tier)
@@ -284,8 +294,10 @@ statement, so a guard cannot be a proof of something weaker.
 
 ### FERMAT-F5 — `Ampas.Claims.fermat_f5_not_prime` (external validation)
 
-- **Text (tightened in this commit):** TRUE (Euler, 1732): the fifth Fermat
-  number 2^(2^5)+1 is not prime. (It equals 4294967297 = 641 × 6700417; the
+- **Text:** TRUE (Euler, 1732): the Fermat number **with index 5**,
+  F₅ = 2^(2^5)+1, is not prime. ("Index 5" rather than "the fifth": counting
+  from F₀ it is the sixth term. Corrected on the reviewer's finding,
+  2026-10-13.) (It equals 4294967297 = 641 × 6700417; the
   factorization is the evidence, and the statement asserts only
   compositeness.)
 - **Statement:** `¬ Nat.Prime (2 ^ (2 ^ 5) + 1)`
@@ -300,9 +312,17 @@ statement, so a guard cannot be a proof of something weaker.
   `Ampas.Guards.fermat_nontrivial` proves `Nat.Prime (2^(2^3)+1)` — F3 = 257
   is prime, so `Nat.Prime` is not degenerate on Fermat numbers and Euler's
   result is specifically about F5. Same reviewer-chosen caveat as
-  PL-AXIOM-IND. F4 = 65537 would be the sharper guard — the last case Fermat
-  checked — but `decide` on it does not finish inside the kernel limits, since
-  the decidability instance tries every divisor.
+  PL-AXIOM-IND. The reviewer accepted the guard for that purpose and bounded
+  it: it does not by itself establish that Mathlib's `Nat.Prime` is the right
+  notion — that rests on reading the definition and on the version pin.
+
+  **Implementation note, not part of the fidelity basis** (the reviewer asked
+  for evidence, having correctly objected that this was asserted without any):
+  F₄ = 65537 would be the sharper guard, being the last case Fermat checked,
+  but `decide` on it does not finish inside this suite's kernel limits. The
+  instance `decide` resolves to is `Nat.decidablePrime`, defined as
+  `decidable_of_iff' (2 ≤ p ∧ ∀ m, 2 ≤ m → m < p → ¬ m ∣ p)` — so it tests
+  every m below p, about 65k divisibility checks in the kernel for F₄.
 - **Source:** K. Conrad, *Fermat numbers and factors* (U. Connecticut);
   Euler, *Observationes de theoremate quodam Fermatiano*, Novi Commentarii
   1732/33.

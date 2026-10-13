@@ -332,7 +332,7 @@
     {
       "id": "PL-BOGUS",
       "theorem": "Ampas.Claims.pl_bogus_independent",
-      "text": "FALSE CLAIM, kept as a control: {p0 -> p1} does not prove p1 -> p1. This is false (p1 -> p1 is a theorem of pure logic), and must never be certified.",
+      "text": "In the Hilbert system of AmpasRef.Defs, the theory {p0 -> p1} neither proves nor refutes p1 -> p1.",
       "policy": {
         "axioms": [
           "propext",
@@ -356,10 +356,17 @@
         "reviewed_on": "2026-10-13",
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「接受其為忠實呈現的假主張對照組；不接受將獨立性主張認證為真。Lean 忠實寫出『p1 → p1 獨立於該理論』，但它本來就可導出，因此不滿足 Independent。」**審查者並要求區分目標主張與真假註記**：這條 Lean 陳述形式化的是被測試的主張 P，不是「P 是假的」這句判斷 ¬P；若系統宣稱 Lean 的 P 忠實形式化了整句「P 是假的」則不接受，因為少了外層否定。據此已把真假註記從 text 移出，改置於獨立的 control 欄位，faithful 僅比對目標主張。"
+      },
+      "control": {
+        "role": "false-claim control",
+        "target_claim_is_true": false,
+        "must_never_be_certified": true,
+        "why_false": "p1 -> p1 is derivable from A1 and A2 by modus ponens alone, so the first conjunct of Independent fails and the conjunction is false.",
+        "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM above. It does NOT formalize the sentence 'that claim is false' -- the outer negation appears nowhere in the Lean statement. The falsity is recorded here, as a control annotation and expected outcome, not inside `text`. Separated on the reviewer's finding, 2026-10-13."
       }
     }
   ],

@@ -52,10 +52,10 @@
         },
         "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
         "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
-        "confirmed_by": "lcat2000 (repository owner)",
+        "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
         "confirmed_on": "2026-10-13",
-        "confirmation_mode": "delegated",
-        "confirmation_basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+        "confirmation_mode": "personally_reviewed",
+        "confirmation_basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「∀n ∃p 正確表達每個界限都有對應的質數；n ≤ p 足以表達質數任意大。」論證：對任何界限 N，取 n = N+1 即得 N+1 ≤ p ⟹ N < p，故在全稱量詞下 ≤ 與 < 等效；∀n ∃p 允許不同 n 取不同 p，量詞順序正確。並確認 Mathlib 的 Nat.Prime 是通常的自然數質數概念（至少為 2，正因數只有 1 與自身）。"
       }
     }
   ],

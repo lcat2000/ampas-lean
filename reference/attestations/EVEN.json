@@ -3,7 +3,8 @@
   "claim": "EVEN",
   "theorem": "Ampas.Claims.even_add_even",
   "text": "The sum of two even natural numbers is even.",
-  "frozen_at": "2026-10-13T07:22:31Z",
+  "control": null,
+  "frozen_at": "2026-10-13T07:28:08Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
@@ -117,7 +118,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:22:31Z",
-    "value": "f74e2999e26bca3434d84602cc03a183916b82907fb882c7c2a9b20643c0aaca41ac6dcea28c8072de26f2e1c27d245d408c9f008ded9fde96ca7647346b9208"
+    "signed_at": "2026-10-13T07:28:08Z",
+    "value": "58d6cb5c87ef3e36c9200782f730eb2b97785b10f8efa18915202c28daef12fb1ad57458b26d93fb19e60ea14b89371d105ce0676414c263cca15f1d98aff805"
   }
 }

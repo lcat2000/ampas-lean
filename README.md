@@ -135,14 +135,22 @@ evidence for each.
   repository and is held by nobody: it shows a record is unaltered, no more.
 - **Most fidelity judgements are still not independently reviewed.** All 13
   were reviewed by the same assistant that wrote the harness
-  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **9 of 13** have since been
-  read and confirmed personally by the repository owner, including all three
-  independence claims. That review changed the repository: it found the
-  EL-IND text calling a trivialized equational theory "inconsistent" (wrong —
-  a pure equational theory always has a one-element model), and it bounded
-  what the PL-AXIOM-IND nontriviality guard is worth more tightly than this
-  document had. Both are corrected. The remaining 4 are still **delegated**.
-  Per-claim status is in `reference/claims*.json` (`confirmation.mode`).
+  ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **All 13** have since been
+  read and confirmed personally by the repository owner, which is an
+  independent reading — independent of the harness's author, which is the
+  property that was missing. It changed the repository rather than ratifying
+  it: EL-IND's text called a trivialized equational theory "inconsistent"
+  (wrong — a pure equational theory always has a one-element model); the
+  PL-AXIOM-IND guard was worth less than claimed (it excludes only a calculus
+  proving nothing at all); the two false-claim controls mixed the claim with
+  the verdict on it, so `faithful` was ambiguous, and the two are now separate
+  fields; "the fifth Fermat number" was ambiguous for F₅; and a performance
+  claim was asserted without evidence. All corrected.
+
+  **What is still missing:** the signature is a demonstration key held by
+  nobody, so no attestation is cryptographically bound to a person; the
+  reviewer reviewed the definitions as given, without re-running Lean; and one
+  reader is not the same as open review.
 - **`unreviewed/` is not part of the deliverable** and nothing loads it. See its
   README.
 

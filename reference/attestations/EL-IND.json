@@ -3,7 +3,8 @@
   "claim": "EL-IND",
   "theorem": "Ampas.Claims.el_comm_independent",
   "text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not trivialize the theory: x = y remains underivable. (Not \"inconsistent\": a pure equational theory always has a one-element model, so inconsistency in the usual sense is unreachable. The degenerate case the second conjunct excludes is trivialization -- every equation becoming derivable, which substitution would give from x = y.)",
-  "frozen_at": "2026-10-13T07:22:31Z",
+  "control": null,
+  "frozen_at": "2026-10-13T07:28:08Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
@@ -115,7 +116,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:22:31Z",
-    "value": "b4dcf240abc2fcb713f1a21a0c385bdce85fcee77580c3d5a1303bda5d201b2e7056c0a96ceb742927c0a56d9c72076a8e70bc162f43ba0d2377b4be15646208"
+    "signed_at": "2026-10-13T07:28:08Z",
+    "value": "5f0e46b5dd96a16308855245bd3ee0359ad20882ce2c68cb9cb7b78edc6b8a152547c569a594604f9cacff09c4d9ba9847021aaf1e92d3edef106371bbb07d02"
   }
 }

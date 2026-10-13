@@ -3,7 +3,7 @@
   "claim": "PRIMES",
   "theorem": "Ampas.Claims.infinitude_of_primes",
   "text": "There are arbitrarily large prime numbers: for every natural number n there is a prime p with n <= p (Euclid's theorem).",
-  "frozen_at": "2026-10-12T16:07:57Z",
+  "frozen_at": "2026-10-13T07:28:24Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeMathlib",
   "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
@@ -392,15 +392,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「∀n ∃p 正確表達每個界限都有對應的質數；n ≤ p 足以表達質數任意大。」論證：對任何界限 N，取 n = N+1 即得 N+1 ≤ p ⟹ N < p，故在全稱量詞下 ≤ 與 < 等效；∀n ∃p 允許不同 n 取不同 p，量詞順序正確。並確認 Mathlib 的 Nat.Prime 是通常的自然數質數概念（至少為 2，正因數只有 1 與自身）。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:07:57Z",
-    "value": "5a6caa978a75339e4d5c3ddec592c968920a576d3a45e4cf83b3d9a577420eb059d659650db592066fec1a5241c7517ae316864b8aa9cfb8414f020d035cb300"
+    "signed_at": "2026-10-13T07:28:24Z",
+    "value": "5cccd614cd1c0b7db8f6de6be6bc86934867476e49a9dee6c5b5b31d8b3a0680935addcdb292866f1a0f64898472bd20c3b0d833a503af81ecb8fd3e9bf84101"
   }
 }

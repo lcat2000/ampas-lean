@@ -2,8 +2,15 @@
   "schema": "ampas-formalization-attestation/1",
   "claim": "FERMAT-CLAIM",
   "theorem": "Ampas.Claims.fermat_all_prime",
-  "text": "FALSE CLAIM, kept as a control (Fermat, c. 1640): every Fermat number 2^(2^n)+1 is prime. Euler refuted it in 1732 with F5 = 641 * 6700417. No submission may ever certify this.",
-  "frozen_at": "2026-10-12T16:08:09Z",
+  "text": "Every Fermat number 2^(2^n) + 1 is prime (Fermat, c. 1640).",
+  "control": {
+    "role": "false-claim control",
+    "target_claim_is_true": false,
+    "must_never_be_certified": true,
+    "why_false": "Euler, 1732: the Fermat number with index 5 is composite, 2^(2^5) + 1 = 4294967297 = 641 * 6700417. n = 5 is a counterexample.",
+    "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM above -- Fermat's assertion. It does NOT formalize 'Fermat's assertion is false'; the outer negation appears nowhere in the Lean statement. Separated on the reviewer's finding, 2026-10-13."
+  },
+  "frozen_at": "2026-10-13T07:28:54Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeFermat",
   "statement_sha256": "5948dd88e7005ce34f454c3c79e55a7d8fc201d320b8222b8924c8c06322e215",
@@ -393,15 +400,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「接受其忠實呈現『所有 Fermat 數皆為質數』的假主張；不接受認證為真，反例為 F5。」依審查者要求，真假註記已自 text 移出，改置於獨立的 control 欄位，faithful 僅比對目標主張。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:08:10Z",
-    "value": "42ee56c3470687309356d6adf0312e9e47532089d18ca80960f8aed643227bbcfd2c7c76c459c52ef7ca8c5259d4b79e6ee78610b03823bc99f33c639ce5f306"
+    "signed_at": "2026-10-13T07:28:54Z",
+    "value": "5b0406d196e8e3ac17004f0274e5fe4353433254ad68e76783e1171e473a82e973f604f3c1c90c516edf6d0822d0867d413fdc1d1b07e85443db21303beab305"
   }
 }

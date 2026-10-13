@@ -3,7 +3,8 @@
   "claim": "DIV",
   "theorem": "Ampas.Claims.div_self_pos",
   "text": "For every positive natural number n, n / n = 1.",
-  "frozen_at": "2026-10-13T07:22:31Z",
+  "control": null,
+  "frozen_at": "2026-10-13T07:28:08Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
@@ -187,7 +188,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:22:31Z",
-    "value": "280282b7db27fe1a7ad68acaae04af2d5c9f7261e6d733c82c65065f17cddf91cae7d5143f0ccd81f61c3405cc71c41c02cd4577d14f783fbd7353ba8c94df09"
+    "signed_at": "2026-10-13T07:28:08Z",
+    "value": "23c56c1e03b863bddaeee5a2103710a946e3c9f1f1af36821a7dff873cc7af5c23d742ac1d34b7cd96327df8835d522ea68b208e4f3e56a13d72a164429c580a"
   }
 }

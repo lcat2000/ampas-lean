@@ -2,8 +2,15 @@
   "schema": "ampas-formalization-attestation/1",
   "claim": "PL-BOGUS",
   "theorem": "Ampas.Claims.pl_bogus_independent",
-  "text": "FALSE CLAIM, kept as a control: {p0 -> p1} does not prove p1 -> p1. This is false (p1 -> p1 is a theorem of pure logic), and must never be certified.",
-  "frozen_at": "2026-10-13T07:22:31Z",
+  "text": "In the Hilbert system of AmpasRef.Defs, the theory {p0 -> p1} neither proves nor refutes p1 -> p1.",
+  "control": {
+    "role": "false-claim control",
+    "target_claim_is_true": false,
+    "must_never_be_certified": true,
+    "why_false": "p1 -> p1 is derivable from A1 and A2 by modus ponens alone, so the first conjunct of Independent fails and the conjunction is false.",
+    "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM above. It does NOT formalize the sentence 'that claim is false' -- the outer negation appears nowhere in the Lean statement. The falsity is recorded here, as a control annotation and expected outcome, not inside `text`. Separated on the reviewer's finding, 2026-10-13."
+  },
+  "frozen_at": "2026-10-13T07:28:08Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
@@ -79,15 +86,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「接受其為忠實呈現的假主張對照組；不接受將獨立性主張認證為真。Lean 忠實寫出『p1 → p1 獨立於該理論』，但它本來就可導出，因此不滿足 Independent。」**審查者並要求區分目標主張與真假註記**：這條 Lean 陳述形式化的是被測試的主張 P，不是「P 是假的」這句判斷 ¬P；若系統宣稱 Lean 的 P 忠實形式化了整句「P 是假的」則不接受，因為少了外層否定。據此已把真假註記從 text 移出，改置於獨立的 control 欄位，faithful 僅比對目標主張。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T07:22:31Z",
-    "value": "5ef617e1db45b269b594fabce7e0a49a66c3dfda5238d769deb1edbffa9d06825981517b458989f07b98eb133f6c31fdeae411a993e07c26f6cd7518c0689b0c"
+    "signed_at": "2026-10-13T07:28:08Z",
+    "value": "457f5c71d0ab623ba7ff1535b16685f274e944929d1ac4dd9e7076ff312977b1a0ca66178bb61be16f4718fbd0ff61767337fa16960a305cf5db9e89fa2d910e"
   }
 }

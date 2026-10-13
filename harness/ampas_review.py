@@ -188,6 +188,7 @@ def derive(cat: dict) -> dict:
             "claim": c["id"],
             "theorem": c["theorem"],
             "text": c["text"],
+            "control": c.get("control"),
             "kind": t["kind"],
             "level_params": t["level_params"],
             "statement_sha256": sha256_str(t["statement"]),
@@ -284,6 +285,13 @@ def cmd_freeze(args):
             "claim": cid,
             "theorem": d["theorem"],
             "text": d["text"],
+            # The target claim and the verdict on it are separate propositions.
+            # `text` is the claim the statement formalizes; `control` records
+            # that the claim is FALSE and must never be certified. Collapsing
+            # them would make `faithful` ambiguous: a reader could take it to
+            # mean the Lean statement formalizes "P is false", which it does
+            # not -- it formalizes P, and the outer negation is nowhere in it.
+            "control": d.get("control"),
             "frozen_at": now,
             "lean_version": cat["lean_version"],
             "reference_module": cat["reference_module"],

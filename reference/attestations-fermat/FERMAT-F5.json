@@ -2,8 +2,9 @@
   "schema": "ampas-formalization-attestation/1",
   "claim": "FERMAT-F5",
   "theorem": "Ampas.Claims.fermat_f5_not_prime",
-  "text": "TRUE (Euler, 1732): the fifth Fermat number 2^(2^5)+1 is not prime. (It equals 4294967297 = 641 * 6700417; the factorization is the evidence, and the statement asserts only compositeness.)",
-  "frozen_at": "2026-10-12T16:08:09Z",
+  "text": "TRUE (Euler, 1732): the Fermat number with index 5, F_5 = 2^(2^5) + 1, is not prime. (It equals 4294967297 = 641 * 6700417; the factorization is the evidence, and the statement asserts only compositeness. \"Index 5\" rather than \"the fifth\": counting from F_0 it is the sixth term of the sequence. Wording corrected on the reviewer's finding, 2026-10-13.)",
+  "control": null,
+  "frozen_at": "2026-10-13T07:28:54Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.ChallengeFermat",
   "statement_sha256": "85554187c6362837dc0aefd0c269fef5d2faadb1eeb889489857571a7bbbe458",
@@ -381,7 +382,7 @@
   "reviewer": {
     "reviewed_by": "Claude (Anthropic assistant), round 3 — see REVIEW-CHECKLIST.md for the per-claim reasoning",
     "faithful": true,
-    "note": "Formalization sign-off NOT given. The statement is a refutation, so the auditor requires a nontriviality guard rather than non-vacuity and necessity; Ampas.Guards.fermat_nontrivial shows F3 = 257 is prime, ruling out the degenerate reading that Nat.Prime holds of no Fermat number. Whether '2^(2^5)+1 is not prime' is a faithful rendering of Euler's result is a human judgement and is awaiting review.",
+    "note": "The statement is a refutation, so the auditor requires a nontriviality guard rather than non-vacuity and necessity; Ampas.Guards.fermat_nontrivial shows F_3 = 257 is prime, ruling out the degenerate reading that Nat.Prime holds of no Fermat number. The reviewer accepted that guard for exactly that purpose and bounded it: it does not by itself establish that Mathlib's Nat.Prime is the right notion, which rests on reading the definition and on the version pin. IMPLEMENTATION NOTE, not part of the fidelity basis: F_4 = 65537 would be the sharper guard, being the last case Fermat checked, but `decide` on it does not finish inside this suite's kernel limits. Evidence, added after the reviewer asked for it: the instance `decide` resolves to is `Nat.decidablePrime`, defined as `decidable_of_iff' (2 <= p AND forall m, 2 <= m -> m < p -> not (m | p))`, so it tests every m below p -- about 65k divisibility checks in the kernel for F_4.",
     "reviewed_on": "2026-10-13",
     "checklist": {
       "statement_matches_text": true,
@@ -393,15 +394,15 @@
     }
   },
   "confirmation": {
-    "confirmed_by": "lcat2000 (repository owner)",
+    "confirmed_by": "lcat2000 (Kai Chang / Morris), repository owner",
     "confirmed_on": "2026-10-13",
-    "mode": "delegated",
-    "basis": "owner delegated the approval decision in the session of 2026-10-13: \"如果你覺得要 approve 就 approve\". The owner has NOT personally read the statements or their closures; this records a delegated approval, not a personal review."
+    "mode": "personally_reviewed",
+    "basis": "審查者逐條閱讀後接受（2026-10-13）。原文判定：「F5 的非平凡因數分解支持其非質數性；F3 guard 足以排除所指定的退化讀法。」審查者同意 guard 的選擇符合所述目的、不必非用 F4，但限定其效力：**它不能單獨保證 Nat.Prime 整個定義正確**，那仍要靠定義核對與版本凍結。審查者另指出兩處措辭問題：(1)「第五個 Fermat 數」易生誤解，應寫「索引為 5 的 F₅」（從 F₀ 起算是第六項）；(2)「F4 的 decide 跑不完」是實作與效能判斷，需要該版本的實例與執行紀錄支持，且非接受本條的必要理由。兩點均已更正：text 改用索引寫法，decide 的說法補上實例證據並標明不列入忠實度判定。"
   },
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-12T16:08:10Z",
-    "value": "a8cecfbbba6be11b6e9bbf70e076a9ba8bbe56b592fb0f3bd00e1cafbcfb5244974d92da40411004b64876cc553568ecfe424f0f75132da9241bdc474903550b"
+    "signed_at": "2026-10-13T07:28:54Z",
+    "value": "3b215ff523d91aee9db71a96e8eb25b6521c1244e5b7fb838dc9c1521f5e26840474b96c16c99ed854ac5ae6a8cf44e015a45306ae282af96c4591b3efd1ea00"
   }
 }
