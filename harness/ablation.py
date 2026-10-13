@@ -62,7 +62,7 @@ def main(argv):
     a = ap.parse_args(argv)
     rows = []
     for path in a.results:
-        for r in json.loads(Path(path).read_text())["results"]:
+        for r in json.loads(Path(path).read_text(encoding="utf-8"))["results"]:
             if not r["module"].startswith("A"):
                 continue
             certs = [c["certified"] for c in r["claims"]]
@@ -72,7 +72,7 @@ def main(argv):
     rows.sort(key=lambda d: d["attack"])
     text = json.dumps(rows, indent=1, ensure_ascii=False) + "\n"
     if a.out:
-        Path(a.out).write_text(text)
+        Path(a.out).write_text(text, encoding="utf-8")
     fired = sorted({s for r in rows for s in r["signals"]})
     print(text)
     print(f"{len(rows)} attacks, all rejected: "

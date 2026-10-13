@@ -33,7 +33,7 @@ BY_ID = {c["id"]: c for c in CAT["claims"]}
 
 @pytest.fixture(scope="session")
 def corpus():
-    manifest = json.loads((ROOT / "corpus" / "manifest.json").read_text())
+    manifest = json.loads((ROOT / "corpus" / "manifest.json").read_text(encoding="utf-8"))
     base = ROOT / "corpus"
     out = {}
     for item in manifest["submissions"]:
@@ -237,7 +237,7 @@ def test_hostile_submission_changes_no_trusted_artifact(corpus):
 
 
 def test_baseline_fresh_replay_recorded():
-    bl = json.loads((ROOT / "evidence" / "baseline_fresh_replay.json").read_text())
+    bl = json.loads((ROOT / "evidence" / "baseline_fresh_replay.json").read_text(encoding="utf-8"))
     assert bl["ok"] is True
 
 
@@ -281,7 +281,7 @@ def _review(trusted=None, catalogue=None):
     else:
         env.pop("AMPAS_CLAIMS", None)
     return subprocess.run([sys.executable, str(ROOT / "harness" / "ampas_review.py"), "verify"],
-                          capture_output=True, text=True, env=env, timeout=900)
+                          capture_output=True, text=True, encoding="utf-8", env=env, timeout=900)
 
 
 def test_every_claim_has_a_verified_signed_attestation():
@@ -297,7 +297,7 @@ def test_guards_are_satisfied_for_every_claim():
     import glob
     seen = 0
     for f in sorted(glob.glob(str(ROOT / "reference" / "attestations" / "*.json"))):
-        d = json.loads(Path(f).read_text())
+        d = json.loads(Path(f).read_text(encoding="utf-8"))
         assert d["guards_satisfied"], f"{d['claim']}: {d['guard_problems']}"
         g = d["guards"]
         if g["hypotheses"] > 0:
@@ -312,9 +312,9 @@ def test_guards_are_satisfied_for_every_claim():
 
 def test_attestations_are_signed_by_the_recorded_reviewer_key():
     import glob
-    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text(encoding="utf-8"))
     for f in sorted(glob.glob(str(ROOT / "reference" / "attestations" / "*.json"))):
-        d = json.loads(Path(f).read_text())
+        d = json.loads(Path(f).read_text(encoding="utf-8"))
         assert d["signature"]["key_id"] == pub["key_id"]
         assert d["reviewer"]["faithful"] is True
         assert all(d["reviewer"]["checklist"].values())
@@ -328,9 +328,9 @@ MATHLIB_PATH = os.environ.get("AMPAS_MATHLIB_PATH", "")
 def mathlib_corpus():
     if not MATHLIB_PATH:
         pytest.skip("AMPAS_MATHLIB_PATH not set (Mathlib oleans not available)")
-    cat = json.loads((ROOT / "reference" / "claims_mathlib.json").read_text())
+    cat = json.loads((ROOT / "reference" / "claims_mathlib.json").read_text(encoding="utf-8"))
     by = {c["id"]: c for c in cat["claims"]}
-    manifest = json.loads((ROOT / "corpus" / "manifest.json").read_text())
+    manifest = json.loads((ROOT / "corpus" / "manifest.json").read_text(encoding="utf-8"))
     saved, saved_extra = A.TRUSTED_OLEAN, A.EXTRA_LEAN_PATH
     saved_base = A.KERNEL_BASELINE
     parts = MATHLIB_PATH.split(":")
@@ -381,7 +381,7 @@ def test_mathlib_claim_third_check_disagreement_is_adjudicated_not_a_veto(mathli
     assert tc["introduced_assumptions"] == [], tc["introduced_assumptions"]
     assert tc["baseline_assumptions"] > 0
     assert not tc["unadjudicated_disagreement"], tc["unadjudicated"]
-    adj = json.loads((ROOT / "reference" / "third_check_adjudications.json").read_text())
+    adj = json.loads((ROOT / "reference" / "third_check_adjudications.json").read_text(encoding="utf-8"))
     known = {d["name"] for d in adj["declarations"]}
     assert set(tc["disagreements"]) <= known, set(tc["disagreements"]) - known
     # the claim still certifies, and the corroboration says exactly what it is
@@ -413,7 +413,7 @@ def test_shadowing_a_mathlib_definition_is_caught(mathlib_corpus):
 
 
 def test_mathlib_is_pinned_and_built_from_source():
-    pin = json.loads((ROOT / "reference" / "mathlib_pin.json").read_text())
+    pin = json.loads((ROOT / "reference" / "mathlib_pin.json").read_text(encoding="utf-8"))
     assert pin["built_from_source"] is True
     assert pin["prebuilt_cache_used"] is False
     assert len(pin["revision"]) == 40
@@ -443,7 +443,7 @@ def test_every_reference_theorem_is_catalogued_and_vice_versa():
     installing anything.
     """
     import re
-    src = (ROOT / "reference" / "AmpasRef" / "Challenge.lean").read_text()
+    src = (ROOT / "reference" / "AmpasRef" / "Challenge.lean").read_text(encoding="utf-8")
     declared = set(re.findall(r"^theorem\s+(\w+)", src, re.MULTILINE))
     catalogued = {c["theorem"].rsplit(".", 1)[-1] for c in CAT["claims"]}
     assert declared == catalogued, (

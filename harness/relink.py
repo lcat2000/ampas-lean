@@ -14,7 +14,7 @@ SUB = {"libgmp.so": "/lib/x86_64-linux-gnu/libgmp.so.10",
        "libssl.so": "/lib/x86_64-linux-gnu/libssl.so.3",
        "libcrypto.so": "/lib/x86_64-linux-gnu/libcrypto.so.3"}
 args = []
-for t in shlex.split(open(rsp).read()):
+for t in shlex.split(open(rsp, encoding="utf-8").read()):
     if "/home/conda/" in t:
         base = os.path.basename(t)
         if base in SUB:
@@ -24,8 +24,8 @@ for t in shlex.split(open(rsp).read()):
         args.append("/lib/x86_64-linux-gnu/libuv.so.1"); continue
     args.append(t)
 argfile = rsp + ".fixed"
-open(argfile, "w").write("\n".join(args))
+open(argfile, "w", encoding="utf-8").write("\n".join(args))
 cmd = ["gcc", "-o", out, f"@{argfile}", f"-Wl,-rpath,{sysroot}/lib/lean"]
-r = subprocess.run(cmd, capture_output=True, text=True)
+r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
 print(r.stdout[-2000:], r.stderr[-2000:])
 sys.exit(r.returncode)

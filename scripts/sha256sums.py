@@ -36,7 +36,7 @@ def main() -> int:
             files.append((rel, f))
     lines = [f"{hashlib.sha256(f.read_bytes()).hexdigest()}  {rel}"
              for rel, f in sorted(files, key=lambda t: str(t[0]))]
-    (ROOT / "SHA256SUMS").write_text("\n".join(lines) + "\n")
+    (ROOT / "SHA256SUMS").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{len(lines)} files -> SHA256SUMS")
     return 0
 

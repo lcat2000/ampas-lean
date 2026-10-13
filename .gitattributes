@@ -1,0 +1,18 @@
+# Keep every text file LF in the working tree as well as in the repository.
+#
+# Why: without this, a Windows checkout with core.autocrlf rewrites line
+# endings and `git status` reports every script modified when nothing was
+# edited -- which is how a reviewer comes to distrust their own diff. It also
+# breaks the shell scripts outright under WSL or Git Bash, where a `\r` at the
+# end of the shebang makes the interpreter unfindable.
+#
+# The reference statements, the exports and the attestations matter more than
+# convenience here: SHA256SUMS and the content-addressed freeze hash file
+# BYTES, so a line-ending conversion anywhere in the reference tree changes
+# hashes that are supposed to change only when meaning changes.
+* text=auto eol=lf
+
+*.olean binary
+*.pem   binary
+*.zip   binary
+*.png   binary

@@ -75,7 +75,7 @@ def test_tier_zero_does_not_need_lean():
 
 
 def test_baseline_file_is_present_and_nonempty():
-    fps = json.loads(BASELINE.read_text())
+    fps = json.loads(BASELINE.read_text(encoding="utf-8"))
     assert isinstance(fps, list) and len(fps) > 100
     assert len(set(fps)) == len(fps), "baseline fingerprints must be distinct"
 
@@ -87,7 +87,7 @@ def test_baseline_covers_the_whole_trusted_environment():
     for genuine submissions: fail-safe, but wrong, and it would have hidden a
     real introduction in the noise. 2000+ is the environment; ~200 was the
     statement closure."""
-    fps = json.loads(BASELINE.read_text())
+    fps = json.loads(BASELINE.read_text(encoding="utf-8"))
     assert len(fps) > 1500, (
         f"{len(fps)} fingerprints looks like a statement-closure baseline; "
         f"regenerate with harness/make_baseline.py")
@@ -98,7 +98,7 @@ def test_forged_large_elimination_is_not_reported_clean():
     into Sort u. Proof irrelevance then makes MyTrue and MyFalse
     interchangeable, and `bad : MyFalse` type-checks. The checker cannot see
     that the recursor is illegitimate, so it must not vouch for it."""
-    base = set(json.loads(BASELINE.read_text()))
+    base = set(json.loads(BASELINE.read_text(encoding="utf-8")))
     out = run(FORGE / "forge_large_elim.export", baseline=base)
     # it type-checks: that is the finding, not a bug in the test
     assert out["errors"] == [], "the forgery does type-check; see REVIEW.md F-2"
@@ -112,7 +112,7 @@ def test_forged_large_elimination_is_not_reported_clean():
 def test_forged_nonpositive_inductive_is_not_reported_clean():
     """Bad.mk : (Bad -> MyFalse) -> Bad, the classic diagonal. Same verdict:
     it type-checks, and the provenance gate reports it."""
-    base = set(json.loads(BASELINE.read_text()))
+    base = set(json.loads(BASELINE.read_text(encoding="utf-8")))
     out = run(FORGE / "forge_positivity.export", baseline=base)
     assert out["errors"] == []
     assert out["introduced_assumptions"]
@@ -140,9 +140,9 @@ def test_a_forgery_is_only_clean_without_the_gate():
 def test_statement_mode_export_is_refused():
     """A --statement export carries #THMTYPE declarations: types without
     proofs. The original code counted those as checked and reported 0 errors."""
-    src = (FORGE / "forge_large_elim.export").read_text()
+    src = (FORGE / "forge_large_elim.export").read_text(encoding="utf-8")
     stmt = ROOT / "tests" / "forgeries" / ".tmp_statement_mode.export"
-    stmt.write_text(src.replace("#MODE proof", "#MODE statement"))
+    stmt.write_text(src.replace("#MODE proof", "#MODE statement"), encoding="utf-8")
     try:
         out = run(stmt)
         assert out["checked"] == 0
@@ -154,7 +154,7 @@ def test_statement_mode_export_is_refused():
 def test_unproved_theorem_is_an_error_even_in_proof_mode():
     """Belt and braces: a #THMTYPE smuggled into a proof-mode export is
     reported, not counted as checked."""
-    src = (FORGE / "forge_positivity.export").read_text().splitlines()
+    src = (FORGE / "forge_positivity.export").read_text(encoding="utf-8").splitlines()
     out_lines, hit = [], False
     for ln in src:
         if ln.startswith("#DEF 7 ") and not hit:
@@ -164,7 +164,7 @@ def test_unproved_theorem_is_an_error_even_in_proof_mode():
             out_lines.append(ln)
     assert hit
     p = ROOT / "tests" / "forgeries" / ".tmp_thmtype.export"
-    p.write_text("\n".join(out_lines) + "\n")
+    p.write_text("\n".join(out_lines) + "\n", encoding="utf-8")
     try:
         out = run(p)
         assert "bad2" in out["unproved_theorems"]
@@ -242,7 +242,7 @@ def test_no_attestation_names_a_person_for_work_they_did_not_do():
     recs = sorted(glob.glob(str(ROOT / "reference" / "attestations*" / "*.json")))
     assert recs, "no attestations found"
     for f in recs:
-        d = json.loads(Path(f).read_text())
+        d = json.loads(Path(f).read_text(encoding="utf-8"))
         name = Path(f).stem
         assert "attested_by" not in d.get("reviewer", {}), (
             f"{name}: the collapsed attested_by field is back")
@@ -268,7 +268,7 @@ def test_the_signing_key_claims_no_more_than_its_custody_states():
     key is a demonstration key generated in the build container and held by
     nobody, and a later reviewer-held key must pass the same test by declaring
     its custody, not by being exempt from it."""
-    k = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    k = json.loads((ROOT / "reference" / "reviewer_key.json").read_text(encoding="utf-8"))
     custody = k.get("custody", "")
     assert custody, (
         "the key record states no custody, so a reader cannot tell whether a "
@@ -301,7 +301,7 @@ def test_every_attestation_is_signed_by_the_one_recorded_key():
     records then verify against no committed key at all, and a summary that
     reports signatures as present would not notice. Checked offline, so it
     fails in seconds rather than after a Lean build."""
-    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text(encoding="utf-8"))
     dirs = ["attestations", "attestations-mathlib", "attestations-fermat"]
     found = 0
     for sub in dirs:
@@ -309,7 +309,7 @@ def test_every_attestation_is_signed_by_the_one_recorded_key():
         if not d.is_dir():
             continue
         for f in sorted(d.glob("*.json")):
-            rec = json.loads(f.read_text())
+            rec = json.loads(f.read_text(encoding="utf-8"))
             sig = rec.get("signature") or {}
             assert sig.get("key_id") == pub["key_id"], (
                 f"{sub}/{f.name} is signed by {sig.get('key_id')!r} but the "
@@ -326,7 +326,7 @@ def test_every_adjudication_is_attributed_and_reasoned():
     """A disagreement is discounted only on a reviewer's record, never by
     default: each entry must name a reviewer, a date, a verdict, a reason and
     the finding it belongs to, and every finding must state its direction."""
-    d = json.loads(ADJ.read_text())
+    d = json.loads(ADJ.read_text(encoding="utf-8"))
     s = d["sign_off"]
     assert s["status"] in ("SIGNED", "PENDING_REVIEWER_CONFIRMATION"), s
     if s["status"] == "SIGNED":
@@ -349,7 +349,7 @@ def test_every_adjudication_is_attributed_and_reasoned():
 def test_the_adjudicated_declarations_are_library_code_not_submissions():
     """The whole adjudication rests on these being Lean core declarations that
     both Lean kernels accept, reproducible with no submission involved."""
-    d = json.loads(ADJ.read_text())
+    d = json.loads(ADJ.read_text(encoding="utf-8"))
     for row in d["declarations"]:
         assert row["origin"].startswith("Lean core"), row
     for f in d["findings"]:

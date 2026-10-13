@@ -55,7 +55,7 @@ def _rebuild(suite: Path):
         subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o",
                         str(suite / TRUSTED_REL / "AmpasRef" / f"{m}.olean"),
                         str(suite / "reference" / "AmpasRef" / f"{m}.lean")],
-                       capture_output=True, text=True, env=env, cwd=suite, timeout=600)
+                       capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
 
 
 def _verify(suite: Path):
@@ -65,7 +65,7 @@ def _verify(suite: Path):
     env["AMPAS_AUDIT_BIN"] = str(suite / "harness" / "audit")
     env.pop("AMPAS_CLAIMS", None)
     return subprocess.run([sys.executable, str(suite / "harness" / "ampas_review.py"), "verify"],
-                          capture_output=True, text=True, env=env, timeout=900)
+                          capture_output=True, text=True, encoding="utf-8", env=env, timeout=900)
 
 
 def test_baseline_verifies(tmp_path):
@@ -78,10 +78,10 @@ def test_statement_drift_is_caught(tmp_path):
     """Dropping the b <= a hypothesis from SUB must invalidate the sign-off."""
     suite = _copy(tmp_path)
     p = suite / "reference" / "AmpasRef" / "Challenge.lean"
-    t = p.read_text()
+    t = p.read_text(encoding="utf-8")
     assert "∀ a b : Nat, b ≤ a → a - b + b = a" in t
     p.write_text(t.replace("∀ a b : Nat, b ≤ a → a - b + b = a",
-                           "∀ a b : Nat, a - b + b = a"))
+                           "∀ a b : Nat, a - b + b = a"), encoding="utf-8")
     _rebuild(suite)
     r = _verify(suite)
     assert r.returncode != 0
@@ -94,13 +94,13 @@ def test_closure_drift_is_caught_with_the_statement_untouched(tmp_path):
     and must name the constant that changed."""
     suite = _copy(tmp_path)
     p = suite / "reference" / "AmpasRef" / "Defs.lean"
-    t = p.read_text()
+    t = p.read_text(encoding="utf-8")
     assert "def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k" in t
     p.write_text(t.replace("def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k",
-                           "def IsEven (_ : Nat) : Prop := True"))
+                           "def IsEven (_ : Nat) : Prop := True"), encoding="utf-8")
     # the statement of EVEN is untouched
     assert "IsEven a → IsEven b → IsEven (a + b)" in \
-        (suite / "reference" / "AmpasRef" / "Challenge.lean").read_text()
+        (suite / "reference" / "AmpasRef" / "Challenge.lean").read_text(encoding="utf-8")
     _rebuild(suite)
     r = _verify(suite)
     assert r.returncode != 0
@@ -112,9 +112,9 @@ def test_tampering_with_an_attestation_breaks_the_signature(tmp_path):
     """Quietly dropping the hypothesis from the attested prose."""
     suite = _copy(tmp_path)
     p = suite / "reference" / "attestations" / "DIV.json"
-    d = json.loads(p.read_text())
+    d = json.loads(p.read_text(encoding="utf-8"))
     d["text"] = "For every natural number n, n / n = 1."
-    p.write_text(json.dumps(d, indent=2, ensure_ascii=False))
+    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
     r = _verify(suite)
     assert r.returncode != 0
     assert "SIGNATURE INVALID" in r.stdout
@@ -133,9 +133,9 @@ def test_an_incomplete_checklist_is_caught(tmp_path):
     flipping it also breaks the signature."""
     suite = _copy(tmp_path)
     p = suite / "reference" / "attestations" / "EVEN.json"
-    d = json.loads(p.read_text())
+    d = json.loads(p.read_text(encoding="utf-8"))
     d["reviewer"]["checklist"]["definitions_reviewed"] = False
-    p.write_text(json.dumps(d, indent=2, ensure_ascii=False))
+    p.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
     r = _verify(suite)
     assert r.returncode != 0
     assert "EVEN" in r.stdout
@@ -146,7 +146,7 @@ def test_redefining_a_definition_also_breaks_the_guards(tmp_path):
     are no longer provable, so the reference does not even compile."""
     suite = _copy(tmp_path)
     p = suite / "reference" / "AmpasRef" / "Defs.lean"
-    p.write_text(p.read_text().replace(
+    p.write_text(p.read_text(encoding="utf-8").replace(
         "def IsEven (n : Nat) : Prop := ∃ k, n = 2 * k",
         "def IsEven (_ : Nat) : Prop := True"))
     env = dict(os.environ)
@@ -156,8 +156,8 @@ def test_redefining_a_definition_also_breaks_the_guards(tmp_path):
         subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o",
                         str(suite / TRUSTED_REL / "AmpasRef" / f"{m}.olean"),
                         str(suite / "reference" / "AmpasRef" / f"{m}.lean")],
-                       capture_output=True, text=True, env=env, cwd=suite, timeout=600)
+                       capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
     g = subprocess.run([str(LEAN_ROOT / "bin" / "lean"), "-o", str(tmp_path / "g.olean"),
                         str(suite / "reference" / "AmpasRef" / "Guards.lean")],
-                       capture_output=True, text=True, env=env, cwd=suite, timeout=600)
+                       capture_output=True, text=True, encoding="utf-8", env=env, cwd=suite, timeout=600)
     assert g.returncode != 0, "the guards must stop compiling when IsEven is redefined"

@@ -40,7 +40,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
                extra_path: str, timeout: int) -> dict:
     req = ROOT / ".cex_req.json"
     req.write_text(json.dumps({"module": module, "decl": decl,
-                               "bound": bound, "exists_bound": exists_bound}))
+                               "bound": bound, "exists_bound": exists_bound}), encoding="utf-8")
     env = dict(os.environ)
     root = lean_root()
     env["PATH"] = f"{root / 'bin'}:{env.get('PATH', '')}"
@@ -59,7 +59,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
         r = subprocess.run(
             [str(root / "bin" / "lean"), "--run", str(ROOT / "harness" / "Counterexample.lean"),
              str(req)],
-            capture_output=True, text=True, env=env, timeout=timeout, cwd=str(ROOT))
+            capture_output=True, text=True, encoding="utf-8", env=env, timeout=timeout, cwd=str(ROOT))
     except subprocess.TimeoutExpired:
         # A search killed by the clock has reached no verdict. Reporting this
         # as "no counterexample" would turn a resource limit into evidence,
@@ -93,7 +93,7 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
 
 
 def bounds_for(claim_id: str) -> tuple[int, int, int]:
-    cfg = json.loads(BOUNDS.read_text())
+    cfg = json.loads(BOUNDS.read_text(encoding="utf-8"))
     d = cfg.get("default", {})
     c = cfg.get("claims", {}).get(claim_id, {})
     return (int(c.get("bound", d.get("bound", 12))),
@@ -107,7 +107,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--claim", action="append", help="limit to these claim ids")
     args = ap.parse_args(argv)
 
-    cat = json.loads(CATALOGUE.read_text())
+    cat = json.loads(CATALOGUE.read_text(encoding="utf-8"))
     module = cat["reference_module"]
     extra = os.environ.get("AMPAS_EXTRA_LEAN_PATH", "")
 
@@ -140,7 +140,7 @@ def main(argv: list[str]) -> int:
         # already be annotated as a false-claim control, and a statement
         # annotated as false must actually be refutable. Either mismatch is a
         # finding about the catalogue, not about the search.
-        waiver = (json.loads(BOUNDS.read_text()).get("claims", {})
+        waiver = (json.loads(BOUNDS.read_text(encoding="utf-8")).get("claims", {})
                   .get(cid, {}).get("falsity_not_searchable"))
         if rec["outcome"] == "REFUTED":
             rec["consistency"] = ("OK" if declared_false
@@ -170,7 +170,7 @@ def main(argv: list[str]) -> int:
            "searched_on": time.strftime("%Y-%m-%d"),
            "searches": results}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps(out, indent=2) + "\n")
+    Path(args.out).write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     print(f"\n-> {args.out}")
     bad = [r for r in results if r["consistency"] != "OK"]
     return 1 if bad else 0

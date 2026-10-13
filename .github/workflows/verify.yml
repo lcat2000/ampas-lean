@@ -24,6 +24,11 @@ jobs:
         # What a clean search result is allowed to mean, checked against the
         # committed records: no Lean, no box re-run, seconds.
         run: python3 -m pytest tests/test_counterexample.py -q
+      - name: portability
+        # No file read may depend on the machine's locale, and no step of the
+        # signing path may need a POSIX shell. Both were found by a reviewer
+        # on Windows, not here.
+        run: python3 -m pytest tests/test_portability.py -q
 
   # Tier 1 is the real verification: the whole core corpus through compile,
   # kernel replay, the third check and the auditor, plus the sign-off and its

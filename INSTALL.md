@@ -17,6 +17,14 @@ Tested on Linux x86-64. The harness's sandbox uses POSIX `setuid`/`setrlimit`,
 so the sandboxed path is Linux/macOS only; see
 [Running without the sandbox](#running-without-the-sandbox).
 
+**On Windows**, the parts that need no sandbox do work: the formalization
+sign-off (`keygen`, `sign`, `scripts/sign_attestations.py`) and most of tier 0.
+Three tier-0 tests import the driver and are skipped, because verifying a
+submission means confining it and there is no `setrlimit` to confine it with.
+Every file the harness reads is UTF-8 and the code says so explicitly, so a
+non-UTF-8 system locale (cp950, cp1252) is not a problem — it was, which is
+why `tests/test_portability.py` exists.
+
 ## Tier 0 — no Lean at all
 
 ```bash

@@ -221,16 +221,18 @@ python3 harness/ampas_review.py keygen \
   --key-id  kai-chang-2026-10 \
   --custody "Held by Kai Chang (Morris) / lcat2000 on their own machine; never in a build container, never committed."
 
-./scripts/sign_attestations.sh ~/.ampas/ampas-reviewer.pem kai-chang-2026-10
+python3 scripts/sign_attestations.py ~/.ampas/ampas-reviewer.pem kai-chang-2026-10
 
 git add -A && git commit -m "Sign the attestations with a key in the reviewer's custody" && git push
 ```
 
 `--custody` 會把「誰保管這把私鑰」寫進公開的金鑰紀錄。那件事從金鑰本身看不出來，而它正是簽章有沒有意義的全部所在，所以不該留給讀者猜。
 
-用 `sign_attestations.sh` 而不是直接呼叫 `sign`，是因為 13 條主張分在三份 catalogue，`sign` 一次只簽 `AMPAS_CLAIMS` 選到的那一份。漏掉一份的話，那幾份簽核還留著舊金鑰的簽章，而 `reference/reviewer_key.json` 已經換成新的——結果是那些紀錄用倉庫裡任何一把公鑰都驗不過。腳本把三份一起簽完，然後立刻用離線測試檢查「全部 13 份都是同一個 key id」。
+用 `sign_attestations.py` 而不是直接呼叫 `sign`，是因為 13 條主張分在三份 catalogue，`sign` 一次只簽 `AMPAS_CLAIMS` 選到的那一份。漏掉一份的話，那幾份簽核還留著舊金鑰的簽章，而 `reference/reviewer_key.json` 已經換成新的——結果是那些紀錄用倉庫裡任何一把公鑰都驗不過。腳本把三份一起簽完，然後立刻用離線測試檢查「全部 13 份都是同一個 key id」。
 
 **私鑰不要進版控。** 腳本跑完後 `git status` 不應該出現任何 `.pem`。
+
+**Windows（PowerShell）** 一樣：`python scripts\sign_attestations.py $HOME\.ampas\ampas-reviewer.pem kai-chang-2026-10`。這支是 Python 而不是 shell script，就是因為簽章這一步必須在審查者自己的機器上做，而那台機器不一定有 POSIX shell——最早的 bash 版本在 PowerShell 裡根本跑不起來。
 
 **驗證交給 CI。** `verify` 需要 Lean（它要重新推導 closure），但你 push 之後 CI 就會跑——它有 Lean，會用你的新公鑰重新驗一遍全部簽核。綠了就表示簽章對、凍結沒漂移。
 

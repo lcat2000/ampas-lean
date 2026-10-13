@@ -38,7 +38,15 @@ from __future__ import annotations
 
 import json
 import os
-import resource
+try:
+    import resource          # POSIX only
+except ModuleNotFoundError:  # Windows
+    # The sandbox (rlimits, setuid) is POSIX-only and the module documents
+    # that. But IMPORTING the driver must not fail for it: tier 0 needs no
+    # Lean and no sandbox, and a reviewer on Windows should be able to run it
+    # -- three tier-0 tests died at this import line rather than at the step
+    # that actually needs a sandbox.
+    resource = None  # type: ignore[assignment]
 import shutil
 import subprocess
 import sys
@@ -61,7 +69,7 @@ def _lean_root() -> Path:
         return Path(env)
     try:
         out = subprocess.run(["lean", "--print-prefix"], capture_output=True,
-                             text=True, timeout=60)
+                             text=True, encoding="utf-8", timeout=60)
         if out.returncode == 0 and out.stdout.strip():
             return Path(out.stdout.strip())
     except (OSError, subprocess.SubprocessError):
@@ -174,6 +182,13 @@ FORBIDDEN_ALWAYS = ("SORRY", "NATIVE_EVALUATION", "OPAQUE_IN_STATEMENT",
 
 
 def _preexec(as_user: dict | None, limits: bool = True, mem: int | None = None):
+    if resource is None:
+        # No rlimits and no setuid here, so nothing may run as another user.
+        if as_user is not None:
+            raise SystemExit(
+                "a sandbox user was requested but this platform has no setuid; "
+                "run the verification on Linux or macOS")
+        return None
     def fn():
         if not limits:
             return
@@ -192,7 +207,10 @@ def _preexec(as_user: dict | None, limits: bool = True, mem: int | None = None):
 
 
 def _sandbox_user() -> dict | None:
-    if os.geteuid() != 0:
+    # os.geteuid and pwd are POSIX-only too, so ask the platform rather than
+    # assume it: on Windows there is no unprivileged-user sandbox and the
+    # driver says so where it matters instead of failing at import.
+    if not hasattr(os, "geteuid") or os.geteuid() != 0:
         return None
     import pwd
     try:
@@ -219,7 +237,7 @@ def _run(cmd, cwd, lean_path, as_user, env_extra=None, limits=True, wall=None, m
     if env_extra:
         env.update(env_extra)
     try:
-        return subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True,
+        return subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True, encoding="utf-8",
                               timeout=wall or WALL_SECONDS,
                               preexec_fn=_preexec(as_user, limits, mem))
     except subprocess.TimeoutExpired as e:
@@ -353,7 +371,7 @@ def baseline(module: str = "AmpasRef.Challenge") -> dict:
 
 def load_catalogue() -> dict:
     path = Path(os.environ.get("AMPAS_CLAIMS", ROOT / "reference" / "claims.json"))
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def check_submission(sub_path: Path, module: str, claims: list[dict],
@@ -437,7 +455,7 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
                "kernel_defeq": defeq_default,
                "theorems": [c["theorem"] for c in claims]}
         req_path = work / "req.json"
-        req_path.write_text(json.dumps(req))
+        req_path.write_text(json.dumps(req), encoding="utf-8")
         if as_user is not None:
             os.chown(req_path, as_user["uid"], as_user["gid"])
         au = _run(audit_cmd() + [str(req_path)], work, lean_path, as_user,
@@ -489,7 +507,7 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
         return {"run": False, "summary": f"checker unavailable: {e}"}
     baseline = None
     if KERNEL_BASELINE.exists():
-        baseline = set(json.loads(KERNEL_BASELINE.read_text()))
+        baseline = set(json.loads(KERNEL_BASELINE.read_text(encoding="utf-8")))
     old = sys.getrecursionlimit()
     sys.setrecursionlimit(60000)
     try:
@@ -504,7 +522,7 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
     adj = {}
     if ADJUDICATIONS.exists():
         adj = {d["name"]: d for d in
-               json.loads(ADJUDICATIONS.read_text()).get("declarations", [])}
+               json.loads(ADJUDICATIONS.read_text(encoding="utf-8")).get("declarations", [])}
     disputed = [n for n, _ in out["errors"]]
     unadjudicated = [n for n in disputed if n not in adj]
     if not out["errors"]:
@@ -610,7 +628,7 @@ def main(argv: list[str]) -> int:
                              ref_mod, trusted)
         results.append(r.to_json())
     else:
-        manifest = json.loads(Path(args.manifest).read_text())
+        manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
         base = Path(args.manifest).resolve().parent
         for item in manifest["submissions"]:
             if not all(c in by_id for c in item["claims"]):
@@ -627,7 +645,7 @@ def main(argv: list[str]) -> int:
             results.append(r_json)
     out = {"results": results}
     if args.out:
-        Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False))
+        Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(out, indent=2, ensure_ascii=False))
     return 0
 

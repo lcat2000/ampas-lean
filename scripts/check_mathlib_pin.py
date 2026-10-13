@@ -11,12 +11,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-pin = json.loads((ROOT / "reference" / "mathlib_pin.json").read_text())
+pin = json.loads((ROOT / "reference" / "mathlib_pin.json").read_text(encoding="utf-8"))
 man_path = ROOT / "mathlib-tier" / "lake-manifest.json"
 if not man_path.exists():
     print("no lake-manifest.json yet; run `lake update` in mathlib-tier/", file=sys.stderr)
     raise SystemExit(1)
-man = json.loads(man_path.read_text())
+man = json.loads(man_path.read_text(encoding="utf-8"))
 got = {p["name"]: p.get("rev") for p in man.get("packages", [])}
 
 want = {"mathlib": pin["revision"]}

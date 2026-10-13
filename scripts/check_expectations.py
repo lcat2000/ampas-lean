@@ -24,7 +24,7 @@ def main(argv) -> int:
                     help="also require that both Lean kernels ran and agreed")
     a = ap.parse_args(argv)
 
-    rows = json.loads(Path(a.results).read_text())["results"]
+    rows = json.loads(Path(a.results).read_text(encoding="utf-8"))["results"]
     bad = []
     for r in rows:
         mod = r["module"]

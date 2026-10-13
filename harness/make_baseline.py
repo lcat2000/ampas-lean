@@ -46,7 +46,7 @@ def main(argv):
             exp = Path(td) / f"{mod}.specs"
             r = subprocess.run([str(LEAN), "--run", str(HERE / "Export.lean"),
                                 "--specs", mod, str(exp)],
-                               capture_output=True, text=True)
+                               capture_output=True, text=True, encoding="utf-8")
             if r.returncode != 0 or not exp.exists():
                 print(f"export of {mod} failed:\n{r.stdout}{r.stderr}", file=sys.stderr)
                 return 1
@@ -54,7 +54,7 @@ def main(argv):
             f = baseline_fingerprints(env)
             counts[mod] = len(f)
             fps |= f
-    out.write_text(json.dumps(sorted(fps), indent=0) + "\n")
+    out.write_text(json.dumps(sorted(fps), indent=0) + "\n", encoding="utf-8")
     print(f"{len(fps)} distinct assumed declarations -> {out}")
     for m, n in counts.items():
         print(f"  {m}: {n}")

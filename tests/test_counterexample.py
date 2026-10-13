@@ -29,8 +29,8 @@ OUTCOMES = {"REFUTED", "NO_COUNTEREXAMPLE", "NO_COUNTEREXAMPLE_PARTIAL",
 
 
 def load(cat_rel, cex_rel, _attest):
-    cat = json.loads((ROOT / cat_rel).read_text())
-    cex = json.loads((ROOT / cex_rel).read_text())
+    cat = json.loads((ROOT / cat_rel).read_text(encoding="utf-8"))
+    cex = json.loads((ROOT / cex_rel).read_text(encoding="utf-8"))
     return cat, {r["claim"]: r for r in cex["searches"]}
 
 
@@ -58,14 +58,14 @@ def test_the_signed_attestation_carries_the_same_search(cat_rel, cex_rel, attest
         p = ROOT / attest / f"{c['id']}.json"
         if not p.exists():
             pytest.skip(f"{c['id']} is not frozen")
-        block = json.loads(p.read_text()).get("counterexample_search")
+        block = json.loads(p.read_text(encoding="utf-8")).get("counterexample_search")
         assert block, f"{c['id']}: the attestation records no counterexample search"
         f = recs[c["id"]]
         for k in ("outcome", "statement_sha256", "bound", "exists_bound"):
             assert block.get(k) == f.get(k), (
                 f"{c['id']}: the signed attestation says {k}={block.get(k)!r} but "
                 f"{cex_rel} says {f.get(k)!r} -- re-freeze after re-searching")
-        assert block["statement_sha256"] == json.loads(p.read_text())["statement_sha256"], (
+        assert block["statement_sha256"] == json.loads(p.read_text(encoding="utf-8"))["statement_sha256"], (
             f"{c['id']}: the search inside the attestation is about a different "
             f"statement than the attestation itself freezes")
 
@@ -109,7 +109,7 @@ def test_the_fermat_claim_is_refuted_at_n_equals_five():
     Euler (1732) refuted it at F_5. A search that cannot reproduce that has no
     claim on anyone's trust, so the witness is pinned rather than described."""
     recs = {r["claim"]: r for r in json.loads(
-        (ROOT / "reference" / "counterexample_search_fermat.json").read_text())["searches"]}
+        (ROOT / "reference" / "counterexample_search_fermat.json").read_text(encoding="utf-8"))["searches"]}
     r = recs["FERMAT-CLAIM"]
     assert r["outcome"] == "REFUTED"
     assert r["witness"] == [5], f"expected the counterexample at n=5, got {r['witness']}"
@@ -122,7 +122,7 @@ def test_a_partial_box_says_how_partial():
     """`NO_COUNTEREXAMPLE` over a box that was mostly undecided means much less
     than one over a box that was not, so the counts have to be there."""
     for _, cex_rel, _ in CATALOGUES:
-        for r in json.loads((ROOT / cex_rel).read_text())["searches"]:
+        for r in json.loads((ROOT / cex_rel).read_text(encoding="utf-8"))["searches"]:
             if not r["outcome"].startswith("NO_COUNTEREXAMPLE"):
                 continue
             assert "box_size" in r and "checked_points" in r, f"{r['claim']}: no counts"
@@ -137,7 +137,7 @@ def test_a_partial_box_says_how_partial():
 def test_the_bounds_are_committed_and_explained():
     """The box is part of what a result means, so it lives in the reference
     tree where changing it is reviewable -- not in a default inside the code."""
-    b = json.loads((ROOT / "reference" / "counterexample_bounds.json").read_text())
+    b = json.loads((ROOT / "reference" / "counterexample_bounds.json").read_text(encoding="utf-8"))
     assert b["default"]["bound"] >= 1 and b["default"]["exists_bound"] >= 1
     for cid, c in b.get("claims", {}).items():
         assert c.get("why") or c.get("falsity_not_searchable"), (

@@ -57,7 +57,7 @@ def _lean_root() -> Path:
         return Path(env)
     try:
         out = subprocess.run(["lean", "--print-prefix"], capture_output=True,
-                             text=True, timeout=60)
+                             text=True, encoding="utf-8", timeout=60)
         if out.returncode == 0 and out.stdout.strip():
             return Path(out.stdout.strip())
     except (OSError, subprocess.SubprocessError):
@@ -118,7 +118,7 @@ def sha256_str(s: str) -> str:
 
 def _audit(request: dict) -> dict:
     req = ROOT / ".review_req.json"
-    req.write_text(json.dumps(request))
+    req.write_text(json.dumps(request), encoding="utf-8")
     env = dict(os.environ)
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"
     # AMPAS_EXTRA_LEAN_PATH after the trusted directory, never before it: at
@@ -130,7 +130,7 @@ def _audit(request: dict) -> dict:
     extra = os.environ.get("AMPAS_EXTRA_LEAN_PATH", "")
     env["LEAN_PATH"] = ":".join([str(TRUSTED_OLEAN)] + ([extra] if extra else []))
     try:
-        r = subprocess.run(audit_cmd() + [str(req)], capture_output=True, text=True,
+        r = subprocess.run(audit_cmd() + [str(req)], capture_output=True, text=True, encoding="utf-8",
                            env=env, timeout=600)
         if r.returncode != 0:
             raise SystemExit(f"auditor failed: {r.stdout}\n{r.stderr}")
@@ -140,7 +140,7 @@ def _audit(request: dict) -> dict:
 
 
 def catalogue() -> dict:
-    return json.loads(CATALOGUE.read_text())
+    return json.loads(CATALOGUE.read_text(encoding="utf-8"))
 
 
 def review_module(cat: dict) -> str:
@@ -279,7 +279,7 @@ def keygen(priv_path: Path, pub_path: Path, key_id: str, custody: str | None = N
         "UNDECLARED — no custody was stated when this key was generated. Treat "
         "the signature as attesting record integrity only, and as attributing "
         "nothing to any person, until this field says who holds the private key.")
-    pub_path.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+    pub_path.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"private key -> {priv_path} (keep out of the package; never commit it)")
     print(f"public key  -> {pub_path}")
     print(f"custody     -> {rec['custody'][:72]}...")
@@ -298,7 +298,7 @@ def cex_records(cat: dict) -> dict:
     p = cex_path(cat)
     if not p.exists():
         return {}
-    return {r["claim"]: r for r in json.loads(p.read_text()).get("searches", [])}
+    return {r["claim"]: r for r in json.loads(p.read_text(encoding="utf-8")).get("searches", [])}
 
 
 def cex_gate(cid: str, claim: dict, derived: dict, rec: dict | None) -> dict:
@@ -410,7 +410,7 @@ def cmd_freeze(args):
             },
         }
         (AD / f"{cid}.json").write_text(
-            json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+            json.dumps(rec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"froze {len(derived)} attestations into {AD}")
     return 0
 
@@ -419,12 +419,12 @@ def cmd_sign(args):
     key = load_private(Path(args.key))
     n = 0
     for p in sorted(attest_dir(catalogue()).glob("*.json")):
-        rec = json.loads(p.read_text())
+        rec = json.loads(p.read_text(encoding="utf-8"))
         sig = key.sign(canonical(rec)).hex()
         rec["signature"] = {"algorithm": "Ed25519", "key_id": args.key_id,
                             "signed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                             "value": sig}
-        p.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+        p.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         n += 1
     print(f"signed {n} attestations with key {args.key_id}")
     return 0
@@ -433,7 +433,7 @@ def cmd_sign(args):
 def cmd_verify(args):
     cat = catalogue()
     derived = derive(cat)
-    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text(encoding="utf-8"))
     pubkey = load_public(pub["public_key_pem"])
     failures = []
     checked = 0
@@ -443,7 +443,7 @@ def cmd_verify(args):
         if not p.exists():
             failures.append(f"{cid}: no attestation (statement is not signed off)")
             continue
-        rec = json.loads(p.read_text())
+        rec = json.loads(p.read_text(encoding="utf-8"))
         d = derived[cid]
         checked += 1
         # 1. signature
@@ -521,7 +521,7 @@ def cmd_verify(args):
     report = {"checked": checked, "failures": failures,
               "verified_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
     if args.out:
-        Path(args.out).write_text(json.dumps(report, indent=2, ensure_ascii=False))
+        Path(args.out).write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     for f in failures:
         print("FAIL:", f)
     print(f"{checked} attestations checked, {len(failures)} failures")
