@@ -102,8 +102,8 @@
   },
   "signature": {
     "algorithm": "Ed25519",
-    "key_id": "ampas-harness-demo-2026-10",
-    "signed_at": "2026-10-13T14:12:04Z",
-    "value": "e549ab6dfa568c601045190632ca64d60143ffe42a7c889de95fe3fb19c836181c2b3548f10b0fe0637ec5d92e110b0bab84aeefac4c00c6c1a1d730a98a6c05"
+    "key_id": "kai-chang-2026-10",
+    "signed_at": "2026-10-13T14:19:41Z",
+    "value": "f0772b74fbb6f2899184b39475d81cc5c2fc997c5fac13474924c6fa338a2b960772391a0ccabedaca9883aa4ee774f3ef9219418d35a3829f5cff66e623e903"
   }
 }

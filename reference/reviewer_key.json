@@ -1,7 +1,6 @@
 {
-  "key_id": "ampas-harness-demo-2026-10",
+  "key_id": "kai-chang-2026-10",
   "algorithm": "Ed25519",
-  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAY2M4d8km+rPPYSknhsKqVSE7/WluPOjRIjCroLX0T6o=\n-----END PUBLIC KEY-----\n",
-  "custody": "NONE — this is a demonstration key, not a reviewer's key.",
-  "note": "The private key was generated inside the session container that produced this repository and is held by nobody: it is not in the repository owner's custody and never was. So a signature with it authenticates the INTEGRITY of an attestation record (nothing has been altered since freezing) and attributes NOTHING to a person. Who reviewed and who confirmed are separate recorded fields, not implied by this signature. The previous key id was 'kai-chang-morris-2026-10', which wrongly suggested the owner's custody; it was replaced for that reason. Real deployment needs a key the reviewer generates and holds themselves, bound to their identity."
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAKOexp8j5cgzdxAL92SrV+o0pt/inI54MGJUa96NTO0w=\n-----END PUBLIC KEY-----\n",
+  "custody": "Held by Kai Chang (Morris) / lcat2000 on their own machine; never in a build container, never committed."
 }
