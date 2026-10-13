@@ -151,7 +151,13 @@ SANDBOX_USER = os.environ.get("AMPAS_SANDBOX_USER", "ampas-sub")
 # limits for a single submission compilation / check
 CPU_SECONDS = int(os.environ.get("AMPAS_CPU_SECONDS", "120"))
 WALL_SECONDS = int(os.environ.get("AMPAS_WALL_SECONDS", "180"))
-MEM_BYTES = int(os.environ.get("AMPAS_MEM_BYTES", str(10 * 1024 ** 3)))
+# RLIMIT_AS caps ADDRESS SPACE, not resident memory, and a thread's stack is
+# an mmap -- so a tight cap makes pthread_create fail ("failed to create
+# thread") rather than reporting memory exhaustion. 10 GiB was tight enough
+# for the largest submission to fail that way on a GitHub runner. It is not
+# what bounds a submission anyway: CPU time, wall clock, output size and the
+# unprivileged user are.
+MEM_BYTES = int(os.environ.get("AMPAS_MEM_BYTES", str(24 * 1024 ** 3)))
 # `lean --run` (the exporter) loads the whole Lean library and the
 # interpreter, and RLIMIT_AS caps *address space*, not resident memory: the
 # mmapped oleans alone reserve more than the submission limit above, so the
@@ -384,6 +390,15 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
             res.error = "TRUSTED_ARTIFACT_MODIFIED during compilation"
             return res
         res.compile_stderr = (cc.stdout + cc.stderr)[-4000:]
+        if _exhausted(cc):
+            # A resource failure while COMPILING is not "it did not compile",
+            # and it is certainly not a statement about the proof. This was
+            # the one step the exhaustion check was never applied to, and it
+            # is where CI hit it: `failed to create thread` on the largest
+            # submission, reported as a plain rejection.
+            res.resource_exhausted.append(f"lean (compile) ({_why(cc)})")
+            res.compile_stderr = _clip(cc.stdout + cc.stderr)
+            return res
         if cc.returncode != 0 or not olean.exists():
             return res
         res.compiled = True

@@ -83,9 +83,11 @@ invalidates one you can.
 git clone https://github.com/lcat2000/ampas-lean.git && cd ampas-lean
 
 # tier 0 — no Lean needed, a few seconds
+pip install pytest
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
 
 # tiers 0–1 — pinned Lean toolchain only, ~6 minutes
+pip install -r requirements.txt
 ./scripts/bootstrap.sh
 ./scripts/verify.sh 1
 

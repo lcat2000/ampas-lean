@@ -204,6 +204,16 @@ def test_resource_exhaustion_is_inconclusive_not_a_rejection():
     assert A._exhausted(R(1, "", threads))
     assert "thread" in A._why(R(1, "", threads))
 
+    # The compile step was the one place this check was never applied, and it
+    # is where GitHub CI hit it: the largest submission failed with
+    # `failed to create thread` while COMPILING, which the driver reported as
+    # a plain rejection ("expected certified_all, got rejected") rather than
+    # as a run that reached no verdict. The signature also arrives with a
+    # different prefix on a different libc++.
+    ci = ("libc++abi: terminating due to uncaught exception of type "
+          "lean::exception: failed to create thread")
+    assert A._exhausted(R(1, "", ci))
+
     # and a genuine kernel rejection must NOT be mistaken for exhaustion
     assert not A._exhausted(R(1, "", "error: unknown identifier 'foo'"))
     assert not A._exhausted(

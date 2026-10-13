@@ -1,0 +1,9 @@
+# Tier 0 needs nothing but the standard library and pytest.
+#
+# `cryptography` is needed for the Ed25519 part of the formalization sign-off
+# (harness/ampas_review.py: sign / verify / keygen), which tier 1 runs. CI was
+# installing only pytest, so every signature check failed with
+# ModuleNotFoundError while the rest of the suite passed -- and INSTALL.md
+# claimed the standard library was enough. It is not.
+pytest>=8
+cryptography>=42

@@ -62,9 +62,11 @@
 git clone https://github.com/lcat2000/ampas-lean.git && cd ampas-lean
 
 # 第 0 層 — 不需要 Lean，幾秒鐘跑完
+pip install pytest
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
 
 # 第 0–1 層 — 只需要固定版本的 Lean 工具鏈，約 6 分鐘
+pip install -r requirements.txt
 ./scripts/bootstrap.sh
 ./scripts/verify.sh 1
 

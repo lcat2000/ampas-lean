@@ -7,7 +7,7 @@ Lean toolchain (and Mathlib / lean4lean for the optional tiers).
 
 | | Needed for | Notes |
 | --- | --- | --- |
-| Python ≥ 3.11 | every tier | standard library only; `pytest` for the test suites |
+| Python ≥ 3.11 | every tier | `pip install -r requirements.txt` — `pytest` for the suites, and `cryptography` for the Ed25519 sign-off (tier 1 and up). Tier 0 alone needs only `pytest`. |
 | `elan` + Lean 4.33.0 | tiers 1–3 | `lean-toolchain` pins the version; elan honours it |
 | `git` | tiers 2–3 | fetching lean4lean and Mathlib |
 | A C toolchain | nothing required | only to *compile* the auditor; there is a fallback |
@@ -35,6 +35,7 @@ that is hardest to fake and easiest to check.
 curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
 source "$HOME/.elan/env"
 
+pip install -r requirements.txt    # pytest + cryptography
 ./scripts/bootstrap.sh     # toolchain, trusted reference, provenance baseline
 ./scripts/verify.sh 1      # ~6 minutes
 ```
