@@ -10,7 +10,7 @@
     "why_false": "p1 -> p1 is derivable from A1 and A2 by modus ponens alone, so the first conjunct of Independent fails and the conjunction is false.",
     "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM above. It does NOT formalize the sentence 'that claim is false' -- the outer negation appears nowhere in the Lean statement. The falsity is recorded here, as a control annotation and expected outcome, not inside `text`. Separated on the reviewer's finding, 2026-10-13."
   },
-  "frozen_at": "2026-10-13T14:12:04Z",
+  "frozen_at": "2026-10-13T22:43:15Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
@@ -76,7 +76,8 @@
     "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
     "declared_false_control": true,
     "consistency": "OK",
-    "falsity_not_searchable": "PL-BOGUS is false because p1 -> p1 IS derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails. That is a fact about derivability in an inductively defined calculus, not about any finite box of numbers: `PL.Derives` has no Decidable instance and a bounded numeric search cannot reach it. Refuting it mechanically needs a bounded DERIVATION search, which this program does not implement (ROADMAP 5.1). Until then the falsity of this control rests on the reviewer's reading, and this search contributes nothing to it."
+    "refuted_by": "bounded derivation search, checked by the Lean kernel",
+    "refutation_decl": "Ampas.Refutations.pl_bogus_refuted"
   },
   "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
   "reviewer": {
@@ -102,7 +103,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
-    "value": "3ec63106f76d7ae0ec4d274741e31de44b7eecd7548b7cd3d94e934b4d6a74d0a275bc7f11738191ee315c24f68c56f745da40b4ae29f032644d91368408300e"
+    "signed_at": "2026-10-13T22:43:15Z",
+    "value": "92ea6bfda82c37b733ef1558d8048ab7906150296c6a09b5c1ee22eb37a1317075be5ccab0c22037f6ced97d92b7126c122da8a62fa364cef9dde4d4ec329d07"
   }
 }

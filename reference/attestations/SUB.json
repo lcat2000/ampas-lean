@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.sub_add_cancel_nat",
   "text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
   "control": null,
-  "frozen_at": "2026-10-13T14:12:04Z",
+  "frozen_at": "2026-10-13T22:43:15Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
@@ -141,7 +141,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
-    "value": "6198cd97888da90e8633bb4f307d0bb984029d0909676ed64832d9d330fd136f2885769e7fbc699a12bd4554e55a3bdf7b51dac7d323085f5c57dee34a6b1103"
+    "signed_at": "2026-10-13T22:43:15Z",
+    "value": "2358333ecd749bc8c59783c255d304ae32c8c298f7ca6e20cd0e77c09c141ec4a981212b5f7e0da5903d15c74f7003fa0a8e4e8e74e786b2ad0e5bf79a0e5b0a"
   }
 }

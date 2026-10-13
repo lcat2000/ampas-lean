@@ -418,7 +418,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
+    "signed_at": "2026-10-13T22:43:16Z",
     "value": "de30d70bed42560b8ed41f345302d313e8ec4cd6f9dc976aef0f1e538ccf6b242db5e430e2844e88fcb4c53a047c346ca4f48e4904d29901d4f00bd7e4835707"
   }
 }

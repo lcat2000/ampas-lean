@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.div_self_pos",
   "text": "For every positive natural number n, n / n = 1.",
   "control": null,
-  "frozen_at": "2026-10-13T14:12:04Z",
+  "frozen_at": "2026-10-13T22:43:15Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
@@ -205,7 +205,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
-    "value": "b163f860465b21df1c1b7e0b14c11d722a613e796fb76928596753c7873affc86c49bfa428a8501c5315a290ec73ebf4b575b7c7adeb769e6ee04b4a200d2b09"
+    "signed_at": "2026-10-13T22:43:15Z",
+    "value": "a8d58de59d806747cbb357fe8b0e87df16d2942db7a9bbf4c459dbf93bf9c8d2f685d8b46b64b6f48a0c71365b71f2c8a04c7ba5e76d8699ab7581ed0cc1690f"
   }
 }

@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.add_comm_nat",
   "text": "Addition of natural numbers is commutative.",
   "control": null,
-  "frozen_at": "2026-10-13T14:12:04Z",
+  "frozen_at": "2026-10-13T22:43:15Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
@@ -103,7 +103,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
-    "value": "f0772b74fbb6f2899184b39475d81cc5c2fc997c5fac13474924c6fa338a2b960772391a0ccabedaca9883aa4ee774f3ef9219418d35a3829f5cff66e623e903"
+    "signed_at": "2026-10-13T22:43:15Z",
+    "value": "4ceb1e2093c7f45a281eb19f069daa10daedef0ff47ebf9ae69cab128167597b6efc98abe3a3c96d7d3ca508985e277afb9f24e6608d273594fea0237385cb09"
   }
 }

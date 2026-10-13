@@ -4,7 +4,7 @@
   "theorem": "Ampas.Claims.exists_greater",
   "text": "Every natural number has a strictly greater natural number.",
   "control": null,
-  "frozen_at": "2026-10-13T14:12:04Z",
+  "frozen_at": "2026-10-13T22:43:15Z",
   "lean_version": "4.33.0",
   "reference_module": "AmpasRef.Challenge",
   "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
@@ -85,7 +85,7 @@
   "signature": {
     "algorithm": "Ed25519",
     "key_id": "kai-chang-2026-10",
-    "signed_at": "2026-10-13T14:19:41Z",
-    "value": "862ab1cc4a103f968217bf7614a265b7d25181052220f83e29e1dd87deeb0c370a2e6c7da83933b9eea1afed822289a0c8cbd9d6c916b1309a4622a5e950040b"
+    "signed_at": "2026-10-13T22:43:15Z",
+    "value": "e1947d342fe92f425bb5aa8928d0ffd0e305b04faa9e8e3715a9d8b79f431181dd4406443ae6c1e250c0cd7d94cc1d8628850eb311c07e4be20202d13ac24e0c"
   }
 }
