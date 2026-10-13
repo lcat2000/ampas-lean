@@ -17,6 +17,12 @@ Tested on Linux x86-64. The harness's sandbox uses POSIX `setuid`/`setrlimit`,
 so the sandboxed path is Linux/macOS only; see
 [Running without the sandbox](#running-without-the-sandbox).
 
+**If a script will not run** (`Permission denied`), the executable bit was
+dropped — git does not track it on Windows, so a commit made there loses mode
+755. `bash ./scripts/verify.sh` works regardless; to fix the bit,
+`git update-index --chmod=+x scripts/<file>`. `tests/test_portability.py`
+fails on this, so a clone whose bits are intact will say so.
+
 **On Windows**, the parts that need no sandbox do work: the formalization
 sign-off (`keygen`, `sign`, `scripts/sign_attestations.py`) and most of tier 0.
 Three tier-0 tests import the driver and are skipped, because verifying a

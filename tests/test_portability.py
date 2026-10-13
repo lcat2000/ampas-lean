@@ -96,3 +96,29 @@ def test_no_shell_only_step_in_the_signing_path():
     src = py.read_text(encoding="utf-8")
     for cat in ("claims.json", "claims_mathlib.json", "claims_fermat.json"):
         assert cat in src, f"the wrapper does not cover {cat}"
+
+
+def test_the_shell_scripts_are_executable():
+    """A commit made on Windows drops mode 755, because git there does not
+    track the executable bit -- and the next CI run fails with "Permission
+    denied" on a file whose contents are perfectly fine. That happened once;
+    this fails in a quarter of a second instead of after a Lean bootstrap.
+
+    CI invokes these as `bash ./script` so it no longer needs the bit, but a
+    reader following INSTALL.md types `./scripts/verify.sh`, and that has to
+    work. Restore with:
+
+        git update-index --chmod=+x scripts/<file>
+    """
+    import stat
+    bad = []
+    for d in ("scripts",):
+        for f in sorted((ROOT / d).iterdir()):
+            if f.suffix not in (".sh", ".py"):
+                continue
+            if not f.stat().st_mode & stat.S_IXUSR:
+                bad.append(f"{d}/{f.name}")
+    assert not bad, (
+        "not executable (a Windows commit drops mode 755):\n  "
+        + "\n  ".join(bad)
+        + "\nrestore with: git update-index --chmod=+x " + " ".join(bad))

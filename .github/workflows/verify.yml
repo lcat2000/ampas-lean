@@ -60,7 +60,11 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: bootstrap (trusted reference + provenance baseline)
-        run: ./scripts/bootstrap.sh
+        # `bash ./script` rather than `./script`: the executable bit is not
+        # tracked by git on Windows, so a commit made there drops mode 755 and
+        # CI fails with "Permission denied" on a file that is perfectly fine.
+        # tests/test_portability.py pins the bit; this makes CI not need it.
+        run: bash ./scripts/bootstrap.sh
 
       - name: the committed baseline must reproduce
         # If this fails, the toolchain built different oleans than the recorded
@@ -71,7 +75,7 @@ jobs:
       - name: verify tiers 0-1
         # No sandbox user in CI, so submissions compile as the runner with the
         # resource limits still applied. Verdicts are unaffected.
-        run: ./scripts/verify.sh 1
+        run: bash ./scripts/verify.sh 1
 
       - name: upload results
         if: always()
@@ -104,6 +108,6 @@ jobs:
             curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
           fi
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-      - run: ./scripts/bootstrap.sh
-      - run: ./scripts/build-lean4lean.sh
-      - run: ./scripts/verify.sh 2
+      - run: bash ./scripts/bootstrap.sh
+      - run: bash ./scripts/build-lean4lean.sh
+      - run: bash ./scripts/verify.sh 2
