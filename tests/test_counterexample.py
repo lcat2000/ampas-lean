@@ -95,9 +95,13 @@ def test_an_undecidable_search_is_never_a_pass(cat_rel, cex_rel, attest):
             assert r.get("reason"), f"{c['id']}: {r['outcome']} without a reason"
         declared_false = (c.get("control") or {}).get("target_claim_is_true") is False
         if declared_false and r["outcome"] != "REFUTED":
-            assert r.get("falsity_not_searchable"), (
-                f"{c['id']}: recorded as false, not refuted by the search, and no "
-                f"stated reason why the search cannot reach it")
+            # Something must back the falsity: this search, the bounded
+            # derivation search whose witness the kernel checked, or a stated
+            # reason why neither can reach it. Silence is what is forbidden.
+            assert r.get("refuted_by") or r.get("falsity_not_searchable"), (
+                f"{c['id']}: recorded as false, not refuted by this search, no "
+                f"derivation refutation on record, and no stated reason why "
+                f"neither can reach it")
         assert r.get("consistency") == "OK", (
             f"{c['id']}: unresolved finding {r.get('consistency')}")
 

@@ -142,16 +142,34 @@ def main(argv: list[str]) -> int:
         # finding about the catalogue, not about the search.
         waiver = (json.loads(BOUNDS.read_text(encoding="utf-8")).get("claims", {})
                   .get(cid, {}).get("falsity_not_searchable"))
+        # A claim this search cannot reach may still be refuted by the BOUNDED
+        # DERIVATION search, whose witness the Lean kernel checked. PL-BOGUS is
+        # exactly that case: `PL.Derives` has no decision procedure, so nothing
+        # numeric will ever refute it, and a refutation exists all the same.
+        # Without this, removing its waiver made this search report an
+        # unresolved finding about a claim that is in fact refuted.
+        derivation = {}
+        dpath = ROOT / "reference" / "derivation_search.json"
+        if dpath.exists():
+            derivation = {r["claim"]: r for r in
+                          json.loads(dpath.read_text(encoding="utf-8")).get("searches", [])}
+        drv = derivation.get(cid) or {}
+        kernel_refuted = drv.get("outcome") == "REFUTED" and (
+            ((drv.get("kernel") or {}).get("statement_check") or {})
+            .get("negates_frozen_statement_structurally") is True)
         if rec["outcome"] == "REFUTED":
             rec["consistency"] = ("OK" if declared_false
                                   else "REFUTED_BUT_NOT_DECLARED_FALSE")
         elif declared_false:
-            # The record says this statement is false. If the search cannot
-            # corroborate that, the gap is stated here rather than left to a
-            # reader to notice, and a waiver has to name the reason -- which
-            # is why PL-BOGUS's falsity (a derivability fact, not a numeric
-            # one) does not quietly pass as "searched, nothing found".
-            if waiver:
+            # The record says this statement is false. Something has to back
+            # that: this search, the derivation search, or a stated reason why
+            # neither can. What is forbidden is silence.
+            if kernel_refuted:
+                rec["consistency"] = "OK"
+                rec["refuted_by"] = ("bounded derivation search, checked by the "
+                                     "Lean kernel")
+                rec["refutation_decl"] = (drv.get("kernel") or {}).get("refutation_decl")
+            elif waiver:
                 rec["consistency"] = "OK"
                 rec["falsity_not_searchable"] = waiver
             else:

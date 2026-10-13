@@ -16,7 +16,7 @@
       "outcome": "NO_COUNTEREXAMPLE",
       "unresolved_points": 0,
       "checked_points": 625,
-      "seconds": 3.3,
+      "seconds": 5.9,
       "claim": "ADD",
       "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
       "declared_false_control": false,
@@ -59,7 +59,7 @@
       "outcome": "NO_COUNTEREXAMPLE_PARTIAL",
       "unresolved_points": 456,
       "checked_points": 169,
-      "seconds": 3.1,
+      "seconds": 3.9,
       "claim": "EVEN",
       "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
       "declared_false_control": false,
@@ -79,7 +79,7 @@
       "unresolved_points": 0,
       "vacuous_points": 15313,
       "checked_points": 312,
-      "seconds": 3.5,
+      "seconds": 3.1,
       "claim": "DVD",
       "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
       "declared_false_control": false,
@@ -98,7 +98,7 @@
       "outcome": "NO_COUNTEREXAMPLE",
       "unresolved_points": 0,
       "checked_points": 25,
-      "seconds": 3.7,
+      "seconds": 3.4,
       "claim": "GREATER",
       "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
       "declared_false_control": false,
@@ -118,7 +118,7 @@
       "unresolved_points": 0,
       "vacuous_points": 1,
       "checked_points": 24,
-      "seconds": 3.4,
+      "seconds": 3.2,
       "claim": "DIV",
       "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
       "declared_false_control": false,
@@ -127,7 +127,7 @@
     {
       "outcome": "NOT_SEARCHABLE",
       "reason": "conclusion Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1): inside a negation: no Decidable instance for Ampas.PL.Derives Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
-      "seconds": 3.5,
+      "seconds": 2.9,
       "claim": "PL-IND",
       "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
       "declared_false_control": false,
@@ -136,7 +136,7 @@
     {
       "outcome": "NOT_SEARCHABLE",
       "reason": "conclusion Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm: inside a negation: no Decidable instance for Ampas.EL.Derives Ampas.EL.monoid Ampas.EL.comm.lhs Ampas.EL.comm.rhs",
-      "seconds": 3.3,
+      "seconds": 3.1,
       "claim": "EL-IND",
       "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
       "declared_false_control": false,
@@ -145,7 +145,7 @@
     {
       "outcome": "NOT_SEARCHABLE",
       "reason": "hypothesis Ampas.PL.DerivesPos Ampas.PL.Empty Ampas.PL.a3_instance: no Decidable instance for Ampas.PL.DerivesPos Ampas.PL.Empty Ampas.PL.a3_instance",
-      "seconds": 3.7,
+      "seconds": 3.2,
       "claim": "PL-AXIOM-IND",
       "statement_sha256": "1326b4b4ba1a48838d08350af9c4e82cfe10d45010b9a31d08ea1d2573e9e056",
       "declared_false_control": false,
@@ -159,7 +159,8 @@
       "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
       "declared_false_control": true,
       "consistency": "OK",
-      "falsity_not_searchable": "PL-BOGUS is false because p1 -> p1 IS derivable from A1 and A2 by modus ponens, so the first conjunct of Independent fails. That is a fact about derivability in an inductively defined calculus, not about any finite box of numbers: `PL.Derives` has no Decidable instance and a bounded numeric search cannot reach it. Refuting it mechanically needs a bounded DERIVATION search, which this program does not implement (ROADMAP 5.1). Until then the falsity of this control rests on the reviewer's reading, and this search contributes nothing to it."
+      "refuted_by": "bounded derivation search, checked by the Lean kernel",
+      "refutation_decl": "Ampas.Refutations.pl_bogus_refuted"
     }
   ]
 }
