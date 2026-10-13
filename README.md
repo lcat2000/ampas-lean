@@ -45,7 +45,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and independently caught the kernel-bypass attack |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
-| Tests | 51 | all pass from a clean checkout |
+| Tests | 52 | all pass from a clean checkout (63 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -133,6 +133,9 @@ evidence for each.
 - **Key management is out of scope, and the signature attributes nothing to a
   person.** The key here was generated in the container that built this
   repository and is held by nobody: it shows a record is unaltered, no more.
+  Custody cannot be read off a key, so the public key record states it and
+  `keygen` refuses to leave it blank — but a stated custody is a claim, not
+  proof of one, and this one states `NONE`.
 - **Most fidelity judgements are still not independently reviewed.** All 13
   were reviewed by the same assistant that wrote the harness
   ([REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md)). **All 13** have since been
@@ -180,11 +183,17 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 2. Close the third check's inductive-specification gap in the one direction
    that is safe: a positivity check, verified against both Lean kernels rather
    than bolted onto the checker under review.
-3. Have the fidelity judgements reviewed by someone other than their author.
-   All 13 are currently `reviewed_by` the assistant that wrote the harness,
-   with the owner's confirmation recorded as **delegated** — see
-   [REVIEW-CHECKLIST.md](REVIEW-CHECKLIST.md). That is honestly recorded but it
-   is not independent review, and independence is the whole point.
+3. Bind the attestations to a person. All 13 now record a personal
+   confirmation by the repository owner, but the signature over them is a
+   demonstration key held by nobody, so cryptographically the records are
+   attributable to no one. `keygen --custody` and
+   `scripts/sign_attestations.sh` exist so that step needs no Lean and no
+   expertise; what it needs is a private key generated and kept by the
+   reviewer, which by construction cannot happen in the container that builds
+   this repository.
+4. Widen review beyond one reader. One confirmation is independent of the
+   harness's author — the property that was missing — but it is not open
+   review.
 
 ## Licence
 

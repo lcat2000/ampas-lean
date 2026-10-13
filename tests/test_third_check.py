@@ -259,16 +259,64 @@ def test_no_attestation_names_a_person_for_work_they_did_not_do():
                     f"{name}: a delegated confirmation must say so plainly")
 
 
-def test_the_signing_key_does_not_claim_to_be_a_persons():
-    """The key was generated inside the container that built the repository and
-    is held by nobody, so its record must say that rather than carry an id that
-    reads like a custody claim."""
+def test_the_signing_key_claims_no_more_than_its_custody_states():
+    """A signature means whatever the custody of its private key means, and
+    custody is not derivable from key material -- so the record has to state
+    it, and the key id must not imply more than the statement supports.
+
+    This is the invariant rather than a snapshot of today's key: the committed
+    key is a demonstration key generated in the build container and held by
+    nobody, and a later reviewer-held key must pass the same test by declaring
+    its custody, not by being exempt from it."""
     k = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
-    assert "kai" not in k["key_id"].lower(), (
-        "the key id names a person, implying custody that does not exist")
-    assert k.get("custody", "").startswith("NONE") or \
-           k.get("custody", "").startswith("UNDECLARED")
-    assert "attributes NOTHING to a person" in k.get("note", "")
+    custody = k.get("custody", "")
+    assert custody, (
+        "the key record states no custody, so a reader cannot tell whether a "
+        "signature with it attributes anything to anyone")
+
+    unheld = custody.startswith("NONE") or custody.startswith("UNDECLARED")
+    if unheld:
+        # Nobody holds it, so nothing in the record may suggest otherwise.
+        assert "kai" not in k["key_id"].lower(), (
+            "the key id names a person while custody is " + custody[:20] +
+            " -- the id implies custody that does not exist")
+        disclaimed = "attributes NOTHING to a person" in k.get("note", "") or \
+                     "attributing nothing to any person" in custody
+        assert disclaimed, (
+            "an unheld key must say outright that it attributes nothing to a "
+            "person; 'NONE' alone is too easy to read past")
+    else:
+        # Someone holds it: the record must say who, not merely that it is held.
+        assert len(custody.split()) >= 4, (
+            "custody is declared but says nothing about who holds the key")
+
+
+def test_every_attestation_is_signed_by_the_one_recorded_key():
+    """All three catalogues' attestations must carry the key id of the single
+    committed public key.
+
+    The catalogues are signed one at a time (`sign` works on the catalogue
+    `AMPAS_CLAIMS` selects), so re-keying can leave some attestations signed by
+    the old key while `reference/reviewer_key.json` names the new one. Those
+    records then verify against no committed key at all, and a summary that
+    reports signatures as present would not notice. Checked offline, so it
+    fails in seconds rather than after a Lean build."""
+    pub = json.loads((ROOT / "reference" / "reviewer_key.json").read_text())
+    dirs = ["attestations", "attestations-mathlib", "attestations-fermat"]
+    found = 0
+    for sub in dirs:
+        d = ROOT / "reference" / sub
+        if not d.is_dir():
+            continue
+        for f in sorted(d.glob("*.json")):
+            rec = json.loads(f.read_text())
+            sig = rec.get("signature") or {}
+            assert sig.get("key_id") == pub["key_id"], (
+                f"{sub}/{f.name} is signed by {sig.get('key_id')!r} but the "
+                f"committed public key is {pub['key_id']!r} -- a partial "
+                f"re-key leaves this record verifiable by nobody")
+            found += 1
+    assert found == 13, f"expected 13 attestations across the catalogues, found {found}"
 
 
 ADJ = ROOT / "reference" / "third_check_adjudications.json"

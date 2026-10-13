@@ -23,7 +23,7 @@ so the sandboxed path is Linux/macOS only; see
 python3 -m pytest tests/test_third_check.py -q -k "not pipeline"
 ```
 
-Seventeen tests, under a second. They run the third checker against fixed
+Eighteen tests, under a second. They run the third checker against fixed
 export files committed in `tests/forgeries/` and pin what a clean result from
 it is allowed to mean. Worth running first: it is the part of this repository
 that is hardest to fake and easiest to check.
@@ -52,7 +52,8 @@ What tier 1 runs:
 - `harness/ablation.py`, which prints *which layer* caught each attack;
 - the formalization sign-off: freeze, guards, Ed25519 signature, drift
   detection;
-- the three test suites (57 tests).
+- the three test suites (63 tests collected; what runs depends on the
+  tier — the Mathlib fixtures skip without `AMPAS_MATHLIB_PATH`).
 
 ## Tier 2 — the second independent kernel
 

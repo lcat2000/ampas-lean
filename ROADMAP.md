@@ -88,15 +88,31 @@ not left expecting a fix that is not coming.
 ## 4. Independent review of the fidelity judgements
 
 **Why.** All 13 claims are `reviewed_by` the same assistant that wrote the
-harness, and the owner's confirmation is recorded as **delegated**
-(REVIEW-CHECKLIST.md states both). The record is honest about this, which is
-necessary but not sufficient: the party that built the checks also judged
-whether the statements say what they claim, and that is precisely the
-judgement a verification system cannot make for itself.
+harness: the party that built the checks also judged whether the statements
+say what they claim, which is precisely the judgement a verification system
+cannot make for itself.
 
-Round 3 fixed the misattribution — 11 records previously named the owner for
-work he had not done — but fixing the attribution does not supply the
-independence.
+**Status, 2026-10-13.** All 13 now also carry `confirmation.mode:
+personally_reviewed` from the repository owner, who did not write the harness.
+That reading changed the repository rather than ratifying it — five
+corrections, listed in REVIEW-CHECKLIST.md — which is the evidence that it was
+a reading and not a rubber stamp.
+
+Two things in this section are therefore done and one is not:
+
+- *done* — the misattribution (11 records had named the owner for work he had
+  not done) and the delegated confirmations;
+- *done* — a reviewer independent of the harness's author;
+- **not done** — custody. The signature over all 13 records is a demonstration
+  key generated in the build container and held by nobody, so cryptographically
+  nothing is bound to anyone. The confirmations are recorded in the files and
+  nowhere else.
+
+That last gap cannot be closed from inside this repository's build: a key
+generated here is a key the builder holds. `keygen --custody` and
+`scripts/sign_attestations.sh` reduce the reviewer's part to generating a key
+on their own machine and running one command with no Lean installed; CI
+re-verifies the signatures afterwards.
 
 **What to do.** Have someone who did not write the harness review the claims,
 starting with the ones anyone relies on. The per-claim reasoning in
@@ -114,9 +130,10 @@ Also still open: the third-check adjudications
 (`reference/third_check_adjudications.json`) are
 `PENDING_REVIEWER_CONFIRMATION`.
 
-**Done when:** at least one claim carries `confirmation.mode:
-personally_reviewed` from someone who did not author the harness, with a key
-in their own custody.
+**Done when:** every claim carries `confirmation.mode: personally_reviewed`
+from someone who did not author the harness — reached — **and** the signature
+over those records is made with a key whose `custody` field names the person
+who holds it — not reached.
 
 ## 5. Attack the statement-fidelity problem directly
 
