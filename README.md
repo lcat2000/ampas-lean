@@ -288,13 +288,21 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
    (`scripts/check-with-conleche.sh`, [evaluation](docs/CONLECHE-EVALUATION.md)).
    It also **accepts `A06_wrong_statement`** — so a verified kernel does not
    close the fidelity gap either.
-2. The third check's three assumed inductive properties are now each checked
-   by a separate, differentially tested pass — positivity (3285 inductives),
-   the recursor's shape and the iota rules (3410 recursors each), 0 violations
-   throughout. What remains assumed has *moved* rather than gone: all three
+2. The third check has **five** differentially tested specification passes —
+   positivity (3285 inductives), the recursor's shape and the iota rules (3410
+   recursors each), `unsafe`/`partial` flags, and declaration well-formedness
+   (3849 valued declarations over Init and Mathlib), 0 violations throughout.
+   What remains assumed has *moved* rather than gone: the inductive passes
    check a declaration against the rules Lean would have followed, none shows
    that Lean produced it, so the provenance gate is still what catches a
-   forgery. See ROADMAP 2.
+   forgery. See ROADMAP 2 and 3a.
+
+   Measured from outside against the [Lean Kernel
+   Arena](https://arena.lean-lang.org/)'s 198 third-party tests: **28 → 7**
+   wrongly accepted of the 72 that must be rejected
+   ([docs/ARENA-RESULT.md](docs/ARENA-RESULT.md)). Still a poor score —
+   con-leche and lean4lean each have 0 — and the figure is kept in the record
+   rather than in prose.
 3. Bind the signing key to an identity outside this repository. As of
    2026-10-13 all 13 attestations are signed by a key held by the repository
    owner rather than by the build container, which was the gap. What is left
@@ -304,6 +312,49 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 4. Widen review beyond one reader. One confirmation is independent of the
    harness's author — the property that was missing — but it is not open
    review.
+
+### Where the work stands, 2026-10-14
+
+Every mechanical layer in this repository detects **falsity or
+malformedness**. None of them reads English. So the remaining work splits
+cleanly into what code can still do and what it cannot, and the second list is
+the one that matters.
+
+**What code can still do** — in the order they are worth doing:
+
+| # | Item | Why it is next |
+| --- | --- | --- |
+| ROADMAP 3 | TC-01 and TC-02, the third check's two recorded incompleteness findings | Both are in the **rejecting** (safe) direction, and the arena confirmed they describe real mechanisms rather than convenient ones. The arena is now the external guard that makes fixing in the widening direction measurable. |
+| ROADMAP 3a | The arena's seven remaining misses: five projection-typing tests on `Prop`/`imax`, two inductive well-formedness | The five are a genuine typing rule this checker does not implement — a larger job than the two declaration rules that took the count 9 → 7. The two inductive ones are the hole ASSUMPTIONS A3 describes. |
+| ROADMAP 7 | The Mathlib build cache | The cheapest win on the list: it turns a 20-minute tier-3 build into a download. Blocked on `leantar` and an unreachable crates.io in the recorded environment. |
+| ROADMAP 8 | Resource limits that scale with the host | A run on a busy machine already produced one spurious `DECLINED` from the OOM killer (round 9). A resource kill is not a verdict, and the record says so, but the limits should not need that defence so often. |
+
+**What code cannot do.** Five of the reviewer's six checklist items now point
+at a named object bound to the statement's hash
+([ASSUMPTIONS A1e](ASSUMPTIONS.md)). The sixth, `statement_matches_text`, is
+marked `machine_derivable: false` and will stay that way: it compares a formal
+object to an English sentence, and `docs/CONLECHE-EVALUATION.md` measured what
+that means — a checker carrying a ZFC model-theoretic consistency proof
+accepts `A06_wrong_statement`. **That one item now carries the whole fidelity
+gap.** Its honest next steps need people, not passes:
+
+- **ROADMAP 5.3, back-translation.** Render each frozen statement back into
+  natural language and have it compared against the original by someone who
+  has not seen the Lean. The protocol is cheap; the reader is the thing this
+  repository does not have.
+- **ROADMAP 4, open review.** One confirmation is independent of the harness's
+  author. That is the property that was missing, and it is not the same as
+  review by people with no stake in the result.
+- **ROADMAP 6b, submissions written by other people.** Every adversarial
+  vector in this repository was written here, except the 198 arena tests and
+  the four historical corpora — and those two were worth more than everything
+  written in-house, because *nothing is caught by its own unit tests*. That is
+  this project's most repeated finding, with roughly fifteen instances on
+  record: a label-class defect needs a second record of the same event, and a
+  model-class defect needs a declaration set written by someone else.
+- **README item 3 above, the signing key.** Nothing ties the key to its holder
+  except the record's own say-so. This one needs an action outside the
+  repository rather than a commit inside it.
 
 ## Licence
 
