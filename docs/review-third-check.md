@@ -230,7 +230,10 @@ no longer produce a clean result.
 
 **What it genuinely adds:** an independent opinion on the term layer — a
 different language, a different author, no shared code with Lean and no use of
-Lean's elaborator. It independently caught the kernel-bypass attack, which is
+Lean's elaborator. It objected to the kernel-bypass attack's bad declaration,
+which the Lean kernels also rejected -- so it CORROBORATED them there rather
+than catching something they missed; the suite reported that as a
+"DISAGREEMENT" until 2026-10-14, which inverted what happened. That is
 not a small thing. **What it does not add** is an independent opinion on the
 inductive layer; and per F-6 it is not complete on library-scale code either.
 

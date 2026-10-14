@@ -450,3 +450,36 @@ def test_every_reference_theorem_is_catalogued_and_vice_versa():
         f"reference module and catalogue disagree:\n"
         f"  in the module, not catalogued: {sorted(declared - catalogued)}\n"
         f"  catalogued, not in the module: {sorted(catalogued - declared)}")
+
+
+def test_a_shared_rejection_is_corroboration_not_disagreement():
+    """A01_kernel_bypass was reported as "DISAGREEMENT (unadjudicated)" in every
+    run from round 1 until 2026-10-14, and the claim-level reason said "the
+    third check rejects a declaration the Lean kernels accept" -- while the
+    Lean kernels had rejected it too. The third check runs without knowing
+    their result, so its own label cannot say whether its objection is a
+    disagreement; the driver knows and must correct it.
+
+    The verdict was never wrong -- A01 is rejected either way. What was wrong
+    was the record, which described a three-way agreement as an unresolved
+    dispute. That is the failure this whole repository exists to prevent, so
+    it gets a test rather than a changelog line."""
+    import ampas_lean as A
+    # the third check objected, and the Lean kernels rejected the module too
+    corrected = A._verdict(
+        {"id": "X", "theorem": "t", "policy": {}},
+        {"found": True, "kind": "theorem", "axioms": [], "flags": [], "statement": {}},
+        False, "DISAGREEMENT (unadjudicated)", None, False)
+    joined = " ".join(corrected.reasons)
+    assert "the Lean kernels accept" not in joined, (
+        "a shared rejection is still reported as the Lean kernels accepting "
+        "the declaration")
+    assert "kernel replay did not succeed" in joined
+
+    # the Lean kernels ACCEPTED and the third check objected: a real disagreement
+    real = A._verdict(
+        {"id": "X", "theorem": "t", "policy": {}},
+        {"found": True, "kind": "theorem", "axioms": [], "flags": [], "statement": {}},
+        False, "DISAGREEMENT (unadjudicated)", None, True)
+    assert "the Lean kernels accept" in " ".join(real.reasons), (
+        "a genuine disagreement must still be reported as one")

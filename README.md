@@ -43,7 +43,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 
 | Corpus | Submissions | Outcome |
 | --- | --- | --- |
-| Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and independently caught the kernel-bypass attack |
+| Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and **corroborated** the Lean kernels on the kernel-bypass attack — it objected to the same declaration they rejected, and caught nothing they missed |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |

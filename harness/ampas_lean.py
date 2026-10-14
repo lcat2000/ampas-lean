@@ -512,13 +512,29 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
             # Certification rests on the two Lean-based kernels. The third
             # check corroborates; an UNADJUDICATED disagreement still blocks,
             # because it may be a real finding rather than its incompleteness.
-            kernel_ok = res.kernel_replay and (res.kernel_replay_independent is not False)
+            replay_ok = res.kernel_replay and (res.kernel_replay_independent is not False)
             tc = res.third_check
-            if tc.get("unadjudicated_disagreement"):
-                kernel_ok = False
+            # The third check runs without knowing the Lean kernels' result, so
+            # its own label can only say "I objected". Whether that objection is
+            # a DISAGREEMENT or a CORROBORATION depends on whether the Lean
+            # kernels accepted the module, which is known here and not there.
+            # Correcting it here keeps the printed table from reporting a
+            # disagreement where all three checkers agreed -- A01_kernel_bypass
+            # was reported that way for every run until 2026-10-14.
+            if tc.get("status", "").startswith("DISAGREEMENT") and not replay_ok:
+                tc["status"] = ("CORROBORATION (the third check also rejected; the Lean "
+                                "kernels rejected too)")
+                tc["corroborated_rejection"] = True
+                tc["unadjudicated_disagreement"] = False
+            # `replay_ok` is passed separately so the recorded reason can say
+            # WHICH of the two blocked. It used to report "the third check
+            # rejects a declaration the Lean kernels accept" whenever the third
+            # check had errors -- including when the Lean kernels had rejected
+            # the module too, which is the opposite of what happened.
+            kernel_ok = replay_ok and not tc.get("unadjudicated_disagreement")
             res.claims.append(_verdict(c, by_name.get(c["theorem"], {}), kernel_ok,
                                        tc.get("status", "NOT_RUN"),
-                                       res.resource_exhausted))
+                                       res.resource_exhausted, replay_ok))
         return res
     finally:
         shutil.rmtree(work, ignore_errors=True)
@@ -588,7 +604,8 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
 
 def _verdict(claim: dict, t: dict, kernel_ok: bool,
              corroboration: str = "NOT_RUN",
-             resource_exhausted: list | None = None) -> ClaimVerdict:
+             resource_exhausted: list | None = None,
+             replay_ok: bool | None = None) -> ClaimVerdict:
     v = ClaimVerdict(claim=claim["id"], theorem=claim["theorem"], certified=False,
                      review=claim.get("review", {}), corroboration=corroboration)
     if resource_exhausted:
@@ -614,7 +631,17 @@ def _verdict(claim: dict, t: dict, kernel_ok: bool,
     if v.kind != "theorem":
         v.reasons.append(f"declared as {v.kind}, not a theorem")
     if not kernel_ok:
-        if corroboration.startswith("DISAGREEMENT (unadjudicated"):
+        # Two different things block here and they must not be reported as one.
+        # A third-check objection is a DISAGREEMENT only when the Lean kernels
+        # ACCEPTED the module; when they rejected it too, the third check
+        # corroborated them and saying otherwise inverts what happened.
+        disagrees = corroboration.startswith("DISAGREEMENT (unadjudicated")
+        if replay_ok is False:
+            v.reasons.append("kernel replay did not succeed (primary or independent kernel)")
+            if disagrees:
+                v.reasons.append("the third check also rejected a declaration, corroborating "
+                                 "the Lean kernels rather than disagreeing with them")
+        elif disagrees:
             v.reasons.append("the third check rejects a declaration the Lean kernels accept, "
                              "and that disagreement has not been adjudicated")
         else:

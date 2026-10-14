@@ -116,7 +116,7 @@ BEq.beq (α × β) (instBEqProd α β instA instB) p q  ≡  (p.1 == q.1) && (p.
 | 情境 | 結果 |
 | --- | --- |
 | 真正的證明 | `errors=0, introduced=0, baseline=24` → **CONFIRMED** |
-| A01 核心旁路 | `errors=1` → NOT CONFIRMED（獨立抓到） |
+| A01 核心旁路 | `errors=1` → CORROBORATION（Lean 核心也拒絕了同一個宣告） |
 | 偽造大消去 | `errors=0` 但 `introduced=7`（`P`, `P.a`, `P.b`, `P.rec`, …）→ **NOT CONFIRMED** |
 | 偽造非正性 inductive | `errors=0` 但 `introduced=4`（`Bad`, `Bad.mk`, `Bad.rec`, …）→ **NOT CONFIRMED** |
 | statement 模式 | 直接拒絕 |
@@ -136,11 +136,11 @@ BEq.beq (α × β) (instBEqProd α β instA instB) p q  ≡  (p.1 == q.1) && (p.
    - 它回報 `introduced_assumptions` → 不阻擋認證（那一層由另兩套核心涵蓋），但該筆限制會記入證據。
 4. 管線中這個洞實際上**不可觸達**：匯出檔來自提交者編譯後的 olean，而提交者只能給 `.lean` 原始碼，偽造的 inductive 或遞子過不了 Lean 自己的 elaborator／核心。換句話說，F-2 的假設在管線裡是由**主核心**解除的，不是由「沒有人」解除的。但若把這個檢查器用於來源不明的 olean（獨立核心最有價值的場景），這個洞就是活的。
 
-**它真正加入的價值：** 對項層的一個獨立意見——不同語言、不同作者、不共用 Lean 的 elaborator。它獨立抓到 A01 核心旁路，這不是小事。它**沒有**加入的，是對 inductive 層的獨立意見；而依 F-6，它對程式庫等級的程式碼也不是完備的。
+**它真正加入的價值：** 對項層的一個獨立意見——不同語言、不同作者、不共用 Lean 的 elaborator。它在 A01 核心旁路上反對了同一個被 Lean 核心拒絕的宣告——那是**佐證**，不是抓到 Lean 核心漏掉的東西（這一點到 2026-10-14 之前被套件誤記為「分歧」）。它**沒有**加入的，是對 inductive 層的獨立意見；而依 F-6，它對程式庫等級的程式碼也不是完備的。
 
 ## 6. 一句話總結
 
 它值得當第三道檢查，但只能當**第三**道：
-- 核心語料 16 份全部重檢、0 錯、0 筆未涵蓋的假設，並獨立抓到 A01；
+- 核心語料 16 份全部重檢、0 錯、0 筆未涵蓋的假設，並在 A01 上佐證了 Lean 核心；
 - Mathlib 等級上有 3 筆已裁定的不完備（F-6），加上 inductive 規格層本來就不檢查（F-2）；
 - 所以它**佐證**項層，不**建立**任何東西。任何只靠它成立的結論都是過度宣稱。
