@@ -140,6 +140,30 @@ Euler 1772 多項式的全稱過度解讀對它在 n = 40 的失敗。完整經�
 `confirmed_by` 都是 `PENDING`，因為沒有人做過那個判斷。把「Mersenne 1644 清單」縮
 到它的 p = 67 那一項、把 Euler 的一般猜想縮到 n = 5 那一例，是最該先讀的兩步。
 
+**`ablation_external.json` 的來源。** 它是從 tier 3 的執行結果
+（`build/fermat_validation.json` ＋ `build/history_validation.json`）產生的，不是從
+已 committed 的 `evidence/fermat_validation.json`——後者早於
+`adjudicated` / `adjudication_sign_off` 這兩個欄位，而且是當輪的紀錄，照規矩是標註
+而不是改寫。用 committed 的 Fermat 紀錄重建這張表，層歸因會一樣（已裁定的歧異光靠
+`unadjudicated: []` 就會失去歸因），只是 Fermat 那四列不會有 `third_check_note`。
+
+**而那四列說明了舊表的一件事**：Fermat 那幾個攻擊也一直被算在第三道檢查頭上，原因
+是同一個函式庫宣告，而且從那組題組加進來那天就是這樣。沒人看見，是因為外部語料根本
+沒有歸因表。
+
+**關於 `DISAGREEMENT (adjudicated: checker incompleteness)`。** 史實語料有四個攻擊帶
+著這個狀態，而且都是同一個宣告：`decide` 作用在有界量詞上會拉進
+`Nat.decidableBallLT.match_5`，它的嵌套 `imax` 宇宙等式是第三道檢查的 `level_leq`
+判不出來的。那就是 TC-02，記在 `reference/third_check_adjudications.json`，方向是
+「拒絕」（安全的那一邊），而且講的是函式庫的程式碼，不是任何送審內容。
+
+2026-10-14 起紀錄會把這些帶在狀態旁邊：`adjudicated` 指名那個宣告與對應的 finding，
+`adjudication_sign_off` 給出裁定檔本身的狀態。**讀「adjudicated」這個詞之前先讀那個
+欄位**：該檔是 `PENDING_REVIEWER_CONFIRMATION`、`confirmed_by: null`，所以
+「adjudicated」的意思是「存在一筆未經確認的裁定」，不是「有審查者同意了」。這個狀態
+以前是在 `adjudication` 欄位為 `null` 的旁邊斷言自己「已裁定」——跟下面那兩個是同一
+類缺陷：衍生標籤旁邊沒有支撐它的資料。
+
 **讀 `ablation_external.json` 的時候要知道它補的是什麼缺口。** `harness/ablation.py`
 以前用 `A` 開頭的檔名前綴認定哪些是攻擊——那只是核心語料剛好這樣命名。外部送審是
 用數學家的名字命名的，所以**所有外部攻擊——Fermat 那四個從它加進來那天起，加上史

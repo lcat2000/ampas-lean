@@ -404,8 +404,8 @@ episodes actually showed:
   back NO_COUNTEREXAMPLE on a false claim — a recorded limit of the search
   layer, demonstrated on a claim this repository did not choose.
 
-**Two defects this corpus found in the harness**, both of the same kind — a
-derived label computed from something other than the data beside it:
+**Four defects this corpus found in the harness**, all of the same kind — a
+derived label computed from, or asserted without, the data beside it:
 
 - `harness/ablation.py` identified attacks by an `A` naming prefix, which is
   how the core corpus happens to name them. The history submissions are named
@@ -421,6 +421,30 @@ derived label computed from something other than the data beside it:
   correctly to a human and is invisible to the code; the search reported
   `REFUTED_BUT_NOT_DECLARED_FALSE` against MERSENNE-67 and that is how it was
   found. A test now pins the field the harness actually reads.
+- the third check's status read `DISAGREEMENT (adjudicated: checker
+  incompleteness)` beside an `adjudication` field of `null`. Four history
+  attacks carry it, all for `Nat.decidableBallLT.match_5` — TC-02, which
+  `decide` over a bounded quantifier pulls in. The record now names the
+  declaration and the finding, and carries the adjudications file's sign-off
+  state, because that file is `PENDING_REVIEWER_CONFIRMATION` with
+  `confirmed_by: null`: **"adjudicated" means an unconfirmed adjudication
+  exists, not that a reviewer agreed**, and the record used to let the word
+  stand unqualified.
+- and `harness/ablation.py` credited the third check with catching those four
+  attacks. It had objected only to library code it cannot decide; a genuine
+  submission using `decide` the same way trips it too. That named a layer
+  that caught nothing, in the one table the README cites as evidence that each
+  attack is stopped by the right layer. Only an *unadjudicated* disagreement
+  now counts, and an adjudicated one is kept on the row as a note rather than
+  dropped.
+
+**And one record that could not be reproduced**, found while checking the
+above: `evidence/ablation.json` has thirteen rows — the twelve core attacks
+and `A13_mathlib_redefine`, which only runs at tier 3 — while `verify.sh` built
+the table from the core results alone, giving twelve. A reader diffing their
+run against the record found a missing row and no explanation of it. Tier 3
+now rebuilds the table over both result files, and a test pins that the
+committed record is what those two files produce.
 
 **One addition to the harness, not a waiver.** A claim recorded as false has
 to be backed by something — this search, the derivation search, or a stated

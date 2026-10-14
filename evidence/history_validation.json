@@ -1,0 +1,1052 @@
+{
+  "provenance": {
+    "recorded_at": "2026-10-14T07:20:11Z",
+    "lean": {
+      "path_name": "lean",
+      "version": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
+      "sha256": "9842f89b9a1874db969cc58933e4117c397338f795eb8febffeb79edd5272847"
+    },
+    "primary_kernel": {
+      "tool": "leanchecker (ships with Lean)",
+      "sha256": "612915adfd75d37c27ade001eb287eebf24268b720f597f4f8ea16e9a5c55f33"
+    },
+    "independent_kernel": {
+      "present": false,
+      "pinned_revision": "67f63b0c818920dfaed2ad07ccff187a6a8fe1e3",
+      "declared_toolchain": "leanprover/lean4:v4.33.0-rc2",
+      "built_with": "Lean 4.33.0 (release); the repo declares v4.33.0-rc2",
+      "divergences_note": "Independently written kernel ('external checker'). Its deliberate divergences from the C++ kernel are documented upstream in divergences.md; notably it does not implement reduceBool, so native evaluation cannot be reduced by it.",
+      "binary_sha256_reference_run": "d1be1b1e726cbe6c79e64b95bd33f2f36576444b528a24eaa6fca1270f0572f8"
+    },
+    "toolchain_pin": "leanprover/lean4:v4.33.0",
+    "trusted_olean_dir": "/home/claude/ampas-lean/build/trusted-mathlib",
+    "auditor": "compiled binary",
+    "mathlib": {
+      "revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+      "built_from_source": true
+    },
+    "advisories": {
+      "list": "reference/kernel_advisories.json",
+      "list_sha256": "b73fa85938ae56eaf2087ee823aecbb3dad8a30b8b2c8b2e8a3ea308a1aa7386",
+      "advisories_last_reviewed": "2026-10-14",
+      "advisory_count": 1,
+      "matched": [],
+      "means": "No advisory in this list names these kernels, as of 2026-10-14. That is a statement about this list on that date, NOT that the kernels have no known soundness bugs. The list's own caveats are in the file."
+    }
+  },
+  "results": [
+    {
+      "submission": "ColeSol.lean",
+      "module": "ColeSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 581,
+        "total": 581,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 150,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "581/581 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "COLE-67",
+          "theorem": "Ampas.Claims.mersenne_67_not_prime",
+          "certified": true,
+          "reasons": [
+            "kernel-checked; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "¬Nat.Prime (2 ^ 67 - 1)",
+            "solution_pp": "Not (Nat.Prime (instHSub.hSub (instHPow.hPow 2 67) 1))",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "A refutation, so the auditor requires a nontriviality guard rather than non-vacuity: Ampas.Guards.mersenne_nontrivial shows 2^7 - 1 = 127, another entry of the same list, IS prime, so this is a statement about p = 67 and not about Nat.Prime being empty on Mersenne numbers.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "certified_all",
+      "note": "Cole's 1903 refutation, from the factorization 193707721 * 761838257287."
+    },
+    {
+      "submission": "LanderParkinSol.lean",
+      "module": "LanderParkinSol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 421,
+        "total": 421,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 130,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "421/421 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "LANDER-PARKIN",
+          "theorem": "Ampas.Claims.lander_parkin_counterexample",
+          "certified": true,
+          "reasons": [
+            "kernel-checked; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∃ a b c d e, 0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d ∧ a ^ 5 + b ^ 5 + c ^ 5 + d ^ 5 = e ^ 5",
+            "solution_pp": "Exists fun a =>\n  Exists fun b =>\n    Exists fun c =>\n      Exists fun d =>\n        Exists fun e =>\n          And (instLTNat.lt 0 a)\n            (And (instLTNat.lt 0 b)\n              (And (instLTNat.lt 0 c)\n                (And (instLTNat.lt 0 d)\n                  (Eq\n                    (instHAdd.hAdd\n                      (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow a 5) (instHPow.hPow b 5)) (instHPow.hPow c 5))\n                      (instHPow.hPow d 5))\n                    (instHPow.hPow e 5)))))",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "An existence claim, so the degenerate reading runs the other way: it must not be satisfiable trivially. The two guards record both halves — that dropping positivity makes zeroes a witness, and that the 1966 witness is positive in all four summands and none of them equals the total.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "certified_all",
+      "note": "The 1966 counterexample 27^5 + 84^5 + 110^5 + 133^5 = 144^5, as the witness of an existence claim."
+    },
+    {
+      "submission": "EulerPolySol.lean",
+      "module": "EulerPolySol",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 581,
+        "total": 581,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 150,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "581/581 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "EULER-POLY-40",
+          "theorem": "Ampas.Claims.euler_poly_40_not_prime",
+          "certified": true,
+          "reasons": [
+            "kernel-checked; statement matches the reference; axioms within policy"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "¬Nat.Prime (40 ^ 2 + 40 + 41)",
+            "solution_pp": "Not (Nat.Prime (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow 40 2) 40) 41))",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "A refutation; Ampas.Guards.euler_poly_nontrivial shows the polynomial does take prime values (n = 30), so this is a statement about n = 40.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "certified_all",
+      "note": "40^2 + 40 + 41 = 41 * 41."
+    },
+    {
+      "submission": "MersenneSorry.lean",
+      "module": "MersenneSorry",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 433,
+        "total": 433,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 138,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "433/433 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-2e74fqr2/MersenneSorry.lean:14:8: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "MERSENNE-67",
+          "theorem": "Ampas.Claims.mersenne_67_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "propext",
+            "sorryAx"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "Nat.Prime (2 ^ 67 - 1)",
+            "solution_pp": "Nat.Prime (instHSub.hSub (instHPow.hPow 2 67) 1)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The historical claim is Mersenne's whole list; what is formalized is its p = 67 entry, which is the entry that is false. That narrowing is the judgement a reader has to check: a reader who disagrees that one entry faithfully represents 'Mersenne's claim' should mark this unfaithful.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [
+            "axiom-policy"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Mersenne's false entry, asserted with a bare sorry. 2^67 - 1 is far beyond `decide`, so there is nowhere else to put the gap."
+    },
+    {
+      "submission": "MersenneAxiom.lean",
+      "module": "MersenneAxiom",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 433,
+        "total": 433,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 138,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "433/433 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "MERSENNE-67",
+          "theorem": "Ampas.Claims.mersenne_67_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: Ampas.Claims.mersenne_list_correct"
+          ],
+          "axioms": [
+            "propext",
+            "Ampas.Claims.mersenne_list_correct"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "Nat.Prime (2 ^ 67 - 1)",
+            "solution_pp": "Nat.Prime (instHSub.hSub (instHPow.hPow 2 67) 1)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "The historical claim is Mersenne's whole list; what is formalized is its p = 67 entry, which is the entry that is false. That narrowing is the judgement a reader has to check: a reader who disagrees that one entry faithfully represents 'Mersenne's claim' should mark this unfaithful.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [
+            "axiom-policy"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "The same entry with no sorry: the assertion becomes an axiom that reads like a citation."
+    },
+    {
+      "submission": "ColeWrong.lean",
+      "module": "ColeWrong",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 581,
+        "total": 581,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 150,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "581/581 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "COLE-67",
+          "theorem": "Ampas.Claims.mersenne_67_not_prime",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "¬Nat.Prime (2 ^ 67 - 1)",
+            "solution_pp": "Not (Nat.Prime (instHPow.hPow 2 67))",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "A refutation, so the auditor requires a nontriviality guard rather than non-vacuity: Ampas.Guards.mersenne_nontrivial shows 2^7 - 1 = 127, another entry of the same list, IS prime, so this is a statement about p = 67 and not about Nat.Prime being empty on Mersenne numbers.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [
+            "statement"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Targets Cole's TRUE statement but proves it of 2^67 rather than 2^67 - 1."
+    },
+    {
+      "submission": "EulerSumWeaker.lean",
+      "module": "EulerSumWeaker",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 466,
+        "total": 467,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [
+          {
+            "name": "Nat.decidableBallLT.match_5",
+            "finding": "TC-02",
+            "mechanism": null
+          }
+        ],
+        "adjudication_sign_off": {
+          "status": "PENDING_REVIEWER_CONFIRMATION",
+          "confirmed_by": null,
+          "means": "An adjudication records that a declaration is library code both Lean kernels accept and that the third check's rejection of it reproduces with no submission involved. Where `confirmed_by` is null, no reviewer has accepted that reading -- so 'adjudicated' here means an unconfirmed adjudication exists, not that one was agreed."
+        },
+        "introduced_assumptions": [],
+        "baseline_assumptions": 129,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "466/467 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "EULER-SUM-5",
+          "theorem": "Ampas.Claims.euler_sum_of_powers",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (a b c d e : ℕ), 0 < a → 0 < b → 0 < c → 0 < d → a ^ 5 + b ^ 5 + c ^ 5 + d ^ 5 ≠ e ^ 5",
+            "solution_pp": "∀ (a b c d e : Fin 3),\n  instLTNat.lt 0 a.val →\n    instLTNat.lt 0 b.val →\n      instLTNat.lt 0 c.val →\n        instLTNat.lt 0 d.val →\n          Ne\n            (instHAdd.hAdd\n              (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow a.val 5) (instHPow.hPow b.val 5)) (instHPow.hPow c.val 5))\n              (instHPow.hPow d.val 5))\n            (instHPow.hPow e.val 5)",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Euler's conjecture is the general statement for every n; what is formalized is the n = 5 case, which is the case that was refuted. The positivity hypotheses are load-bearing and not decoration: without them the equation is satisfied by zeroes, which Ampas.Guards.sum_of_powers_trivial_without_positivity records.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "signals": [
+            "statement"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, with the variables quantified over Fin 3 instead of Nat. The formalization-fidelity failure mode, by type substitution rather than an added hypothesis."
+    },
+    {
+      "submission": "LanderParkinTrivial.lean",
+      "module": "LanderParkinTrivial",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "CONFIRMED",
+        "checked": 430,
+        "total": 430,
+        "errors": [],
+        "disagreements": [],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [],
+        "adjudication_sign_off": null,
+        "introduced_assumptions": [],
+        "baseline_assumptions": 130,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "430/430 declarations re-checked, 0 assumption(s) not covered"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "LANDER-PARKIN",
+          "theorem": "Ampas.Claims.lander_parkin_counterexample",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∃ a b c d e, 0 < a ∧ 0 < b ∧ 0 < c ∧ 0 < d ∧ a ^ 5 + b ^ 5 + c ^ 5 + d ^ 5 = e ^ 5",
+            "solution_pp": "Exists fun a =>\n  Exists fun b =>\n    Exists fun c =>\n      Exists fun d =>\n        Exists fun e =>\n          Eq\n            (instHAdd.hAdd (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow a 5) (instHPow.hPow b 5)) (instHPow.hPow c 5))\n              (instHPow.hPow d 5))\n            (instHPow.hPow e 5)",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "An existence claim, so the degenerate reading runs the other way: it must not be satisfiable trivially. The two guards record both halves — that dropping positivity makes zeroes a witness, and that the 1966 witness is positive in all four summands and none of them equals the total.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "CONFIRMED",
+          "signals": [
+            "statement"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Targets the TRUE existence claim with the positivity hypotheses dropped, then satisfies it with zeroes. Ampas.Guards.sum_of_powers_trivial_without_positivity records that this reading exists."
+    },
+    {
+      "submission": "EulerPolyAttempt.lean",
+      "module": "EulerPolyAttempt",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [
+          {
+            "name": "Nat.decidableBallLT.match_5",
+            "finding": "TC-02",
+            "mechanism": null
+          }
+        ],
+        "adjudication_sign_off": {
+          "status": "PENDING_REVIEWER_CONFIRMATION",
+          "confirmed_by": null,
+          "means": "An adjudication records that a declaration is library code both Lean kernels accept and that the third check's rejection of it reproduces with no submission involved. Where `confirmed_by` is null, no reviewer has accepted that reading -- so 'adjudicated' here means an unconfirmed adjudication exists, not that one was agreed."
+        },
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "/tmp/ampas-sub-tkin6drz/EulerPolyAttempt.lean:16:8: warning: declaration uses `sorry`\n",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "EULER-POLY",
+          "theorem": "Ampas.Claims.euler_poly_all_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: sorryAx",
+            "forbidden: SORRY"
+          ],
+          "axioms": [
+            "propext",
+            "sorryAx",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [
+            "SORRY"
+          ],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (n ^ 2 + n + 41)",
+            "solution_pp": "∀ (n : Nat), Nat.Prime (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow n 2) n) 41)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Euler observed that the polynomial is prime for n = 0 .. 39; the universal claim is the natural over-reading of that observation and is false. Attributing the universal claim to Euler himself would be unfair, which is why the text says 'after Euler' — a reader should check that wording as much as the formula.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "signals": [
+            "axiom-policy"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "The small cases checked, then sorry. The pattern really does hold to n = 39, which is what makes the claim a trap."
+    },
+    {
+      "submission": "EulerPolyAxiom.lean",
+      "module": "EulerPolyAxiom",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [
+          {
+            "name": "Nat.decidableBallLT.match_5",
+            "finding": "TC-02",
+            "mechanism": null
+          }
+        ],
+        "adjudication_sign_off": {
+          "status": "PENDING_REVIEWER_CONFIRMATION",
+          "confirmed_by": null,
+          "means": "An adjudication records that a declaration is library code both Lean kernels accept and that the third check's rejection of it reproduces with no submission involved. Where `confirmed_by` is null, no reviewer has accepted that reading -- so 'adjudicated' here means an unconfirmed adjudication exists, not that one was agreed."
+        },
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "EULER-POLY",
+          "theorem": "Ampas.Claims.euler_poly_all_prime",
+          "certified": false,
+          "reasons": [
+            "axioms outside the policy: Ampas.Claims.euler_poly_tail"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound",
+            "Ampas.Claims.euler_poly_tail"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": true,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (n ^ 2 + n + 41)",
+            "solution_pp": "∀ (n : Nat), Nat.Prime (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow n 2) n) 41)",
+            "strict_equal": true
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Euler observed that the polynomial is prime for n = 0 .. 39; the universal claim is the natural over-reading of that observation and is false. Attributing the universal claim to Euler himself would be unfair, which is why the text says 'after Euler' — a reader should check that wording as much as the formula.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "signals": [
+            "axiom-policy"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "The same claim with the tail moved into a plausible-sounding axiom."
+    },
+    {
+      "submission": "EulerPolyWeaker.lean",
+      "module": "EulerPolyWeaker",
+      "compiled": true,
+      "kernel_replay": true,
+      "kernel_replay_independent": null,
+      "kernel_agreement": "not_run",
+      "third_check": {
+        "run": true,
+        "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+        "checked": 1805,
+        "total": 1806,
+        "errors": [
+          [
+            "Nat.decidableBallLT.match_5",
+            "argument type mismatch applying Nat.casesOn:\n  expected ((t:Nat) -> Sort u_1)\n  got      ((x:Nat) -> Sort imax(imax((0+1),imax(0,(0+1))),imax(imax((0+1),imax(0,(0+1))),u_1)))"
+          ]
+        ],
+        "disagreements": [
+          "Nat.decidableBallLT.match_5"
+        ],
+        "unadjudicated_disagreement": false,
+        "unadjudicated": [],
+        "adjudicated": [
+          {
+            "name": "Nat.decidableBallLT.match_5",
+            "finding": "TC-02",
+            "mechanism": null
+          }
+        ],
+        "adjudication_sign_off": {
+          "status": "PENDING_REVIEWER_CONFIRMATION",
+          "confirmed_by": null,
+          "means": "An adjudication records that a declaration is library code both Lean kernels accept and that the third check's rejection of it reproduces with no submission involved. Where `confirmed_by` is null, no reviewer has accepted that reading -- so 'adjudicated' here means an unconfirmed adjudication exists, not that one was agreed."
+        },
+        "introduced_assumptions": [],
+        "baseline_assumptions": 261,
+        "unproved_theorems": [],
+        "covers": "every declaration's type; inductive specifications only where they match the trusted baseline",
+        "summary": "1805/1806 re-checked; 1 disagreement(s), 0 unadjudicated"
+      },
+      "kernel_replay_fresh": null,
+      "compile_stderr": "",
+      "solution_imports": [
+        "AmpasRef.Defs",
+        "Init",
+        "Mathlib.Data.Nat.Prime.Basic"
+      ],
+      "claims": [
+        {
+          "claim": "EULER-POLY",
+          "theorem": "Ampas.Claims.euler_poly_all_prime",
+          "certified": false,
+          "reasons": [
+            "statement does not match the reference (strict)"
+          ],
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "flags": [],
+          "statement": {
+            "closure_differing": [],
+            "closure_missing": [],
+            "closure_ok": true,
+            "extra_constants": [],
+            "kernel_defeq": false,
+            "reference_pp": "∀ (n : ℕ), Nat.Prime (n ^ 2 + n + 41)",
+            "solution_pp": "∀ (n : Nat), instLENat.le n 5 → Nat.Prime (instHAdd.hAdd (instHAdd.hAdd (instHPow.hPow n 2) n) 41)",
+            "strict_equal": false
+          },
+          "kind": "theorem",
+          "review": {
+            "faithful": true,
+            "note": "Euler observed that the polynomial is prime for n = 0 .. 39; the universal claim is the natural over-reading of that observation and is false. Attributing the universal claim to Euler himself would be unfair, which is why the text says 'after Euler' — a reader should check that wording as much as the formula.",
+            "checklist": {
+              "statement_matches_text": true,
+              "no_unintended_convention": true,
+              "quantifier_order_checked": true,
+              "hypotheses_necessary_and_satisfiable": true,
+              "definitions_reviewed": true,
+              "conclusion_not_weakened": true
+            },
+            "reviewed_on": "2026-10-14",
+            "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+            "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+            "confirmed_by": "PENDING",
+            "confirmed_on": null,
+            "confirmation_mode": "none",
+            "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+          },
+          "corroboration": "DISAGREEMENT (adjudicated: checker incompleteness)",
+          "signals": [
+            "statement"
+          ],
+          "inconclusive": false
+        }
+      ],
+      "error": "",
+      "resource_exhausted": [],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, of the restricted statement (n <= 5), under the general claim's name."
+    }
+  ]
+}

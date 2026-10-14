@@ -265,3 +265,133 @@ def test_derivation_outcomes_follow_from_their_kernel_records():
         assert r["outcome"] == derivation_search.verdict(r["kernel"]), (
             f"{r['claim']}: recorded {r['outcome']} but its kernel record "
             f"yields {derivation_search.verdict(r['kernel'])}")
+
+
+# ---------------------------------------------------------------------------
+# A status that names an adjudication must carry it (2026-10-14)
+#
+# The third check's status read "DISAGREEMENT (adjudicated: checker
+# incompleteness)" beside an `adjudication` field of null, so a reader had to
+# leave the record to find out which finding was meant -- and would then
+# discover that the adjudications file is PENDING_REVIEWER_CONFIRMATION, which
+# is weaker than the word "adjudicated" suggests. Third time this session that
+# a derived label's support was not beside it (after the A01 mislabel and
+# ablation.py's filename prefix), so it gets a test.
+def _third_check_records():
+    out = []
+    for path in sorted((ROOT / "evidence").glob("*.json")) + \
+                sorted((ROOT / "build").glob("*validation*.json")) + \
+                sorted((ROOT / "build").glob("corpus*.json")):
+        try:
+            d = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for r in (d.get("results") or []) if isinstance(d, dict) else []:
+            tc = r.get("third_check") or {}
+            if tc.get("run"):
+                out.append((path.name, r.get("module"), tc))
+    return out
+
+
+def test_an_adjudicated_status_names_the_adjudication():
+    checked = 0
+    for name, module, tc in _third_check_records():
+        status = str(tc.get("status", ""))
+        if "adjudicated:" not in status:
+            continue
+        if "adjudicated" not in tc:
+            continue        # written before 2026-10-14; the field did not exist
+        checked += 1
+        assert tc["adjudicated"], (name, module,
+                                   "status says adjudicated and the list is empty")
+        for a in tc["adjudicated"]:
+            assert a.get("name"), (name, module)
+            assert a.get("finding"), (name, module, a.get("name"))
+    # not asserted non-zero: a record set may legitimately contain no
+    # adjudicated disagreement, and inventing one to satisfy a test would be
+    # the opposite of the point
+
+
+def test_an_adjudicated_status_says_whether_a_reviewer_confirmed_it():
+    for name, module, tc in _third_check_records():
+        if "adjudicated:" not in str(tc.get("status", "")):
+            continue
+        so = tc.get("adjudication_sign_off")
+        if so is None and "adjudicated" not in tc:
+            continue        # pre-2026-10-14 record
+        assert so, (name, module, "no sign-off state beside an adjudicated status")
+        assert "status" in so and "confirmed_by" in so, (name, module)
+        assert "unconfirmed adjudication exists" in (so.get("means") or ""), (
+            name, module,
+            "the record must not let 'adjudicated' read as 'a reviewer agreed'")
+
+
+def test_every_adjudicated_name_is_in_the_adjudications_file():
+    adj_path = ROOT / "reference" / "third_check_adjudications.json"
+    adj = {d["name"] for d in
+           json.loads(adj_path.read_text(encoding="utf-8"))["declarations"]}
+    for name, module, tc in _third_check_records():
+        for a in tc.get("adjudicated") or []:
+            assert a["name"] in adj, (name, module, a["name"])
+
+
+def test_an_adjudicated_disagreement_is_not_credited_as_catching_an_attack():
+    """The ablation table answers "which layer actually caught this attack".
+    An ADJUDICATED third-check disagreement is about library code the checker
+    cannot decide -- four history attacks trip TC-02 merely by using `decide`
+    over a bounded quantifier, and a genuine submission doing the same would
+    trip it too. Crediting the third check there named a layer that caught
+    nothing, in the one table the README cites as evidence that each attack is
+    stopped by the right layer."""
+    import ablation
+    base = {"compiled": True, "kernel_replay": True,
+            "kernel_replay_independent": True, "claims": []}
+    adjudicated_only = dict(base, third_check={
+        "run": True, "errors": [["Nat.decidableBallLT.match_5", "imax"]],
+        "unadjudicated": [],
+        "adjudicated": [{"name": "Nat.decidableBallLT.match_5",
+                         "finding": "TC-02"}]})
+    assert "third check" not in ablation.signals(adjudicated_only)
+
+    unadjudicated = dict(base, third_check={
+        "run": True, "errors": [["Ampas.Claims.false_thm", "mismatch"]],
+        "unadjudicated": ["Ampas.Claims.false_thm"]})
+    assert "third check" in ablation.signals(unadjudicated)
+
+    # a record from before `unadjudicated` existed keeps the old reading
+    legacy = dict(base, third_check={"run": True, "errors": [["x", "y"]]})
+    assert "third check" in ablation.signals(legacy)
+
+
+def test_an_adjudicated_disagreement_is_still_recorded_somewhere():
+    """Dropped from `signals` is not the same as dropped from the record: the
+    row must still say the third check objected and why it does not count."""
+    path = ROOT / "evidence" / "ablation_external.json"
+    if not path.exists():
+        pytest.skip("run tier 3 to produce it")
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    noted = [r for r in rows if r.get("third_check_note")]
+    assert noted, "no row carries an adjudicated third-check note"
+    for r in noted:
+        n = r["third_check_note"]
+        assert n["adjudicated"]
+        assert "caught nothing about this submission" in n["means"]
+        assert "third check" not in r["signals"], r["attack"]
+
+
+def test_the_core_ablation_record_is_reproducible_from_the_committed_results():
+    """evidence/ablation.json has 13 rows: the 12 core attacks and
+    A13_mathlib_redefine, which only runs at tier 3. Rebuilding it from the
+    core results alone gives 12, so for a while the committed record could not
+    be reproduced by scripts/verify.sh and a reader diffing their run found a
+    missing row with no explanation."""
+    import ablation
+    rows = []
+    for name in ("corpus_results_threechecks.json", "corpus_results_mathlib3.json"):
+        d = json.loads((ROOT / "evidence" / name).read_text(encoding="utf-8"))
+        for r in d["results"]:
+            if ablation.is_attack(r):
+                rows.append(r["module"])
+    committed = [r["attack"] for r in
+                 json.loads((ROOT / "evidence" / "ablation.json").read_text(encoding="utf-8"))]
+    assert sorted(rows) == sorted(committed), (sorted(rows), sorted(committed))

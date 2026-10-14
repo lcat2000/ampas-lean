@@ -1,0 +1,166 @@
+[
+ {
+  "attack": "ColeWrong",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "EulerPolyAttempt",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "EulerPolyAxiom",
+  "signals": [
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "EulerPolyWeaker",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "EulerSumWeaker",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "FermatAttempt",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "FermatAxiom",
+  "signals": [
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "FermatF5Wrong",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "FermatWeaker",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED",
+  "third_check_note": {
+   "status": "DISAGREEMENT (adjudicated: checker incompleteness)",
+   "adjudicated": [
+    {
+     "name": "Nat.decidableBallLT.match_5",
+     "finding": "TC-02",
+     "mechanism": null
+    }
+   ],
+   "means": "The third check objected only to library code it cannot decide (an adjudicated incompleteness). It caught nothing about this submission, so it is not listed among the layers that did."
+  }
+ },
+ {
+  "attack": "LanderParkinTrivial",
+  "signals": [
+   "statement"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "MersenneAxiom",
+  "signals": [
+   "axiom-policy"
+  ],
+  "verdict": "REJECTED"
+ },
+ {
+  "attack": "MersenneSorry",
+  "signals": [
+   "axiom-policy",
+   "SORRY"
+  ],
+  "verdict": "REJECTED"
+ }
+]

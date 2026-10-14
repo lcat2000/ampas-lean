@@ -579,10 +579,11 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
         sys.setrecursionlimit(old)
     # a rejection the two Lean kernels do not share is a DISAGREEMENT, and it
     # is only discounted where a reviewer has adjudicated that declaration
-    adj = {}
+    adj, sign_off = {}, None
     if ADJUDICATIONS.exists():
-        adj = {d["name"]: d for d in
-               json.loads(ADJUDICATIONS.read_text(encoding="utf-8")).get("declarations", [])}
+        adj_file = json.loads(ADJUDICATIONS.read_text(encoding="utf-8"))
+        adj = {d["name"]: d for d in adj_file.get("declarations", [])}
+        sign_off = adj_file.get("sign_off")
     disputed = [n for n, _ in out["errors"]]
     unadjudicated = [n for n in disputed if n not in adj]
     if not out["errors"]:
@@ -591,11 +592,35 @@ def _third_check(work: Path, lean_path: str, as_user, module: str, roots: list) 
         status = "DISAGREEMENT (unadjudicated)"
     else:
         status = "DISAGREEMENT (adjudicated: checker incompleteness)"
+    # A status that says "adjudicated" has to carry WHICH adjudication, and
+    # what state that adjudication is in. Without this the record asserted
+    # "adjudicated: checker incompleteness" beside an `adjudication` field of
+    # null, so a reader had to leave the record to find out which finding was
+    # meant -- and would then discover that the adjudications themselves are
+    # PENDING_REVIEWER_CONFIRMATION, which is weaker than the word suggests.
+    # Same defect as the A01 mislabel and the ablation prefix: a derived label
+    # whose support is not beside it.
+    adjudicated = [{"name": n,
+                    "finding": adj[n].get("finding"),
+                    "mechanism": adj[n].get("mechanism") or None}
+                   for n in disputed if n in adj]
     return {"run": True, "status": status, "checked": out["checked"], "total": out["total"],
             "errors": out["errors"][:5],
             "disagreements": disputed,
             "unadjudicated_disagreement": bool(unadjudicated),
             "unadjudicated": unadjudicated,
+            "adjudicated": adjudicated,
+            "adjudication_sign_off": (
+                {"status": (sign_off or {}).get("status"),
+                 "confirmed_by": (sign_off or {}).get("confirmed_by"),
+                 "means": ("An adjudication records that a declaration is library "
+                           "code both Lean kernels accept and that the third "
+                           "check's rejection of it reproduces with no submission "
+                           "involved. Where `confirmed_by` is null, no reviewer "
+                           "has accepted that reading -- so 'adjudicated' here "
+                           "means an unconfirmed adjudication exists, not that "
+                           "one was agreed.")}
+                if adjudicated else None),
             "introduced_assumptions": out["introduced_assumptions"],
             "baseline_assumptions": out["baseline_assumptions"],
             "unproved_theorems": out["unproved_theorems"],

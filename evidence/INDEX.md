@@ -225,6 +225,36 @@ says is a judgement, and every `review` block in
 list" to its p = 67 entry, and of Euler's general conjecture to its n = 5
 case, are the steps to read first.
 
+**Provenance of `ablation_external.json`.** It is built from the tier-3 runs
+(`build/fermat_validation.json` + `build/history_validation.json`), not from
+the committed `evidence/fermat_validation.json`, which predates the
+`adjudicated` / `adjudication_sign_off` fields and is kept as the record of
+that round rather than rewritten. Rebuilding the table from the committed
+Fermat record gives the same layers — an adjudicated disagreement already
+loses its credit from `unadjudicated: []` alone — but no `third_check_note`
+rows for the Fermat four.
+
+**And what those four rows say about the old table:** the Fermat attacks were
+being credited to the third check too, for the same library declaration, from
+the day that pair was added. Nobody saw it because the external corpora had no
+attribution table at all.
+
+**On `DISAGREEMENT (adjudicated: checker incompleteness)`.** Four of the
+history attacks carry it, all for the same declaration: `decide` over a
+bounded quantifier pulls in `Nat.decidableBallLT.match_5`, whose nested `imax`
+universe identity the third check's `level_leq` cannot decide. That is TC-02,
+recorded in `reference/third_check_adjudications.json`, in the rejecting
+(safe) direction, and about library code rather than any submission.
+
+Since 2026-10-14 the record carries that beside the status — `adjudicated`
+names the declaration and the finding, and `adjudication_sign_off` gives the
+state of the adjudications file. **Read that field before reading the word
+"adjudicated":** the file is `PENDING_REVIEWER_CONFIRMATION` with
+`confirmed_by: null`, so "adjudicated" means an unconfirmed adjudication
+exists, not that a reviewer agreed with it. The status used to assert
+"adjudicated" beside an `adjudication` field of `null`, which is the same
+defect as the two below — a derived label whose support is not beside it.
+
 **Read `ablation_external.json` with the gap it closed in mind.**
 `harness/ablation.py` used to identify attacks by an `A` filename prefix,
 which is how the core corpus happens to name them. The external submissions

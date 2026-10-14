@@ -34,7 +34,19 @@ def signals(r: dict) -> list[str]:
         out.append("independent kernel")
     tc = r.get("third_check", {})
     if tc.get("run") and tc.get("errors"):
-        out.append("third check")
+        # Only an UNADJUDICATED disagreement is the third check catching this
+        # submission. An adjudicated one is about library code -- four of the
+        # history attacks trip Nat.decidableBallLT.match_5 (TC-02) merely by
+        # using `decide` over a bounded quantifier, and a genuine submission
+        # doing the same would trip it too. Counting those as "the third check
+        # caught the attack" credited a layer that caught nothing, in the one
+        # table the README cites as evidence that each attack is stopped by
+        # the right layer. A record from before `unadjudicated` existed falls
+        # back to the old reading, which is why the key is tested for.
+        if "unadjudicated" not in tc:
+            out.append("third check")
+        elif tc["unadjudicated"]:
+            out.append("third check")
     for c in r["claims"]:
         # Structured tags when the record has them. The substring matching
         # below is the fallback for records written before 2026-10-14, and it
@@ -97,9 +109,21 @@ def main(argv):
             if not is_attack(r):
                 continue
             certs = [c["certified"] for c in r["claims"]]
-            rows.append({"attack": r["module"], "signals": signals(r),
-                         "verdict": "REJECTED" if not (certs and all(certs))
-                                    else "CERTIFIED (unexpected)"})
+            row = {"attack": r["module"], "signals": signals(r),
+                   "verdict": "REJECTED" if not (certs and all(certs))
+                              else "CERTIFIED (unexpected)"}
+            # not a layer that caught anything, but not information to drop
+            tc = r.get("third_check") or {}
+            adjudicated = tc.get("adjudicated") or []
+            if adjudicated and not tc.get("unadjudicated"):
+                row["third_check_note"] = {
+                    "status": tc.get("status"),
+                    "adjudicated": adjudicated,
+                    "means": ("The third check objected only to library code it "
+                              "cannot decide (an adjudicated incompleteness). It "
+                              "caught nothing about this submission, so it is "
+                              "not listed among the layers that did.")}
+            rows.append(row)
     rows.sort(key=lambda d: d["attack"])
     text = json.dumps(rows, indent=1, ensure_ascii=False) + "\n"
     if a.out:

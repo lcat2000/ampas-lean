@@ -145,6 +145,20 @@ if [ -f "$MT/.lake/build/lib/lean/AmpasRef/ChallengeMathlib.olean" ]; then
         --out build/corpus_mathlib.json >/dev/null \
     && run "$PY" scripts/check_expectations.py build/corpus_mathlib.json
 
+  # The committed evidence/ablation.json has 13 rows: the 12 core attacks and
+  # A13_mathlib_redefine, which only runs here. Tier 1 can only know the 12,
+  # so the table is rebuilt over both result files once the Mathlib run exists
+  # -- otherwise a reader diffing their run against the record finds a missing
+  # row and no explanation of it.
+  note "which layer caught each attack, core + Mathlib (reproduces evidence/ablation.json)"
+  run "$PY" harness/ablation.py build/corpus_core.json build/corpus_mathlib.json \
+        --out build/ablation.json >/dev/null \
+    && "$PY" -c "
+import json
+rows = json.load(open('build/ablation.json'))
+for r in rows:
+    print(f\"     {r['attack']:28}{r['verdict']:9} {', '.join(r['signals'])}\")"
+
   note "counterexample search over the Mathlib claim"
   AMPAS_CLAIMS="$ROOT/reference/claims_mathlib.json" \
     run "$PY" harness/counterexample.py --out build/counterexample_search_mathlib.json

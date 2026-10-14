@@ -102,13 +102,18 @@ more than the fact that all 11 submissions came out right:
   it**: the 1966 witness needs 144 in five variables. It returns "no
   counterexample" on a false claim. That is what a bounded numeric search is,
   shown on a claim this repository did not choose.
-- And the corpus found two defects in the harness, both the same kind of
-  mistake — a derived label read from something other than the data beside it.
-  The layer-attribution table identified attacks by a filename prefix, so
+- And the corpus found four defects in the harness, all the same kind of
+  mistake — a derived label read from, or asserted without, the data beside
+  it. The layer-attribution table identified attacks by a filename prefix, so
   **every external attack, including the four Fermat ones, had been missing
-  from it since the Fermat pair was added**; and a control field written
+  from it since the Fermat pair was added**; a control field written
   `target_claim_is` instead of `target_claim_is_true` read correctly to a
-  human and was invisible to the code. Both are in ROADMAP 6a.
+  human and was invisible to the code; a third-check status said
+  "adjudicated" beside an empty adjudication field, and the adjudications it
+  meant are themselves unconfirmed; and that same status was being credited
+  with catching four attacks it had caught nothing about. A fifth finding:
+  `evidence/ablation.json` could not be reproduced by `verify.sh` — it has a
+  thirteenth row that only tier 3 produces. All in ROADMAP 6a.
 
 What a historical claim fixes is the verdict, not the formalization. Whether
 each Lean statement says what the historical sentence says is still a
