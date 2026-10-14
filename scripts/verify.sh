@@ -104,7 +104,7 @@ run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_positivity.py tests/test_recursor.py tests/test_iota.py \
-      tests/test_portability.py -q
+      tests/test_history_corpus.py tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }
@@ -177,6 +177,34 @@ if [ -f "$MT/.lake/build/lib/lean/AmpasRef/ChallengeMathlib.olean" ]; then
   # and Euler's refutation of it must not
   note "counterexample search over the validation pair"
   run "$PY" harness/counterexample.py --out build/counterexample_search_fermat.json
+
+  # ROADMAP 6, external validation round 2: three more historical episodes,
+  # 6 claims and 11 submissions, where the verdict was settled by someone
+  # else long before this repository existed
+  note "external validation: Mersenne/Cole (1644/1903), Euler/Lander-Parkin (1769/1966), Euler's polynomial (1772)"
+  LEAN_PATH="$AMPAS_TRUSTED_OLEAN:$MLPATH" "$PY" harness/make_baseline.py \
+      build/kernel_baseline_history.json AmpasRef.GuardsHistory \
+      AmpasRef.ChallengeHistory >/dev/null
+  export AMPAS_CLAIMS="$ROOT/reference/claims_history.json"
+  export AMPAS_KERNEL_BASELINE="$ROOT/build/kernel_baseline_history.json"
+  run "$PY" harness/ampas_lean.py corpus/manifest_history.json \
+        --out build/history_validation.json >/dev/null \
+    && run "$PY" scripts/check_expectations.py build/history_validation.json
+  note "counterexample search over the historical claims (EULER-POLY must die at n = 40; EULER-SUM-5 must not be found — that is the recorded limit)"
+  run "$PY" harness/counterexample.py --out build/counterexample_search_history.json
+
+  # Which layer caught each EXTERNAL attack. This was missing: ablation.py
+  # identified attacks by an `A` naming prefix, so all four Fermat attacks and
+  # all eight history ones fell out of the table -- of the corpus added
+  # precisely to answer "the corpus was written by whoever wrote the harness".
+  note "which layer caught each attack in the external corpora"
+  run "$PY" harness/ablation.py build/fermat_validation.json \
+        build/history_validation.json --out build/ablation_external.json >/dev/null \
+    && "$PY" -c "
+import json
+rows = json.load(open('build/ablation_external.json'))
+for r in rows:
+    print(f\"     {r['attack']:24}{r['verdict']:9} {', '.join(r['signals'])}\")"
   unset AMPAS_CLAIMS
   RAN="$RAN 3"
 else

@@ -12,6 +12,8 @@ diff your run against the record.
 | `corpus_results_threechecks.json` | core corpus, 16 submissions, all three checks | `harness/ampas_lean.py corpus/manifest.json` with `AMPAS_THIRD_CHECK=1` |
 | `corpus_results_mathlib3.json` | Mathlib corpus, 2 submissions, all three checks | the same, with `AMPAS_CLAIMS` / `AMPAS_EXTRA_LEAN_PATH` / `AMPAS_KERNEL_BASELINE` for the Mathlib tier |
 | `fermat_validation.json` | the external validation pair, 5 submissions | `harness/ampas_lean.py corpus/manifest_fermat.json` with the Fermat catalogue |
+| `history_validation.json` | three more historical episodes, 6 claims, 11 submissions (ROADMAP 6a) | the same with `corpus/manifest_history.json` and `reference/claims_history.json` |
+| `ablation_external.json` | which layer caught each attack in **both** external corpora — 12 attacks | `harness/ablation.py` over the two external result files |
 | `ablation.json` | which layer actually caught each attack — **not** merely that all were rejected | `harness/ablation.py <the result files>` |
 | `review_verification.json` | the 10 core claims: freeze, signature, guards, drift detection | `harness/ampas_review.py verify` |
 | `review_verification_mathlib.json` | the same for the Mathlib claim | the same with `AMPAS_CLAIMS` |
@@ -195,3 +197,68 @@ a pass, and none would have been visible from its own unit tests:
 
 A rule wrong in the rejecting direction could as easily have been wrong in the
 accepting one.
+
+## history_validation.json, ablation_external.json — the historical corpora
+
+    export AMPAS_CLAIMS=$PWD/reference/claims_history.json
+    export AMPAS_KERNEL_BASELINE=$PWD/build/kernel_baseline_history.json
+    python3 harness/ampas_lean.py corpus/manifest_history.json \
+        --out build/history_validation.json
+    python3 scripts/check_expectations.py build/history_validation.json
+    python3 harness/ablation.py build/fermat_validation.json \
+        build/history_validation.json --out build/ablation_external.json
+
+`scripts/verify.sh` runs both at tier 3. Three episodes, each a historically
+FALSE claim with the TRUE refutation that settled it: Mersenne's 1644 list at
+p = 67 against Cole's 1903 factorization, Euler's 1769 sum-of-powers
+conjecture at n = 5 against Lander and Parkin's 1966 counterexample, and the
+universal over-reading of Euler's 1772 polynomial against its failure at
+n = 40. ROADMAP 6a has the full account.
+
+**What a historical claim buys, and what it does not.** It fixes the verdict:
+whether `2^67 - 1` is prime is not this repository's to decide, which is the
+one weakness a self-written corpus cannot fix. It does **not** fix the
+formalization. Whether each Lean statement says what the historical sentence
+says is a judgement, and every `review` block in
+`reference/claims_history.json` is `PENDING` in both `reviewed_by` and
+`confirmed_by` because nobody has made it. The narrowing of "Mersenne's 1644
+list" to its p = 67 entry, and of Euler's general conjecture to its n = 5
+case, are the steps to read first.
+
+**Read `ablation_external.json` with the gap it closed in mind.**
+`harness/ablation.py` used to identify attacks by an `A` filename prefix,
+which is how the core corpus happens to name them. The external submissions
+are named after mathematicians, so **every external attack — all four Fermat
+ones, from the day that pair was added, and all eight history ones — was
+missing from the layer-attribution table**, which then reported "0 attacks,
+all rejected: True" about the corpus added precisely to answer "the corpus was
+written by whoever wrote the harness". Attacks are now read from each record's
+own `expected` field. The same mistake in a different place is why
+`reference/claims_history.json` first wrote `target_claim_is` where the code
+reads `target_claim_is_true`: correct to a human, invisible to the code.
+
+## counterexample_search_history.json — the search on claims we did not choose
+
+    AMPAS_CLAIMS=$PWD/reference/claims_history.json \
+      python3 harness/counterexample.py --out build/counterexample_search_history.json
+
+The most informative file of this round, because two of its six results are
+about the search rather than about the claims:
+
+| claim | outcome | what it means |
+| --- | --- | --- |
+| `EULER-POLY` | **REFUTED**, witness n = 40 | the counterexample is inside the box; the search finds it unaided |
+| `MERSENNE-67` | **REFUTED** | the box is a single point, and `Nat.Prime`'s decision procedure finds the factor 193707721 by trial division in a few minutes — so the search reproduces Cole's 1903 result on its own. `reference/counterexample_bounds.json` had said it could not; that sentence is corrected in place, with the correction recorded |
+| `EULER-SUM-5` | NO_COUNTEREXAMPLE | **the claim is false.** Lander and Parkin's witness needs 144 in five variables, about 6.2e10 points, so no box this search can afford reaches it. A recorded limit of the search layer, on a claim this repository did not choose |
+| `LANDER-PARKIN` | NO_COUNTEREXAMPLE_PARTIAL | a pure existential in five variables; the search cannot confirm it either. The witness comes from the submission and is checked by the kernel |
+| `COLE-67`, `EULER-POLY-40` | NO_COUNTEREXAMPLE | single-point boxes, nothing found, as expected of true statements |
+
+A claim recorded as false has to be backed by something — this search, the
+derivation search, or a stated reason why neither can. EULER-SUM-5 is backed
+by none of those and is refuted all the same, in this repository, by
+LANDER-PARKIN. `harness/counterexample.py` now recognises that third case by
+**recomputing** it rather than accepting a sentence: `control.refuted_by` must
+name a claim of the same catalogue that is not itself declared false and that
+a results record shows certified. It fails closed, and when no results record
+is to hand the field says the backing was checked structurally and not by
+execution.

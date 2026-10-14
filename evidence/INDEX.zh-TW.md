@@ -15,6 +15,8 @@
 | `positivity_differential.json` | 正性 pass 跑過受信任參考環境與 Mathlib 環境裡的每一個歸納型 | `harness/spec_diff.py`（見下） |
 | `recursor_differential.json` | 遞子形狀 pass 跑過同樣這兩個環境裡的每一個遞子 | 同上，`--pass recursor` |
 | `iota_differential.json` | 每個遞子的 iota 規則，從建構子與遞子重新導出後比對 | 同上，`--pass iota` |
+| `history_validation.json` | 另外三段數學史：6 條主張、11 份送審（ROADMAP 6a） | `harness/ampas_lean.py corpus/manifest_history.json` 配 `reference/claims_history.json` |
+| `ablation_external.json` | **兩組**外部語料裡每個攻擊被哪一層抓到——共 12 個攻擊 | `harness/ablation.py` 跑過那兩份外部結果檔 |
 | `corpus_results.json` | 第一輪紀錄（單一核心） | 歷史 |
 | `corpus_results_twokernels.json` | 第二輪紀錄（兩套核心，無第三道檢查） | 歷史 |
 | `corpus_results_mathlib.json` | 第二輪的 Mathlib 紀錄 | 歷史 |
@@ -115,3 +117,55 @@ assumed 宣告），以及嵌套歸納型在包裹型別上額外產生的輔助
   組的差分測試會讓這個錯誤出廠**——這就是為什麼兩個環境都是必要的。
 
 一條在「拒絕」方向錯掉的規則，同樣可能在「接受」方向錯掉。
+
+## history_validation.json、ablation_external.json — 史實語料
+
+    export AMPAS_CLAIMS=$PWD/reference/claims_history.json
+    export AMPAS_KERNEL_BASELINE=$PWD/build/kernel_baseline_history.json
+    python3 harness/ampas_lean.py corpus/manifest_history.json \
+        --out build/history_validation.json
+    python3 scripts/check_expectations.py build/history_validation.json
+    python3 harness/ablation.py build/fermat_validation.json \
+        build/history_validation.json --out build/ablation_external.json
+
+`scripts/verify.sh` 在 tier 3 跑這兩段。三段史實，每段是一條歷史上**錯**的主張配
+上當年定案推翻它的那條**真**陳述：Mersenne 1644 清單的 p = 67 對 Cole 1903 的因數
+分解、Euler 1769 sum-of-powers 猜想的 n = 5 對 Lander 與 Parkin 1966 的反例、以及
+Euler 1772 多項式的全稱過度解讀對它在 n = 40 的失敗。完整經過見 ROADMAP 6a。
+
+**一條史實主張買到什麼、買不到什麼。** 它固定下**答案**：`2^67 - 1` 是不是質數不
+是這個倉庫說了算，而那正是自己寫的語料無法自己修掉的那個弱點。它**沒有**固定下
+**形式化**。每條 Lean 陳述是否真的在說那句歷史句子所說的事，仍然是人的判斷，而
+`reference/claims_history.json` 裡每個 `review` 區塊的 `reviewed_by` 與
+`confirmed_by` 都是 `PENDING`，因為沒有人做過那個判斷。把「Mersenne 1644 清單」縮
+到它的 p = 67 那一項、把 Euler 的一般猜想縮到 n = 5 那一例，是最該先讀的兩步。
+
+**讀 `ablation_external.json` 的時候要知道它補的是什麼缺口。** `harness/ablation.py`
+以前用 `A` 開頭的檔名前綴認定哪些是攻擊——那只是核心語料剛好這樣命名。外部送審是
+用數學家的名字命名的，所以**所有外部攻擊——Fermat 那四個從它加進來那天起，加上史
+實那八個——全部不在層歸因表裡**，而那張表還對「語料是寫管線的人自己寫的」這個問題
+回報「0 attacks, all rejected: True」。現在攻擊是從每份紀錄自己的 `expected` 欄位
+讀出來的。同一類錯誤換個地方，就是 `reference/claims_history.json` 一開始把欄位寫
+成 `target_claim_is` 而程式讀的是 `target_claim_is_true`：對人是對的，對程式不存在。
+
+## counterexample_search_history.json — 搜尋在「不是我們挑的」主張上
+
+    AMPAS_CLAIMS=$PWD/reference/claims_history.json \
+      python3 harness/counterexample.py --out build/counterexample_search_history.json
+
+這一輪最有資訊量的一份檔，因為六個結果裡有兩個講的是**搜尋本身**，不是那些主張：
+
+| 主張 | 結果 | 意思 |
+| --- | --- | --- |
+| `EULER-POLY` | **REFUTED**，見證 n = 40 | 反例落在盒子裡，搜尋自己找到它 |
+| `MERSENNE-67` | **REFUTED** | 盒子只有一個點，而 `Nat.Prime` 的判定程序用試除在幾分鐘內找出因數 193707721——所以搜尋自己重現了 Cole 1903 年的結果。`reference/counterexample_bounds.json` 原本寫它做不到；那句話已就地改正，並把改正本身記下來 |
+| `EULER-SUM-5` | NO_COUNTEREXAMPLE | **這條主張是假的。** Lander 與 Parkin 的見證需要五個變數都到 144，約 6.2e10 個點，所以這個搜尋負擔得起的任何盒子都碰不到它。這是搜尋層的一個**已記錄的極限**，而且是在一條不是這個倉庫挑的主張上 |
+| `LANDER-PARKIN` | NO_COUNTEREXAMPLE_PARTIAL | 五個變數的純存在陳述；搜尋也無法確認它。見證來自送審，由核心檢查 |
+| `COLE-67`、`EULER-POLY-40` | NO_COUNTEREXAMPLE | 單點盒子、沒找到東西，真陳述本來就該是這樣 |
+
+一條被紀錄為假的主張必須有東西背書——這個搜尋、推導搜尋，或是一句說明為什麼兩者
+都做不到。EULER-SUM-5 三者皆無，而它確實被推翻了，就在這個倉庫裡，由 LANDER-PARKIN
+推翻。`harness/counterexample.py` 現在認得這第三種情況，而且是**重算**出來的，不是
+接受一句話：`control.refuted_by` 必須指向同一份目錄裡一條本身不被宣告為假、而且在
+某次執行紀錄裡確實被認證的主張。它預設失敗；當手上沒有執行紀錄時，欄位會寫明這次
+背書是結構性檢查過的，不是靠執行驗證的。

@@ -43,6 +43,42 @@
       "exists_bound": 8,
       "timeout_seconds": 60,
       "why": "No Nat variable, so the numeric search is NOT_SEARCHABLE: PL.Derives is an inductively defined predicate. Its falsity is established instead by the bounded DERIVATION search (reference/derivation_search.json), whose witness the Lean kernel accepted -- so the waiver that used to sit here, saying the falsity rested on the reviewer's reading, is no longer needed."
+    },
+    "EULER-POLY": {
+      "bound": 64,
+      "exists_bound": 8,
+      "timeout_seconds": 600,
+      "why": "n^2 + n + 41 reaches 4201 at n = 64, which the trial division in Nat.Prime's instance can still decide. The historical counterexample is at n = 40, well inside this box -- so a NO_COUNTEREXAMPLE result here would be a defect in the search, not a fact about the claim."
+    },
+    "EULER-SUM-5": {
+      "bound": 8,
+      "exists_bound": 8,
+      "timeout_seconds": 600,
+      "why": "RECORDED LIMIT, not a tuned box. Lander and Parkin's counterexample is at 27^5 + 84^5 + 110^5 + 133^5 = 144^5, so any box this search can afford in FIVE Nat variables misses it: reaching a = 144 alone would be 144^5 points. The claim is FALSE and this search must still report NO_COUNTEREXAMPLE. Raising the bound does not fix that -- it is what a bounded numeric search is, demonstrated on a claim this repository did not choose."
+    },
+    "COLE-67": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 300,
+      "why": "No Nat variable: the statement is about one number."
+    },
+    "MERSENNE-67": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 600,
+      "why": "No Nat variable: the box is the single empty tuple, and the search evaluates the statement at it. That turns out to REFUTE the claim -- Nat.Prime's decision procedure finds the factor 193707721 by trial division in a few minutes -- so this search independently reproduces Cole's 1903 result, which an earlier draft of this field wrongly said it could not do. Corrected after the run contradicted it."
+    },
+    "EULER-POLY-40": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 300,
+      "why": "No Nat variable: the statement is about n = 40."
+    },
+    "LANDER-PARKIN": {
+      "bound": 0,
+      "exists_bound": 8,
+      "timeout_seconds": 300,
+      "why": "A pure existential in five variables, and no bound this search can afford reaches the witness: Lander and Parkin's solution needs 144 in every variable, which is 144^5 ~ 6.2e10 points. exists_bound is therefore kept small so the search TERMINATES and reports honestly that it did not confirm the claim, rather than running until something kills it. (An earlier draft set it to 160 while saying in this same field that the search could not get there; that bound did exactly what the sentence said it would not -- it ran for half an hour and produced nothing. Recorded because a bound that cannot finish is worse than a small one: it yields no record at all.) The witness is supplied by the submission and checked by the kernel."
     }
   }
 }

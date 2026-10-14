@@ -1,0 +1,258 @@
+{
+  "round": "external-validation-history",
+  "lean_version": "4.33.0",
+  "reference_module": "AmpasRef.ChallengeHistory",
+  "guards_module": "AmpasRef.GuardsHistory",
+  "trusted_modules": [
+    "Init",
+    "Lean",
+    "Std",
+    "Batteries",
+    "Mathlib",
+    "Aesop",
+    "Qq",
+    "ImportGraph",
+    "Plausible",
+    "LeanSearchClient",
+    "ProofWidgets",
+    "Cli",
+    "AmpasRef.Defs"
+  ],
+  "axiom_policies": {
+    "classical": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "constructive": []
+  },
+  "notes": "ROADMAP 6, external validation round 2. Three episodes from the history of mathematics, each contributing a historically FALSE claim and the TRUE refutation that settled it: Mersenne's 1644 list at p = 67 against Cole's 1903 factorization; Euler's 1769 sum-of-powers conjecture at n = 5 against Lander and Parkin's 1966 counterexample; and the over-reading of Euler's 1772 polynomial against its failure at n = 40. The point of drawing claims from history is that the verdict is not this repository's to set, which is the one weakness a self-written corpus cannot fix. What is still ours, and is the thing to review, is the FORMALIZATION: whether each Lean statement says what the historical sentence says. Every `review` block here is therefore PENDING — no reader has signed off on these six formalizations.",
+  "claims": [
+    {
+      "id": "MERSENNE-67",
+      "theorem": "Ampas.Claims.mersenne_67_prime",
+      "text": "2^67 - 1 is prime (the p = 67 entry of Mersenne's 1644 list).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "The historical claim is Mersenne's whole list; what is formalized is its p = 67 entry, which is the entry that is false. That narrowing is the judgement a reader has to check: a reader who disagrees that one entry faithfully represents 'Mersenne's claim' should mark this unfaithful.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "control": {
+        "role": "false-claim control",
+        "target_claim_is_true": false,
+        "must_never_be_certified": true,
+        "why_false": "F. N. Cole, October 1903: 2^67 - 1 = 193707721 * 761838257287, announced to the American Mathematical Society by multiplying it out on a blackboard without speaking.",
+        "refuted_by": "COLE-67",
+        "note_on_faithful": "`faithful: true` means the Lean statement faithfully formalizes the TARGET CLAIM -- the p = 67 entry of Mersenne's 1644 list. It does not formalize 'that entry is false'. The narrowing from Mersenne's whole list to its p = 67 entry is a judgement a reader must check."
+      }
+    },
+    {
+      "id": "COLE-67",
+      "theorem": "Ampas.Claims.mersenne_67_not_prime",
+      "text": "2^67 - 1 is not prime (Cole, 1903).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "A refutation, so the auditor requires a nontriviality guard rather than non-vacuity: Ampas.Guards.mersenne_nontrivial shows 2^7 - 1 = 127, another entry of the same list, IS prime, so this is a statement about p = 67 and not about Nat.Prime being empty on Mersenne numbers.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "guards": {
+        "nontriviality": "Ampas.Guards.mersenne_nontrivial"
+      }
+    },
+    {
+      "id": "EULER-SUM-5",
+      "theorem": "Ampas.Claims.euler_sum_of_powers",
+      "text": "No fifth power is the sum of four positive fifth powers (the n = 5 case of Euler's 1769 sum-of-powers conjecture).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Euler's conjecture is the general statement for every n; what is formalized is the n = 5 case, which is the case that was refuted. The positivity hypotheses are load-bearing and not decoration: without them the equation is satisfied by zeroes, which Ampas.Guards.sum_of_powers_trivial_without_positivity records.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "control": {
+        "role": "false-claim control",
+        "target_claim_is_true": false,
+        "must_never_be_certified": true,
+        "why_false": "L. J. Lander and T. R. Parkin, Bull. Amer. Math. Soc. 72 (1966) 1079: 27^5 + 84^5 + 110^5 + 133^5 = 144^5, found by search on a CDC 6600.",
+        "refuted_by": "LANDER-PARKIN",
+        "note_on_faithful": "`faithful: true` means the Lean statement formalizes the n = 5 case of Euler's 1769 conjecture, not the general conjecture and not its negation. The positivity hypotheses are load-bearing: without them zeroes satisfy the equation, which Ampas.Guards.sum_of_powers_trivial_without_positivity records."
+      }
+    },
+    {
+      "id": "LANDER-PARKIN",
+      "theorem": "Ampas.Claims.lander_parkin_counterexample",
+      "text": "There are four positive fifth powers whose sum is a fifth power (Lander and Parkin, 1966).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "An existence claim, so the degenerate reading runs the other way: it must not be satisfiable trivially. The two guards record both halves — that dropping positivity makes zeroes a witness, and that the 1966 witness is positive in all four summands and none of them equals the total.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "guards": {
+        "nontriviality": "Ampas.Guards.lander_parkin_witness_is_positive",
+        "degenerate_reading_ruled_out": "Ampas.Guards.sum_of_powers_trivial_without_positivity"
+      }
+    },
+    {
+      "id": "EULER-POLY",
+      "theorem": "Ampas.Claims.euler_poly_all_prime",
+      "text": "n^2 + n + 41 is prime for every natural number n (after Euler, 1772).",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "Euler observed that the polynomial is prime for n = 0 .. 39; the universal claim is the natural over-reading of that observation and is false. Attributing the universal claim to Euler himself would be unfair, which is why the text says 'after Euler' — a reader should check that wording as much as the formula.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "control": {
+        "role": "false-claim control",
+        "target_claim_is_true": false,
+        "must_never_be_certified": true,
+        "why_false": "40^2 + 40 + 41 = 1681 = 41 * 41. The polynomial is prime for n = 0 .. 39, which is what makes the universal claim tempting.",
+        "refuted_by": "EULER-POLY-40",
+        "note_on_faithful": "`faithful: true` means the Lean statement formalizes the universal over-reading of Euler's 1772 observation. Euler observed the n = 0 .. 39 behaviour; attributing the universal claim to him would be unfair, which is what 'after Euler' in the text is doing. A reader should check that wording as much as the formula."
+      }
+    },
+    {
+      "id": "EULER-POLY-40",
+      "theorem": "Ampas.Claims.euler_poly_40_not_prime",
+      "text": "40^2 + 40 + 41 is not prime.",
+      "policy": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "comparator": "strict"
+      },
+      "review": {
+        "faithful": true,
+        "note": "A refutation; Ampas.Guards.euler_poly_nontrivial shows the polynomial does take prime values (n = 30), so this is a statement about n = 40.",
+        "checklist": {
+          "statement_matches_text": true,
+          "no_unintended_convention": true,
+          "quantifier_order_checked": true,
+          "hypotheses_necessary_and_satisfiable": true,
+          "definitions_reviewed": true,
+          "conclusion_not_weakened": true
+        },
+        "reviewed_on": "2026-10-14",
+        "prepared_by": "AMPAS harness (machine-derived: statement/closure hashes, guard types, closure list)",
+        "reviewed_by": "PENDING — the assistant prepared these statements; no reader has signed off on the formalizations",
+        "confirmed_by": "PENDING",
+        "confirmed_on": null,
+        "confirmation_mode": "none",
+        "confirmation_basis": "尚未確認。這一輪（ROADMAP 6）的六條主張由助理從三段數學史整理並形式化，形式化忠實性的簽核是人的判斷，還沒有人給。要看的是：形式化是否真的對應歷史上那句主張。"
+      },
+      "guards": {
+        "nontriviality": "Ampas.Guards.euler_poly_nontrivial"
+      }
+    }
+  ]
+}

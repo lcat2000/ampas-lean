@@ -447,12 +447,26 @@ without predicted verdicts does not have that protection.
 - **Independence proofs** are over proof calculi deeply embedded in this
   repository (`Ampas.PL`, `Ampas.EL`), proved sound by hand. They are not
   statements about ZFC.
-- **The corpus is adversarial but finite.** Thirteen attacks, each with a
-  recorded layer that catches it. Absence of an attack in the corpus is not
-  evidence the pipeline resists it.
-- **The corpus was written by the same hands as the harness**, which is why the
-  external validation pair exists — and why a reviewer's own submissions are
-  more informative than any of this.
+- **The corpus is adversarial but finite.** Twenty-five attacks across three
+  corpora — thirteen core, twelve external — each with a recorded layer that
+  catches it (`evidence/ablation.json`, `evidence/ablation_external.json`).
+  Absence of an attack in the corpus is not evidence the pipeline resists it.
+- **The corpus was written by the same hands as the harness.** Four episodes
+  from the history of mathematics now supply claims whose verdicts are not
+  this repository's to set — Fermat/Euler (1640/1732), Mersenne/Cole
+  (1644/1903), Euler/Lander–Parkin (1769/1966) and Euler's polynomial (1772).
+  **That fixes the verdicts and not the formalizations.** Whether each Lean
+  statement says what the historical sentence says is a judgement, and for the
+  three episodes added on 2026-10-14 nobody has made it: every `review` block
+  in `reference/claims_history.json` is `PENDING`. A reviewer's own
+  submissions are still more informative than any of this.
+- **Externally-set claims found two defects in the harness**, which is the
+  argument for them in one line. The layer-attribution table identified
+  attacks by a filename prefix, so every external attack — including the four
+  Fermat ones, since the day that pair was added — had been missing from it;
+  and a control field written `target_claim_is` where the code reads
+  `target_claim_is_true` was correct to a human and invisible to the code.
+  ROADMAP 6a.
 
 ## A7. Reproducibility
 

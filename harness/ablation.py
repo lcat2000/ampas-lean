@@ -8,6 +8,15 @@ so a rejection can be attributed, and a layer that never fires is visible.
 
     python3 harness/ablation.py evidence/corpus_results_threechecks.json \\
         [more results.json ...] --out evidence/ablation.json
+
+Which submissions count as attacks is read from each record's own `expected`
+field -- the manifest's declared outcome -- and NOT from the module's name.
+The first version keyed on an `A` prefix, which is how the core corpus happens
+to name its attacks; the history corpus (ROADMAP 6) names its submissions
+after the mathematicians, so every one of its eight attacks fell out of the
+table and the table said "0 attacks, all rejected: True". A derived label has
+to be recomputable from the data beside it, which is the same lesson as the
+`signals` rewrite below.
 """
 import argparse
 import json
@@ -66,6 +75,17 @@ def signals(r: dict) -> list[str]:
     return uniq
 
 
+def is_attack(r: dict) -> bool:
+    """A submission the manifest expects to be rejected.
+
+    `expected` has been in every result record since round 1, so this needs no
+    fallback to the naming convention -- and must not have one: a record
+    without it is not evidence about any layer and is better left out of the
+    table than guessed at from its name.
+    """
+    return r.get("expected") == "rejected"
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("results", nargs="+")
@@ -74,7 +94,7 @@ def main(argv):
     rows = []
     for path in a.results:
         for r in json.loads(Path(path).read_text(encoding="utf-8"))["results"]:
-            if not r["module"].startswith("A"):
+            if not is_attack(r):
                 continue
             certs = [c["certified"] for c in r["claims"]]
             rows.append({"attack": r["module"], "signals": signals(r),

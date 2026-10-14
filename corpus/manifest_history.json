@@ -1,0 +1,83 @@
+{
+  "round": "external-validation-history",
+  "note": "External validation, round 2 (ROADMAP 6): three episodes from the history of mathematics. Mersenne's 1644 list (p = 67 entry, FALSE) against Cole's 1903 factorization; Euler's 1769 sum-of-powers conjecture at n = 5 (FALSE) against Lander and Parkin's 1966 counterexample; Euler's 1772 polynomial n^2 + n + 41 (FALSE as a universal claim) against its failure at n = 40. No statement here was invented for this suite and none of the verdicts is this repository's to set.",
+  "submissions": [
+    {
+      "file": "history/ColeSol.lean",
+      "module": "ColeSol",
+      "claims": ["COLE-67"],
+      "expected": "certified_all",
+      "note": "Cole's 1903 refutation, from the factorization 193707721 * 761838257287."
+    },
+    {
+      "file": "history/LanderParkinSol.lean",
+      "module": "LanderParkinSol",
+      "claims": ["LANDER-PARKIN"],
+      "expected": "certified_all",
+      "note": "The 1966 counterexample 27^5 + 84^5 + 110^5 + 133^5 = 144^5, as the witness of an existence claim."
+    },
+    {
+      "file": "history/EulerPolySol.lean",
+      "module": "EulerPolySol",
+      "claims": ["EULER-POLY-40"],
+      "expected": "certified_all",
+      "note": "40^2 + 40 + 41 = 41 * 41."
+    },
+    {
+      "file": "history/MersenneSorry.lean",
+      "module": "MersenneSorry",
+      "claims": ["MERSENNE-67"],
+      "expected": "rejected",
+      "note": "Mersenne's false entry, asserted with a bare sorry. 2^67 - 1 is far beyond `decide`, so there is nowhere else to put the gap."
+    },
+    {
+      "file": "history/MersenneAxiom.lean",
+      "module": "MersenneAxiom",
+      "claims": ["MERSENNE-67"],
+      "expected": "rejected",
+      "note": "The same entry with no sorry: the assertion becomes an axiom that reads like a citation."
+    },
+    {
+      "file": "history/ColeWrong.lean",
+      "module": "ColeWrong",
+      "claims": ["COLE-67"],
+      "expected": "rejected",
+      "note": "Targets Cole's TRUE statement but proves it of 2^67 rather than 2^67 - 1."
+    },
+    {
+      "file": "history/EulerSumWeaker.lean",
+      "module": "EulerSumWeaker",
+      "claims": ["EULER-SUM-5"],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, with the variables quantified over Fin 3 instead of Nat. The formalization-fidelity failure mode, by type substitution rather than an added hypothesis."
+    },
+    {
+      "file": "history/LanderParkinTrivial.lean",
+      "module": "LanderParkinTrivial",
+      "claims": ["LANDER-PARKIN"],
+      "expected": "rejected",
+      "note": "Targets the TRUE existence claim with the positivity hypotheses dropped, then satisfies it with zeroes. Ampas.Guards.sum_of_powers_trivial_without_positivity records that this reading exists."
+    },
+    {
+      "file": "history/EulerPolyAttempt.lean",
+      "module": "EulerPolyAttempt",
+      "claims": ["EULER-POLY"],
+      "expected": "rejected",
+      "note": "The small cases checked, then sorry. The pattern really does hold to n = 39, which is what makes the claim a trap."
+    },
+    {
+      "file": "history/EulerPolyAxiom.lean",
+      "module": "EulerPolyAxiom",
+      "claims": ["EULER-POLY"],
+      "expected": "rejected",
+      "note": "The same claim with the tail moved into a plausible-sounding axiom."
+    },
+    {
+      "file": "history/EulerPolyWeaker.lean",
+      "module": "EulerPolyWeaker",
+      "claims": ["EULER-POLY"],
+      "expected": "rejected",
+      "note": "Every line genuinely proved, of the restricted statement (n <= 5), under the general claim's name."
+    }
+  ]
+}

@@ -46,20 +46,24 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Core (`corpus/manifest.json`) | 16 (4 genuine, 12 attacks) | 16/16 as expected; both Lean kernels agreed on all; third check confirmed 15 and **corroborated** the Lean kernels on the kernel-bypass attack — it objected to the same declaration they rejected, and caught nothing they missed |
 | Mathlib (`reference/claims_mathlib.json`) | 2 | 2/2 as expected |
 | External validation (`corpus/manifest_fermat.json`) | 5 | 5/5 as expected |
+| External validation, historical (`corpus/manifest_history.json`) | 11 (3 genuine, 8 attacks) | 11/11 as expected; 6 claims from three episodes whose verdicts this repository did not set |
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
+| Counterexample search, historical | 6 statements | 2 refuted unaided (Euler's polynomial at n = 40, and Mersenne's p = 67 entry — the search reproduces Cole's 1903 factorization); **1 false claim it cannot reach and says so** (Euler's sum of powers; the 1966 witness needs 144 in five variables) |
 | Derivation search | the 4 out of reach | PL-BOGUS refuted — kernel-accepted, no axioms; 3 NO_DERIVATION over a stated universe |
 | Triangulation | 3 claim pairs | 3 EQUIVALENT, checked against the named statements — and the method's limit proved as a theorem (A1d) |
-| Tests | 230 | all pass from a clean checkout (241 collected; the Mathlib fixtures skip below tier 3) |
+| Tests | 370 | all pass from a clean checkout (the Mathlib and tier-3 fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
 a suite where one layer does all the work while the others do nothing would
 look identical on a pass/fail summary.
 
-### The external validation pair
+### The external validation corpora
 
 The corpus was written by the same hands as the harness, so it was also tested
-on a case taken from the history of mathematics instead:
+on cases taken from the history of mathematics instead, where the verdict was
+settled by someone else long before this repository existed. Four episodes,
+eight claims, sixteen submissions.
 
 - **Fermat** (c. 1640) asserted every Fermat number $F_n = 2^{2^n}+1$ is prime,
   having checked $F_0 \ldots F_4$. The claim is **false**.
@@ -77,6 +81,39 @@ The third row is the one worth dwelling on: no `sorry`, no extra axiom, honest
 Lean, both kernels satisfied — and the formalization simply is not the claim it
 is filed under. Only the statement comparator stands between that and a
 certificate.
+
+Three more episodes were added in the same shape (`reference/claims_history.json`,
+11 submissions, all landing where the manifest says):
+
+| Episode | The false claim | Settled against it by |
+| --- | --- | --- |
+| Mersenne, 1644 | $2^{67}-1$ is prime (the $p=67$ entry of his list) | Cole, 1903: $2^{67}-1 = 193707721 \times 761838257287$ |
+| Euler, 1769 | no fifth power is the sum of four positive fifth powers | Lander and Parkin, 1966: $27^5+84^5+110^5+133^5 = 144^5$ |
+| after Euler, 1772 | $n^2+n+41$ is prime for every $n$ | $40^2+40+41 = 1681 = 41^2$ |
+
+They were picked to land on different layers, and what they showed is worth
+more than the fact that all 11 submissions came out right:
+
+- Euler's polynomial dies to the bounded search at $n = 40$, and Mersenne's
+  entry dies to it as well — the decision procedure finds the factor
+  193707721 in a few minutes, so the search reproduces Cole's 1903 result on
+  its own.
+- Euler's sum-of-powers conjecture is **false and the search cannot reach
+  it**: the 1966 witness needs 144 in five variables. It returns "no
+  counterexample" on a false claim. That is what a bounded numeric search is,
+  shown on a claim this repository did not choose.
+- And the corpus found two defects in the harness, both the same kind of
+  mistake — a derived label read from something other than the data beside it.
+  The layer-attribution table identified attacks by a filename prefix, so
+  **every external attack, including the four Fermat ones, had been missing
+  from it since the Fermat pair was added**; and a control field written
+  `target_claim_is` instead of `target_claim_is_true` read correctly to a
+  human and was invisible to the code. Both are in ROADMAP 6a.
+
+What a historical claim fixes is the verdict, not the formalization. Whether
+each Lean statement says what the historical sentence says is still a
+judgement, and nobody has made it: every review block in the new catalogue is
+`PENDING`.
 
 ## Verifying it yourself
 

@@ -97,6 +97,73 @@ def search_one(module: str, decl: str, bound: int, exists_bound: int,
     return rec
 
 
+def load_results_record():
+    """The corpus results for this catalogue, if a run of it is to hand.
+
+    Looked up from AMPAS_RESULTS, else from build/ and evidence/ by the
+    catalogue's round name. Absent is a normal state -- the search runs
+    standalone too -- and is recorded as such rather than treated as a pass.
+    """
+    env = os.environ.get("AMPAS_RESULTS")
+    cands = [Path(env)] if env else []
+    try:
+        rnd = json.loads(CATALOGUE.read_text(encoding="utf-8")).get("round", "")
+    except (OSError, json.JSONDecodeError):
+        rnd = ""
+    stem = rnd.rsplit("-", 1)[-1] if rnd else ""
+    if stem:
+        cands += [ROOT / "build" / f"{stem}_validation.json",
+                  ROOT / "evidence" / f"{stem}_validation.json"]
+    for c in cands:
+        try:
+            d = json.loads(Path(c).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        certified = {cl["claim"] for r in d.get("results", [])
+                     for cl in r.get("claims", []) if cl.get("certified")}
+        return {"path": os.path.relpath(Path(c).resolve(), ROOT),
+                "certified": certified}
+    return None
+
+
+def refuting_sibling(claim: dict, by_id: dict, record):
+    """Is this false claim refuted by another CERTIFIED claim of this catalogue?
+
+    The third way a declared-false claim can be backed, after this search and
+    the derivation search. EULER-SUM-5 is the case: Euler's sum-of-powers
+    conjecture at n = 5 is false, no bounded numeric search can reach Lander
+    and Parkin's witness at 144^5, and the refutation is nonetheless in this
+    repository -- LANDER-PARKIN, proved from that witness and checked by the
+    kernel.
+
+    This is deliberately NOT a waiver. A waiver is a sentence someone wrote;
+    this is recomputed from the catalogue and the run, and it fails closed:
+    `refuted_by` must name a claim of this catalogue that is not itself
+    declared false, and if a results record is to hand that claim must be
+    certified in it. When no record is to hand the return says so, so a reader
+    can see that the backing was checked structurally and not by execution.
+    """
+    ctl = claim.get("control") or {}
+    rid = ctl.get("refuted_by")
+    if not rid:
+        return None
+    other = by_id.get(rid)
+    if other is None:
+        return None
+    if ((other.get("control") or {}).get("target_claim_is_true")) is False:
+        return None            # a false claim cannot refute another
+    out = {"claim": rid, "theorem": other.get("theorem"),
+           "mechanism": "a refuting claim of this catalogue, proved and "
+                        "kernel-checked by a submission in the same corpus"}
+    if record is None:
+        out["certified_in_a_run"] = "NOT CHECKED — no results record was to hand"
+        return out
+    if rid not in record["certified"]:
+        return None            # the named refutation is not actually proved
+    out["certified_in_a_run"] = record["path"]
+    return out
+
+
 def bounds_for(claim_id: str) -> tuple[int, int, int]:
     cfg = json.loads(BOUNDS.read_text(encoding="utf-8"))
     d = cfg.get("default", {})
@@ -115,6 +182,8 @@ def main(argv: list[str]) -> int:
     cat = json.loads(CATALOGUE.read_text(encoding="utf-8"))
     module = cat["reference_module"]
     extra = os.environ.get("AMPAS_EXTRA_LEAN_PATH", "")
+    by_id = {c["id"]: c for c in cat["claims"]}
+    results_record = load_results_record()
 
     # Bind every search to the statement it actually ran against. Without
     # this, a statement could be edited after a clean search and keep the
@@ -159,6 +228,7 @@ def main(argv: list[str]) -> int:
             derivation = {r["claim"]: r for r in
                           json.loads(dpath.read_text(encoding="utf-8")).get("searches", [])}
         drv = derivation.get(cid) or {}
+        sibling = refuting_sibling(claim, by_id, results_record)
         kernel_refuted = drv.get("outcome") == "REFUTED" and (
             ((drv.get("kernel") or {}).get("statement_check") or {})
             .get("negates_frozen_statement_structurally") is True)
@@ -174,6 +244,9 @@ def main(argv: list[str]) -> int:
                 rec["refuted_by"] = ("bounded derivation search, checked by the "
                                      "Lean kernel")
                 rec["refutation_decl"] = (drv.get("kernel") or {}).get("refutation_decl")
+            elif sibling:
+                rec["consistency"] = "OK"
+                rec["refuted_by"] = sibling
             elif waiver:
                 rec["consistency"] = "OK"
                 rec["falsity_not_searchable"] = waiver
