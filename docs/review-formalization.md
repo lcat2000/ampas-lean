@@ -92,6 +92,51 @@ and a checklist:
 | `definitions_reviewed` | every definition in the closure has been read |
 | `conclusion_not_weakened` | the conclusion has not been weakened |
 
+#### Per-item evidence: what each tick points at
+
+Until 2026-10-14 those six answers were booleans and nothing else. All
+thirteen signed attestations answer all six `true`, so a reviewer who worked
+through a statement carefully and one who ticked six boxes left
+**byte-identical records** — the checklist could not distinguish them, and
+neither could anyone reading it afterwards.
+
+`harness/checklist_evidence.py write` derives, from the frozen statement, the
+object each mechanisable tick is a claim about, and records it in
+`reference/checklist-evidence*.json` bound to that statement's hash:
+
+| Check | What the record now points at |
+| --- | --- |
+| `statement_matches_text` | **nothing — `machine_derivable: false`** |
+| `no_unintended_convention` | the convention-bearing constants the statement uses, those one of this repository's definitions brings in a level down, and the constants the convention list has no rule for |
+| `quantifier_order_checked` | the binder sequence in order, split into data and hypotheses, hashed over the **order** so a permutation is detected |
+| `hypotheses_necessary_and_satisfiable` | each hypothesis binder against the guard that covers it; a statement with two hypotheses and one necessity guard fails |
+| `definitions_reviewed` | this repository's own definitions in the closure, each with its own hash |
+| `conclusion_not_weakened` | the conclusion, pretty and serialized, hashed over the serialization |
+
+`verify` re-derives all of it and fails on `EVIDENCE DRIFT` if the statement
+it was derived from is not the statement in the reference now.
+
+**Three things this does not do**, each of which it would be easy to read it
+as doing:
+
+1. **It does not decide fidelity.** `statement_matches_text` is the item that
+   matters most and the only one with nothing behind it. A layer that quietly
+   supplied *something* there would be worse than none, so
+   `tests/test_checklist_evidence.py` fails if a sixth item ever acquires
+   machine evidence. `docs/CONLECHE-EVALUATION.md` is why: a checker with a
+   ZFC model-theoretic consistency proof accepts `A06_wrong_statement`.
+2. **It does not record that anyone read it.** All thirteen attestations were
+   signed before it existed, which `verify` reports by name in
+   `attestations_signed_before_the_evidence_existed`. The evidence shows what
+   the ticks were *about*; a tick made with it in hand would be a stronger
+   claim and none here is one.
+3. **The convention list is a judgement.**
+   `reference/fidelity_conventions.json` holds the traps this repository
+   thought of. A statement whose trap is absent reports no convention at all,
+   so `last_reviewed` and the `unmatched_statement_constants` channel are what
+   make an empty result mean anything — that channel is how the `Nat.Prime`
+   and `^`-associativity rules came to exist.
+
 The whole record is signed with a **detached Ed25519 signature**
 (`reference/reviewer_key.json` is the public key; the private key is **not** in
 this repository). The signature covers every field except itself, so even
@@ -148,7 +193,12 @@ python3 harness/ampas_review.py freeze
 # 4. the reviewer signs (private key stays with the reviewer)
 python3 harness/ampas_review.py sign --key <private.pem> --key-id <id>
 
-# 5. verify on every run (CI)
+# 5. derive the per-item checklist evidence (after any statement change)
+python3 harness/checklist_evidence.py write
+
+# 6. verify on every run (CI): re-derives the evidence too, and fails if it
+#    was derived from a statement other than the one in the reference now
+python3 harness/checklist_evidence.py check
 python3 harness/ampas_review.py verify --out build/review_verification.json
 ```
 
@@ -166,7 +216,10 @@ is passed explicitly, which records the failure in the record itself.
   restricted statement under the general claim's name.
 - **The quality of the reviewer's judgement is out of scope.** The process
   guarantees the judgement is attributed, dated and drift-resistant. It does
-  not guarantee it is correct.
+  not guarantee it is correct. Since 2026-10-14 the per-item evidence makes a
+  *careless* judgement visible — a tick now points at a named binder sequence,
+  a named definition list, a named set of conventions — which is a different
+  and much smaller thing than making a judgement correct.
 - **The natural language may itself be ambiguous.** If the text is imprecise,
   what is frozen is a commitment to one reading of it.
 - **Key management is out of the model.** This repository uses a demonstration

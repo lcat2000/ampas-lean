@@ -237,6 +237,62 @@ misreading, and the equivalence proof then confirms only that they share it.
 A genuinely independent second author remains open, and because of the
 finding above it would buy less than ROADMAP 5.2 expected.
 
+### A1e. The checklist was attested wholesale, and one of its six items still is
+
+Until 2026-10-14 the reviewer's checklist was six booleans:
+
+    statement_matches_text, no_unintended_convention,
+    quantifier_order_checked, hypotheses_necessary_and_satisfiable,
+    definitions_reviewed, conclusion_not_weakened
+
+All thirteen signed attestations answer all six `true`, and nothing in any
+record said **which** quantifier order was checked, which definitions were
+read, or which conventions were in play. A reviewer who worked through a
+statement carefully and one who ticked six boxes left byte-identical records.
+Since everything else in A1 above is mechanical and detects falsity or
+malformedness, those six booleans carried the whole of the fidelity judgement
+on their own.
+
+`harness/checklist_evidence.py` now derives, per item, the object the tick is
+a claim about, and binds it to the statement's hash
+(`reference/checklist-evidence*.json`, re-derived by `verify`). Five of the
+six point at something: the binder sequence and a hash over its **order**;
+the convention-bearing constants the statement uses, and those one of this
+repository's own definitions brings in; each hypothesis binder against the
+guard that is supposed to cover it; this repository's definitions in the
+closure, each hashed; the conclusion, hashed over its serialized form.
+
+**The sixth is `statement_matches_text`, and it has nothing behind it.** It is
+marked `machine_derivable: false` in every record, because the comparison it
+names is between a formal object and an English sentence, and no property of
+the formal object settles it. This is not a gap awaiting a cleverer check:
+`docs/CONLECHE-EVALUATION.md` measured it, and a checker carrying a ZFC
+model-theoretic consistency proof accepts `A06_wrong_statement` for the same
+reason. `tests/test_checklist_evidence.py` fails if a sixth item ever
+acquires machine evidence, because something put beside that item would
+answer a different question than the one asked.
+
+**What the evidence is not.** It does not record that a reviewer examined any
+of it. All thirteen attestations were signed before it existed, which
+`ampas_review.py verify` reports by name
+(`attestations_signed_before_the_evidence_existed`) rather than leaving a
+reader to assume otherwise from its presence. The evidence shows what the
+ticks were **about** and fails if the statement moves out from under them; a
+tick made with the evidence in hand is a stronger claim, and no attestation
+here is one yet.
+
+**The convention list is a judgement, not a derivation.**
+`reference/fidelity_conventions.json` is the set of traps this repository
+thought of — Nat's truncating subtraction, `n % 0 = n`, `^` associating
+right, Mathlib's `Nat.Prime` excluding 1. A statement whose trap is not on
+that list is reported as using no convention at all, which is the same
+failure mode `reference/kernel_advisories.json` exists to guard against. Two
+things make an empty result mean anything: the `last_reviewed` date, and
+`unmatched_statement_constants` in the output, which names the constants the
+list has no rule for. That channel is not decoration — it is how the
+`Nat.Prime` and `^`-associativity rules came to exist, after showing them
+unmatched under the Fermat claim, whose entire content is `2 ^ 2 ^ n + 1`.
+
 ## A2. Kernel soundness — and cross-checking is weaker evidence than it looks
 
 **Assumed:** that Lean's kernel is sound, or that the two kernels this

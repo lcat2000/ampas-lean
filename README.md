@@ -35,9 +35,14 @@ statements. It goes through:
 | **Statement comparator** | The elaborated statement against the frozen one, structurally or up to kernel definitional equality |
 | **Counterexample search** | Before a statement can be frozen, a bounded search tries to falsify it, and the result is signed into the record. Fermat's claim dies at n = 5 |
 | **Formalization sign-off** | A content-addressed freeze, machine-derived guard theorems, an Ed25519 signature, and drift detection |
+| **Checklist evidence** | Five of the reviewer's six checklist items now point at the object they are a claim about — the binder order, the conventions in play, the definitions, the conclusion — each bound to the statement's hash. The sixth, `statement_matches_text`, points at nothing and is marked so |
 
 The last row is the one that cannot be automated, and the repository does not
-pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.md).
+pretend otherwise: a checker carrying a ZFC model-theoretic consistency proof
+accepts a well-formed statement of the wrong claim
+([docs/CONLECHE-EVALUATION.md](docs/CONLECHE-EVALUATION.md)). What the
+evidence makes visible is carelessness, not error. See
+[docs/review-formalization.md](docs/review-formalization.md) and ASSUMPTIONS A1e.
 
 ## Results of the recorded run
 

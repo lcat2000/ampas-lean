@@ -427,6 +427,153 @@ unsafe def main (args : List String) : IO UInt32 := do
           ("closure_missing", jnames missing.toList)])
     IO.println (Json.mkObj [("freeze", Json.arr out)]).compress
     return 0
+  -- ROADMAP 5.4: the per-item material a fidelity checklist tick is about.
+  -- The six-item checklist was attested WHOLESALE -- six booleans, all true,
+  -- for every claim -- so a careless tick and a careful one left the same
+  -- record. This mode derives, from the frozen statement itself, what each
+  -- mechanisable item is a claim ABOUT: the binder prefix split into data and
+  -- hypotheses, the conclusion, the convention-bearing constants actually
+  -- present, and the project's own definitions the statement rests on.
+  --
+  -- It does not decide fidelity and cannot: `statement_matches_text` is the
+  -- one item with no machine-derivable evidence, and the Python side labels it
+  -- so rather than letting it sit among five that have some.
+  if mode == "fidelity" then
+    let refEnv ← importModules #[{ module := (← getStr req "reference_module").toName }] {}
+      (loadExts := true)
+    let conventions := (getStrs req "conventions").map String.toName
+    -- NOT `trusted`. That list answers a provenance question -- which modules
+    -- a submission may import -- and it includes AmpasRef.Defs, which is
+    -- exactly the module whose definitions a fidelity reviewer must read: a
+    -- wrong `Ampas.IsEven` is the canonical fidelity failure and it lives
+    -- there. Reusing the provenance list here reported zero definitions for
+    -- every claim, including the one that rests on IsEven. What is excluded
+    -- is only what this repository did not write.
+    let libraryMods : List Name := [`Init, `Lean, `Std, `Mathlib, `Batteries, `Aesop,
+                                    `Qq, `ProofWidgets, `ImportGraph, `Plausible, `LeanSearchClient]
+    let isLibraryMod (m : Name) : Bool := libraryMods.any (fun x => x.isPrefixOf m)
+    let mut out := #[]
+    for nstr in getStrs req "theorems" do
+      let n := nstr.toName
+      match refEnv.find? n with
+      | none => out := out.push (Json.mkObj [("name", jstr nstr), ("error", jstr "missing")])
+      | some ci =>
+        -- the binder prefix, split the way the auditor already splits it for
+        -- the witness and necessity guards (a binder whose type is a Prop is a
+        -- hypothesis), so the two cannot disagree about what a hypothesis is.
+        --
+        -- Everything a reviewer READS is rendered INSIDE the telescope. Doing
+        -- it outside printed `_fvar.1` for the data binders and -- worse --
+        -- rendered `∀ n, ∃ m, n < m` as `∃ m, m < m`, because a free variable
+        -- with no local context lets pp reuse the inner binder's name. That
+        -- is a different and false statement, offered as the evidence a tick
+        -- is about. Serialization goes the other way: `body.abstract xs` puts
+        -- the de Bruijn indices back, so `serExpr` sees the same name-free
+        -- form it sees everywhere else in this file.
+        let rendered ← runMeta refEnv (
+          forallTelescopeReducing ci.type fun xs body => do
+            let mut bs := #[]
+            for h : i in [0:xs.size] do
+              let x := xs[i]
+              let ty ← inferType x
+              let isH ← isProp ty
+              -- An anonymous binder (`∀ a b, b ≤ a → …`) has a machine name
+              -- like `a._@._internal._hyg.0`, and all of them have the SAME
+              -- one, so a tick citing a hypothesis by name would be ambiguous
+              -- exactly where hypotheses matter most. `index` is the identity;
+              -- a name is reported only when the author wrote one.
+              let raw ← x.fvarId!.getUserName
+              let nm := if raw.hasMacroScopes || (raw.toString.splitOn "_@").length != 1
+                        then Name.anonymous else raw
+              bs := bs.push (i, isH, nm, toString (← Meta.ppExpr ty),
+                             serExpr (ty.abstract (xs.extract 0 i)))
+            return (bs, toString (← Meta.ppExpr body), serExpr (body.abstract xs)))
+        let (bs, concl, conclSer) := rendered
+        let mut bjson := #[]
+        for (i, isH, nm, tyPP, tySer) in bs do
+          bjson := bjson.push (Json.mkObj [
+            ("index", Json.num i),
+            ("name", if nm.isAnonymous then Json.null else jstr nm.toString),
+            ("kind", jstr (if isH then "hypothesis" else "data")),
+            ("type", jstr tyPP),
+            ("type_serialized", jstr tySer)])
+        -- which convention-bearing constants the statement actually uses. The
+        -- LIST is this repository's judgement and is reviewable in
+        -- reference/fidelity_conventions.json; a convention not on it is not
+        -- reported, which the record says.
+        -- Matched against the statement's own constants and, separately,
+        -- against what THIS REPOSITORY's definitions bring in: `Ampas.IsEven`
+        -- hides `%` one level down, and a convention a reviewer cannot see in
+        -- the statement is the one most worth naming.
+        --
+        -- The second channel expands only through constants outside the
+        -- libraries. Expanding through Lean's too made it useless: `Nat.div`
+        -- is implemented with truncated subtraction, so every claim mentioning
+        -- `/` reported `HSub.hSub`, `Nat.sub` and `Nat.pred`, and `OfNat.ofNat`
+        -- appeared under nearly every claim there is. The reviewer's question
+        -- is which conventions the STATEMENT is exposed to, not how Lean
+        -- implements its own arithmetic.
+        let used := ci.type.getUsedConstants
+        let (cl, _) := closure refEnv used false
+        let present := conventions.filter (fun c => used.contains c)
+        let projReach : NameSet := Id.run do
+          let mut seen : NameSet := {}
+          let mut todo := used.toList
+          while !todo.isEmpty do
+            match todo with
+            | [] => break
+            | n :: rest =>
+              todo := rest
+              if seen.contains n then continue
+              seen := seen.insert n
+              match refEnv.find? n with
+              | none => pure ()
+              | some d =>
+                -- a library constant is reported, never expanded through
+                if isLibraryMod (moduleOf refEnv n) then continue
+                todo := (directConsts d (match d with | .thmInfo _ => false | _ => true)).toList ++ todo
+          return seen
+        let viaDefs := conventions.filter (fun c => projReach.contains c && !used.contains c)
+        -- the project's OWN definitions the statement rests on: the closure
+        -- entries outside the trusted modules. These are what
+        -- `definitions_reviewed` can be a claim about; a statement resting
+        -- only on Lean's own definitions has none, and that is informative
+        -- rather than missing.
+        let mut defs := #[]
+        for c in (cl.toArray.qsort Name.lt) do
+          if isLibraryMod (moduleOf refEnv c) then continue
+          match refEnv.find? c with
+          | none => pure ()
+          | some d =>
+            let val := match d with
+              | .defnInfo v => some v.value
+              | .opaqueInfo v => some v.value
+              | _ => none
+            let valJson : Json ← match val with
+              | some v => do let s ← ppIn refEnv v; pure (jstr s)
+              | none => pure Json.null
+            defs := defs.push (Json.mkObj [
+              ("name", jstr c.toString),
+              ("kind", jstr (kindOf d)),
+              ("module", jstr (moduleOf refEnv c).toString),
+              ("type", jstr (← ppIn refEnv d.type)),
+              ("value", valJson)])
+        out := out.push (Json.mkObj [
+          ("name", jstr nstr),
+          ("binders", jarr bjson.toList),
+          ("hypotheses", Json.num (bs.filter (fun b => b.2.1)).size),
+          ("conclusion", jstr concl),
+          ("conclusion_serialized", jstr conclSer),
+          ("conventions_present", jnames present),
+          ("conventions_via_definitions", jnames viaDefs),
+          -- what the convention list was matched AGAINST, so an empty result
+          -- is auditable rather than merely reassuring: a reviewer can see a
+          -- constant here that reference/fidelity_conventions.json has no rule
+          -- for, which is the file's own stated weakness.
+          ("statement_constants", jnames (used.qsort Name.lt).toList),
+          ("project_definitions", jarr defs.toList)])
+    IO.println (Json.mkObj [("fidelity", Json.arr out)]).compress
+    return 0
   if mode == "sanity" then
     let refEnv ← importModules #[{ module := (← getStr req "reference_module").toName }] {}
       (loadExts := true)

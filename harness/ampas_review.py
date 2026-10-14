@@ -124,12 +124,38 @@ def _usable_binary(p: Path) -> bool:
 
 
 def audit_cmd() -> list[str]:
-    """The compiled auditor if present, otherwise `lean --run` on its source
-    (slower, but needs no C toolchain). See harness/ampas_lean.py."""
-    if _usable_binary(AUDIT_BIN):
+    """The compiled auditor if present AND NOT STALE, otherwise `lean --run`
+    on its source (slower, but needs no C toolchain). See
+    harness/ampas_lean.py, whose copy of this rule must agree."""
+    if _usable_binary(AUDIT_BIN) and not audit_binary_is_stale():
         return [str(AUDIT_BIN)]
     require_lean()
     return [str(lean_exe("lean")), "--run", str(HERE / "Audit.lean")]
+
+
+def audit_binary_is_stale() -> bool:
+    """Is the compiled auditor older than its source?
+
+    This used to go unasked, and the binary simply won. Edit Audit.lean,
+    re-run, and the code that executes is the code from before the edit --
+    with nothing in the output saying so. Found while adding the `fidelity`
+    mode: the new mode fell through to `audit` and failed with
+    "solution_module: String expected", which is the HARMLESS version. The
+    harmful version is a mode that exists in both builds and changed
+    behaviour, where a stale binary returns a plausible wrong answer. (It
+    nearly happened: the first `fidelity` implementation rendered
+    `∀ n, ∃ m, n < m` as `∃ m, m < m`, and a stale binary would have kept
+    emitting that after the fix.)
+
+    Erring toward the source is the safe direction: interpreting is slower and
+    always current, and `audit_fingerprint_path()` hashes whichever one runs,
+    so the provenance record follows this decision rather than contradicting
+    it.
+    """
+    src = HERE / "Audit.lean"
+    if not src.is_file():
+        return False
+    return AUDIT_BIN.stat().st_mtime < src.stat().st_mtime
 
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))
 ATTEST_DIR = ROOT / "reference" / "attestations"
@@ -189,6 +215,45 @@ def review_module(cat: dict) -> str:
 def attest_dir(cat: dict) -> Path:
     sub = cat.get("attestation_dir")
     return (ROOT / sub) if sub else ATTEST_DIR
+
+
+def checklist_evidence_path(cat: dict) -> Path:
+    """Where the per-item checklist evidence lives: beside the attestations it
+    is evidence for, so a catalogue with its own attestation directory gets
+    its own evidence file. harness/checklist_evidence.py writes it and this
+    module reads it; the path is defined here so the writer and the verifier
+    cannot disagree about where it is (and so importing one does not require
+    importing the other)."""
+    ad = attest_dir(cat)
+    return ad.parent / (ad.name.replace("attestations", "checklist-evidence") + ".json")
+
+
+def checklist_evidence_for(cat: dict, cid: str) -> dict | None:
+    p = checklist_evidence_path(cat)
+    if not p.is_file():
+        return None
+    return json.loads(p.read_text(encoding="utf-8"))["claims"].get(cid)
+
+
+def evidence_informed_the_tick(cat: dict, cid: str, rec: dict) -> bool | None:
+    """Could the reviewer have SEEN the per-item evidence when they ticked?
+
+    The evidence is derived, so it can be produced for an attestation signed
+    long before it existed -- and then it reads as backing for a judgement it
+    had no part in. All thirteen signed attestations are in exactly that
+    position: ROADMAP 5.4 was written after them. The answer is recomputable
+    from the two dates sitting beside each other, which is the rule this
+    repository holds for every derived label, so it is reported rather than
+    asserted either way.
+    """
+    p = checklist_evidence_path(cat)
+    if not p.is_file():
+        return None
+    gen = json.loads(p.read_text(encoding="utf-8")).get("generated")
+    signed = (rec.get("signature") or {}).get("signed_at")
+    if not gen or not signed:
+        return None
+    return gen <= signed
 
 
 def guard_spec(cat: dict) -> dict:
@@ -582,13 +647,77 @@ def cmd_verify(args):
         missing = [k for k, v in rv.get("checklist", {}).items() if not v]
         if missing:
             failures.append(f"{cid}: checklist incomplete: {', '.join(missing)}")
+        # 5b. the checklist ticks must point at something (ROADMAP 5.4).
+        #
+        # Six booleans, all true, for every claim: a reviewer who thought hard
+        # and one who ticked six boxes left byte-identical records, so the
+        # checklist could not distinguish them. harness/checklist_evidence.py
+        # derives, per item, the object the tick is a claim about -- the binder
+        # order, the conventions in play, the definitions, the conclusion --
+        # and binds it to the statement's hash.
+        #
+        # This is checked for every claim, signed or not, because the evidence
+        # is DERIVED rather than attested: it is recomputable from the
+        # reference beside it. What cannot be back-dated is whether the
+        # reviewer saw it, so that is reported separately below instead of
+        # being implied by its presence.
+        ev = checklist_evidence_for(cat, cid)
+        if ev is None:
+            failures.append(
+                f"{cid}: no per-item checklist evidence; run "
+                f"`python3 harness/checklist_evidence.py write` (ROADMAP 5.4)")
+        else:
+            if ev["statement_sha256"] != d["statement_sha256"]:
+                failures.append(
+                    f"{cid}: EVIDENCE DRIFT - the per-item checklist evidence was "
+                    f"derived from a different statement than the one in the "
+                    f"reference now")
+            got = set(ev.get("items", {}))
+            if got != set(CHECKLIST):
+                failures.append(
+                    f"{cid}: checklist evidence covers {sorted(got)}, not the "
+                    f"six items of the checklist")
+            bad = ev["items"]["hypotheses_necessary_and_satisfiable"]["guard_coverage"]
+            if not bad.get("consistent"):
+                failures.append(
+                    f"{cid}: the hypotheses tick covers "
+                    f"{bad.get('necessity_guards')} guarded hypotheses but the "
+                    f"statement has {bad.get('hypothesis_binders')}")
         conf = rec.get("confirmation", {})
         if conf.get("confirmed_by") and not conf.get("mode"):
             failures.append(f"{cid}: confirmed_by set without saying how "
                             f"(mode: personally_reviewed | delegated)")
         if conf.get("mode") and not conf.get("basis"):
             failures.append(f"{cid}: confirmation mode without a recorded basis")
+    # Which ticks were made with the per-item evidence available, and which
+    # were made before it existed. Not a failure: the evidence is derived and
+    # the drift check above is what it is FOR. Recorded because a reader who
+    # finds per-item evidence beside a signed checklist will otherwise assume
+    # the reviewer worked from it, and for all thirteen signed attestations
+    # that is false -- ROADMAP 5.4 came after them.
+    predating = []
+    for c in cat["claims"]:
+        p = attest_dir(cat) / f"{c['id']}.json"
+        if not p.exists():
+            continue
+        if evidence_informed_the_tick(
+                cat, c["id"], json.loads(p.read_text(encoding="utf-8"))) is False:
+            predating.append(c["id"])
     report = {"checked": checked, "failures": failures,
+              "checklist_evidence": {
+                  "path": str(checklist_evidence_path(cat).relative_to(ROOT)
+                              ).replace(os.sep, "/"),
+                  "attestations_signed_before_the_evidence_existed": predating,
+                  "means": (
+                      "For these claims the six checklist booleans were ticked "
+                      "without the per-item evidence in front of the reviewer: "
+                      "it is derived from the same statement afterwards, so it "
+                      "shows WHAT the ticks were about and detects the statement "
+                      "moving, but it is not a record that the reviewer examined "
+                      "any of it. A tick made with the evidence available is a "
+                      "different and stronger thing, and no attestation here is "
+                      "one yet."),
+              },
               "verified_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
     if args.out:
         Path(args.out).write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")

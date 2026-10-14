@@ -451,13 +451,89 @@ resource in the whole pipeline.
    into natural language and compare against the original, with the comparison
    done by someone who has not seen the Lean. Weak evidence, but it raises the
    cost of an unnoticed mismatch.
-4. **A fidelity checklist with teeth.** The current six-item checklist is
-   attested wholesale. Per-item evidence — "quantifier order checked" pointing
-   at the specific binders — would make a careless attestation visible.
+4. **A fidelity checklist with teeth.** *Done, 2026-10-14* —
+   `harness/checklist_evidence.py`, the auditor's new `fidelity` mode, and
+   `reference/checklist-evidence*.json`.
+
+   The problem was not that the checklist was wrong. It was that a reviewer
+   who thought hard and a reviewer who ticked six boxes in four seconds left
+   **byte-identical records**: six booleans, all `true`, on all thirteen
+   signed attestations, with nothing saying which quantifier order was
+   checked, which definitions were read, or which conventions were in play.
+   And by then it was the weakest link in the pipeline by elimination —
+   every mechanical layer added in rounds 1–7 detects falsity or
+   malformedness, and `docs/CONLECHE-EVALUATION.md` settled that no kernel
+   closes what is left, because con-leche carries a ZFC model-theoretic
+   consistency proof and still accepts `A06_wrong_statement`.
+
+   Five of the six items now point at the object they are a claim about,
+   derived from the frozen statement and bound to its hash:
+
+   | item | what the tick now points at |
+   | --- | --- |
+   | `statement_matches_text` | **nothing. Marked `machine_derivable: false`** |
+   | `no_unintended_convention` | the convention-bearing constants the statement uses, and those one of this repository's own definitions brings in a level down |
+   | `quantifier_order_checked` | the binder sequence in order, split into data and hypotheses, with a hash over the ORDER |
+   | `hypotheses_necessary_and_satisfiable` | each hypothesis binder, cross-checked against the guards that are supposed to cover it |
+   | `definitions_reviewed` | this repository's own definitions in the closure, each with its own hash |
+   | `conclusion_not_weakened` | the conclusion, pretty and serialized, hashed |
+
+   **The first item is the point of the table.** It is the one that matters
+   most and the only one with nothing behind it, and a layer that quietly
+   supplied *something* there would be worse than none. `tests/
+   test_checklist_evidence.py` fails if a sixth item ever acquires machine
+   evidence.
+
+   What this does NOT establish, and the record says so in
+   `verify`'s output: that any reviewer saw any of it. All thirteen
+   attestations were signed before this existed, so the evidence shows what
+   their ticks were about and detects the statement moving out from under
+   them — it is not a record of examination. A tick made with the evidence
+   in hand would be a stronger thing and no attestation here is one yet.
+
+   Three defects found while building it, each the session's recurring shape —
+   *nothing is caught by its own unit tests*:
+
+   - The first implementation pretty-printed **after** the binder telescope
+     closed, so `∀ n, ∃ m, n < m` came out as `∃ m, m < m` — a different and
+     false statement, offered as the evidence a tick is about. Found by
+     reading the output against the source, not by any test.
+   - It reused the **provenance** trusted-module list to decide which
+     definitions are "the project's own". That list includes
+     `AmpasRef.Defs`, which is exactly where `Ampas.IsEven` lives, so
+     `definitions_reviewed` reported zero definitions for every claim —
+     including the one claim whose fidelity turns on a definition.
+   - The convention list was written against the **surface syntax**
+     (`Nat.le`, `Nat.sub`) and matched almost nothing: `b ≤ a` elaborates to
+     `@LE.le Nat instLENat b a` and never mentions `Nat.le`. Hence
+     `unmatched_statement_constants` in the output — what the list had no
+     rule for — which then showed `Nat.Prime` and `HPow.hPow` sitting
+     unmatched under three claims, **including the Fermat claim, whose entire
+     content is `2 ^ 2 ^ n + 1` and whose reading depends on `^` associating
+     to the right.** Five rules were added because of that channel.
+
+   And one outside this item, found by it: `audit_cmd()` preferred the
+   compiled auditor over its source with no staleness check, so editing
+   `Audit.lean` and re-running executed the code from before the edit. Here
+   it surfaced as a confusing error; the harmful version is a mode present in
+   both builds whose behaviour changed — which this nearly was, since a stale
+   binary would have kept emitting `∃ m, m < m` after the fix. Both drivers
+   now prefer the source when the binary is older, and
+   `audit_fingerprint_path()` follows the same rule so provenance cannot
+   record a hash for code that did not run.
 
 **Done when:** a statement cannot be frozen without a counterexample search
 having run — reached — and the triangulation protocol has been tried on at
 least one claim — not reached.
+
+### 5.4a What is left of this item
+
+Item 3 (back-translation) is untouched. The equational derivation search still
+cannot produce a witness. And the checklist's own residue is now sharply
+stated rather than diffuse: **one item, `statement_matches_text`, carries the
+whole fidelity gap, and nothing mechanical will ever carry it.** The honest
+next step for it is not a cleverer derivation but a second human who has not
+seen the Lean — item 3, or `## 4`'s open review.
 
 ## 6. Scale the corpus, and stop writing it ourselves
 

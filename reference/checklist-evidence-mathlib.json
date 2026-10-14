@@ -1,0 +1,125 @@
+{
+  "schema": "ampas-checklist-evidence/1",
+  "generated": "2026-10-14T13:12:27Z",
+  "catalogue": "reference/claims_mathlib.json",
+  "reference_module": "AmpasRef.ChallengeMathlib",
+  "what_this_is": [
+    "Per-item evidence for the fidelity checklist in the attestations",
+    "beside this file (ROADMAP 5.4). Each of the six checklist items",
+    "points at the object it is a claim about, derived from the frozen",
+    "statement and bound to its hash.",
+    "",
+    "It does not decide fidelity. `statement_matches_text` has no",
+    "machine evidence and says so: a kernel cannot compare a formal",
+    "object to an English sentence, which is what",
+    "docs/CONLECHE-EVALUATION.md measured when a checker carrying a",
+    "ZFC consistency proof accepted A06_wrong_statement.",
+    "",
+    "What it does is make a careless tick distinguishable from a",
+    "careful one, and make the distinction survive into the record."
+  ],
+  "items_with_no_machine_evidence": [
+    "statement_matches_text"
+  ],
+  "conventions_list_last_reviewed": "2026-10-14",
+  "claims": {
+    "PRIMES": {
+      "claim": "PRIMES",
+      "theorem": "Ampas.Claims.infinitude_of_primes",
+      "statement_sha256": "6873ec2b136cc14073171b343655c7347f8f7a8334ab6c2098f591d90d2315fc",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "There are arbitrarily large prime numbers: for every natural number n there is a prime p with n <= p (Euclid's theorem).",
+            "conclusion": "∃ p, n ≤ p ∧ Nat.Prime p",
+            "binders": [
+              {
+                "index": 0,
+                "name": "n",
+                "kind": "data",
+                "type": "ℕ",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "LE.le",
+              "note": "≤ is reflexive, so `b ≤ a` admits b = a; a claim meaning STRICTLY less needs <."
+            },
+            {
+              "const": "instLENat",
+              "note": "The instance behind `≤` on Nat."
+            },
+            {
+              "const": "Nat.Prime",
+              "note": "Mathlib's `Nat.Prime` is irreducibility in ℕ: 0 and 1 are NOT prime and 2 is the smallest. A text defining a prime as 'divisible only by 1 and itself' admits 1 and does not match this."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "And",
+            "Exists",
+            "Nat"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "n",
+              "kind": "data",
+              "type": "ℕ",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            }
+          ],
+          "data_binders": 1,
+          "hypothesis_binders": 0,
+          "order_sha256": "01884e93202a91e5c1302da0d0393c954be1655e17422a0dffebf6c3b4aae503"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "∃ p, n ≤ p ∧ Nat.Prime p",
+          "conclusion_serialized": "(app (app (const Exists [(S 0)]) (const Nat [])) (lam d (const Nat []) (app (app (const And []) (app (app (app (app (const LE.le [0]) (const Nat [])) (const instLENat [])) (bvar 1)) (bvar 0))) (app (const Nat.Prime []) (bvar 0)))))",
+          "conclusion_sha256": "6405f592a4853809790f37fb7a82fff98f9ed64ff9ecbb6dea8478bb62c19f3b"
+        }
+      }
+    }
+  },
+  "totals": {
+    "claims": 1,
+    "items_per_claim": 6,
+    "machine_derivable_items": 5,
+    "guard_coverage_inconsistent": []
+  }
+}

@@ -140,14 +140,15 @@ AUDIT_BIN = Path(os.environ.get("AMPAS_AUDIT_BIN", HERE / "audit"))
 def audit_cmd() -> list[str]:
     """How to invoke the auditor.
 
-    The compiled executable when it exists, otherwise `lean --run` on its
-    source. The interpreted route is roughly 3x slower but needs no C
+    The compiled executable when it exists AND IS NOT STALE, otherwise
+    `lean --run` on its source. A binary older than Audit.lean is skipped:
+    see audit_binary_is_stale(). The interpreted route is roughly 3x slower but needs no C
     toolchain and no linking, so a reviewer who only ran
     `elan`/`lake build AmpasRef` can still verify everything. Linking the
     executable fails outright on some Lean distributions (a conda build
     records placeholder library paths); docs/build-notes.md has the fix.
     """
-    if usable_binary(AUDIT_BIN):
+    if usable_binary(AUDIT_BIN) and not audit_binary_is_stale():
         return [str(AUDIT_BIN)]
     require_lean()
     src = HERE / "Audit.lean"
@@ -156,10 +157,28 @@ def audit_cmd() -> list[str]:
     return [str(lean_exe("lean")), "--run", str(src)]
 
 
+def audit_binary_is_stale() -> bool:
+    """Is the compiled auditor older than its source?
+
+    This used to go unasked, and the binary simply won: edit Audit.lean,
+    re-run, and the code that executes is the code from before the edit, with
+    nothing in the output saying so. harness/ampas_review.py carries the same
+    rule and the reasoning behind it; the two must agree, since a run that
+    interprets while the fingerprint hashes the binary would record provenance
+    for code that did not run.
+    """
+    src = HERE / "Audit.lean"
+    if not src.is_file():
+        return False
+    return AUDIT_BIN.stat().st_mtime < src.stat().st_mtime
+
+
 def audit_fingerprint_path() -> Path:
     """What to hash as "the auditor" in the trusted fingerprint: the compiled
-    binary if it is what runs, otherwise its source."""
-    if usable_binary(AUDIT_BIN):
+    binary if it is what runs, otherwise its source. Must follow the same
+    staleness rule as audit_cmd(), or the fingerprint names code that did not
+    run."""
+    if usable_binary(AUDIT_BIN) and not audit_binary_is_stale():
         return AUDIT_BIN
     return HERE / "Audit.lean"
 

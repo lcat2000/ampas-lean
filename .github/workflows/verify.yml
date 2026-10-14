@@ -64,6 +64,13 @@ jobs:
         # claimed that nobody gave, and a search that cannot reach a
         # counterexample must say so rather than read as evidence.
         run: python3 -m pytest tests/test_history_corpus.py -q
+      - name: fidelity checklist evidence
+        # The six checklist booleans were attested wholesale: a careless tick
+        # and a careful one left byte-identical records. These pin what each
+        # tick points at, that `statement_matches_text` is marked as having no
+        # machine evidence, and that the thirteen signed attestations are not
+        # read as having been made with the evidence in hand. See ROADMAP 5.4.
+        run: python3 -m pytest tests/test_checklist_evidence.py -q
       - name: portability
         # No file read may depend on the machine's locale, and no step of the
         # signing path may need a POSIX shell. Both were found by a reviewer

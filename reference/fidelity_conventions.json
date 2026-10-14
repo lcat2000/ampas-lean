@@ -1,0 +1,162 @@
+{
+  "schema": "ampas-fidelity-conventions/1",
+  "last_reviewed": "2026-10-14",
+  "what_this_is": [
+    "Lean constants whose CONVENTIONS commonly differ from the reading a",
+    "natural-language claim invites. `no_unintended_convention` in the",
+    "fidelity checklist is a claim about these, and until 2026-10-14 it was a",
+    "bare boolean: nothing said which conventions were in play for a given",
+    "statement, so a tick carried no information about what was examined.",
+    "",
+    "harness/Audit.lean's `fidelity` mode reports which of these a frozen",
+    "statement actually uses, so the tick becomes a claim about a named list",
+    "rather than about nothing. Two channels: `conventions_present` for what",
+    "the statement itself mentions, `conventions_via_definitions` for what",
+    "one of THIS REPOSITORY's own definitions brings in a level down -- the",
+    "`Ampas.IsEven` case, where `%` is invisible in the statement.",
+    "",
+    "The names are the ELABORATED ones. Written first against the surface",
+    "syntax (`Nat.le`, `Nat.sub`) the list matched almost nothing: `b ≤ a`",
+    "elaborates to `@LE.le Nat instLENat b a` and never mentions `Nat.le` at",
+    "all. Both forms are listed now, and `statement_constants` in the output",
+    "is what the matching was done against, so a miss of this kind is visible",
+    "in the record instead of reading as a clean result.",
+    "",
+    "Five rules (`^` associativity, `Nat.pow`, `Nat.Prime`, `Nat.Coprime`) were added after `unmatched_statement_constants` showed `Nat.Prime` and `HPow.hPow` sitting unmatched under three claims -- including the Fermat claim, whose whole content is `2 ^ 2 ^ n + 1` and whose reading depends on `^` associating to the RIGHT. That channel is the only reason the gap was visible; an empty `conventions_present` had read as a clean result.",
+    "",
+    "READ THIS BEFORE READING AN EMPTY LIST. This file is a judgement, not a",
+    "derivation: it is the conventions THIS REPOSITORY thought of. A statement",
+    "whose trap is not here is reported as using no convention at all, which",
+    "is the same failure mode reference/kernel_advisories.json is built",
+    "against. `last_reviewed` is what makes an empty result mean anything."
+  ],
+  "conventions": [
+    {
+      "const": "HSub.hSub",
+      "note": "Nat subtraction TRUNCATES at zero: 3 - 5 = 0, so `a - b + b = a` needs b ≤ a."
+    },
+    {
+      "const": "Nat.sub",
+      "note": "The same truncation, written directly rather than through the HSub class."
+    },
+    {
+      "const": "instSubNat",
+      "note": "The instance that makes `-` on Nat the truncating subtraction."
+    },
+    {
+      "const": "HDiv.hDiv",
+      "note": "Nat division truncates toward zero and n / 0 = 0, so a claim about division needs its divisor constrained."
+    },
+    {
+      "const": "Nat.div",
+      "note": "The same, written directly."
+    },
+    {
+      "const": "Nat.instDiv",
+      "note": "The instance that makes `/` on Nat the truncating division."
+    },
+    {
+      "const": "HMod.hMod",
+      "note": "n % 0 = n in Lean, which is not every textbook's convention."
+    },
+    {
+      "const": "Nat.mod",
+      "note": "The same, written directly."
+    },
+    {
+      "const": "Nat.instMod",
+      "note": "The instance behind `%` on Nat."
+    },
+    {
+      "const": "LE.le",
+      "note": "≤ is reflexive, so `b ≤ a` admits b = a; a claim meaning STRICTLY less needs <."
+    },
+    {
+      "const": "instLENat",
+      "note": "The instance behind `≤` on Nat."
+    },
+    {
+      "const": "Nat.le",
+      "note": "The relation itself, written directly."
+    },
+    {
+      "const": "LT.lt",
+      "note": "On Nat, n < m unfolds to n + 1 ≤ m; a bound stated as < is one tighter than the same number stated as ≤."
+    },
+    {
+      "const": "instLTNat",
+      "note": "The instance behind `<` on Nat."
+    },
+    {
+      "const": "Nat.lt",
+      "note": "The relation itself, written directly."
+    },
+    {
+      "const": "Nat.pred",
+      "note": "pred 0 = 0, truncating like subtraction."
+    },
+    {
+      "const": "Dvd.dvd",
+      "note": "Every number divides 0, and 0 divides only 0. A claim about divisors usually excludes 0 and may not say so."
+    },
+    {
+      "const": "Nat.instDvd",
+      "note": "The instance behind `∣` on Nat; note `∣` (U+2223) is not the ASCII bar."
+    },
+    {
+      "const": "Nat.cast",
+      "note": "A coercion into another numeric type can change which operations' conventions apply."
+    },
+    {
+      "const": "Int.ediv",
+      "note": "Lean has three integer divisions (ediv, fdiv, tdiv) that disagree on negative operands."
+    },
+    {
+      "const": "Int.emod",
+      "note": "The matching modulus; its sign convention is one of the three."
+    },
+    {
+      "const": "Int.instDiv",
+      "note": "Which of the three `/` means on Int."
+    },
+    {
+      "const": "HPow.hPow",
+      "note": "`^` is RIGHT-associative: `2 ^ 2 ^ n` is `2 ^ (2 ^ n)`, not `(2 ^ 2) ^ n`. A Fermat number is the former; the two agree only at n = 1."
+    },
+    {
+      "const": "instHPow",
+      "note": "The class instance behind `^`; which `Monoid` it resolves through decides what the base and exponent types are."
+    },
+    {
+      "const": "Nat.pow",
+      "note": "The same exponentiation written directly; note 0 ^ 0 = 1 in Lean."
+    },
+    {
+      "const": "Nat.Prime",
+      "note": "Mathlib's `Nat.Prime` is irreducibility in ℕ: 0 and 1 are NOT prime and 2 is the smallest. A text defining a prime as 'divisible only by 1 and itself' admits 1 and does not match this."
+    },
+    {
+      "const": "Nat.Coprime",
+      "note": "`Nat.Coprime m n` is `gcd m n = 1`, so 1 is coprime to everything and 0 is coprime only to 1."
+    },
+    {
+      "const": "OfNat.ofNat",
+      "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+    },
+    {
+      "const": "instOfNatNat",
+      "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+    }
+  ],
+  "not_covered": [
+    "Anything not listed above. Known gaps this repository has not written",
+    "rules for: real-number conventions (Mathlib's division by zero, sSup of",
+    "an unbounded set), List and Array index conventions (get! vs get? vs",
+    "getD on an out-of-range index), and the empty-structure cases (a product",
+    "over an empty index set, a conjunction over no hypotheses).",
+    "",
+    "A claim using one of those is reported with an empty convention list and",
+    "the tick on `no_unintended_convention` then rests on the reviewer alone,",
+    "exactly as it did before this file existed."
+  ]
+}

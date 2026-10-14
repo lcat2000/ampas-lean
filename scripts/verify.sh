@@ -77,6 +77,13 @@ import json
 rows = json.load(open('build/ablation.json'))
 for r in rows:
     print(f\"     {r['attack']:28}{r['verdict']:9} {', '.join(r['signals'])}\")"
+# ROADMAP 5.4: the checklist's per-item evidence must re-derive from the
+# reference as it is NOW. `verify` below refuses an attestation whose evidence
+# was derived from a different statement, so this must run first -- a stale
+# evidence file would otherwise fail verify with no indication of which one is
+# behind.
+note "per-item fidelity checklist evidence (reproduces reference/checklist-evidence.json)"
+run "$PY" harness/checklist_evidence.py check
 note "sign-off, guards and drift detection"
 run "$PY" harness/ampas_review.py verify --out build/review_verification.json
 note "bounded counterexample search against the frozen statements (reproduces reference/counterexample_search.json)"
@@ -162,6 +169,14 @@ rows = json.load(open('build/ablation.json'))
 for r in rows:
     print(f\"     {r['attack']:28}{r['verdict']:9} {', '.join(r['signals'])}\")"
 
+  note "per-item checklist evidence for the Mathlib claim"
+  AMPAS_CLAIMS="$ROOT/reference/claims_mathlib.json" \
+    run "$PY" harness/checklist_evidence.py check
+  note "sign-off and drift detection for the Mathlib claim"
+  AMPAS_CLAIMS="$ROOT/reference/claims_mathlib.json" \
+    run "$PY" harness/ampas_review.py verify \
+      --out build/review_verification_mathlib.json
+
   note "counterexample search over the Mathlib claim"
   AMPAS_CLAIMS="$ROOT/reference/claims_mathlib.json" \
     run "$PY" harness/counterexample.py --out build/counterexample_search_mathlib.json
@@ -194,6 +209,10 @@ for r in rows:
   # and Euler's refutation of it must not
   note "counterexample search over the validation pair"
   run "$PY" harness/counterexample.py --out build/counterexample_search_fermat.json
+  note "per-item checklist evidence and sign-off for the validation pair"
+  run "$PY" harness/checklist_evidence.py check
+  run "$PY" harness/ampas_review.py verify \
+      --out build/review_verification_fermat.json
 
   # ROADMAP 6, external validation round 2: three more historical episodes,
   # 6 claims and 11 submissions, where the verdict was settled by someone

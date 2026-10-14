@@ -1,0 +1,1617 @@
+{
+  "schema": "ampas-checklist-evidence/1",
+  "generated": "2026-10-14T13:13:02Z",
+  "catalogue": "reference/claims.json",
+  "reference_module": "AmpasRef.Challenge",
+  "what_this_is": [
+    "Per-item evidence for the fidelity checklist in the attestations",
+    "beside this file (ROADMAP 5.4). Each of the six checklist items",
+    "points at the object it is a claim about, derived from the frozen",
+    "statement and bound to its hash.",
+    "",
+    "It does not decide fidelity. `statement_matches_text` has no",
+    "machine evidence and says so: a kernel cannot compare a formal",
+    "object to an English sentence, which is what",
+    "docs/CONLECHE-EVALUATION.md measured when a checker carrying a",
+    "ZFC consistency proof accepted A06_wrong_statement.",
+    "",
+    "What it does is make a careless tick distinguishable from a",
+    "careful one, and make the distinction survive into the record."
+  ],
+  "items_with_no_machine_evidence": [
+    "statement_matches_text"
+  ],
+  "conventions_list_last_reviewed": "2026-10-14",
+  "claims": {
+    "ADD": {
+      "claim": "ADD",
+      "theorem": "Ampas.Claims.add_comm_nat",
+      "statement_sha256": "fab3fea160794443d2071b2ab07e47ed46b1b47c58c425946bbea22e1c09b97b",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "Addition of natural numbers is commutative.",
+            "conclusion": "a + b = b + a",
+            "binders": [
+              {
+                "index": 0,
+                "name": "a",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 1,
+                "name": "b",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Eq",
+            "Nat",
+            "instAddNat",
+            "instHAdd",
+            "HAdd.hAdd"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "a",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 1,
+              "name": "b",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            }
+          ],
+          "data_binders": 2,
+          "hypothesis_binders": 0,
+          "order_sha256": "d5a036fd91dc93889c9f184933bf4e23dffb7f49dd08908ad005d0003524c953"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "a + b = b + a",
+          "conclusion_serialized": "(app (app (app (const Eq [(S 0)]) (const Nat [])) (app (app (app (app (app (app (const HAdd.hAdd [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHAdd [0]) (const Nat [])) (const instAddNat []))) (bvar 1)) (bvar 0))) (app (app (app (app (app (app (const HAdd.hAdd [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHAdd [0]) (const Nat [])) (const instAddNat []))) (bvar 0)) (bvar 1)))",
+          "conclusion_sha256": "48dcc65123e2f8baf7430545e4820678626c6e312b4de4c411e6985f39e362f1"
+        }
+      }
+    },
+    "SUB": {
+      "claim": "SUB",
+      "theorem": "Ampas.Claims.sub_add_cancel_nat",
+      "statement_sha256": "dbb78a7889d30840dd1a9f9b7def20ce65e9819c30a35b229500908fbeec9de7",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "For natural numbers a and b with b <= a, (a - b) + b = a.",
+            "conclusion": "a - b + b = a",
+            "binders": [
+              {
+                "index": 0,
+                "name": "a",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 1,
+                "name": "b",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 2,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "b ≤ a",
+                "type_sha256": "bc1e829e4134c6c6a6b7e9ddf554a9eda940f0b90843f5df7f835417fb423f91"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "HSub.hSub",
+              "note": "Nat subtraction TRUNCATES at zero: 3 - 5 = 0, so `a - b + b = a` needs b ≤ a."
+            },
+            {
+              "const": "instSubNat",
+              "note": "The instance that makes `-` on Nat the truncating subtraction."
+            },
+            {
+              "const": "LE.le",
+              "note": "≤ is reflexive, so `b ≤ a` admits b = a; a claim meaning STRICTLY less needs <."
+            },
+            {
+              "const": "instLENat",
+              "note": "The instance behind `≤` on Nat."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Eq",
+            "Nat",
+            "instAddNat",
+            "instHAdd",
+            "instHSub",
+            "HAdd.hAdd"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "a",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 1,
+              "name": "b",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 2,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "b ≤ a",
+              "type_sha256": "bc1e829e4134c6c6a6b7e9ddf554a9eda940f0b90843f5df7f835417fb423f91"
+            }
+          ],
+          "data_binders": 2,
+          "hypothesis_binders": 1,
+          "order_sha256": "9467d9f197c09a16b0bb9e64a65b548972ac681513e32b0a7a8d69f380107e3a"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 2,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "b ≤ a",
+              "type_sha256": "bc1e829e4134c6c6a6b7e9ddf554a9eda940f0b90843f5df7f835417fb423f91"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 1,
+            "guards_hypotheses": 1,
+            "necessity_guards": 1,
+            "necessity_status": [
+              "OK"
+            ],
+            "non_vacuity_status": "OK",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "a - b + b = a",
+          "conclusion_serialized": "(app (app (app (const Eq [(S 0)]) (const Nat [])) (app (app (app (app (app (app (const HAdd.hAdd [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHAdd [0]) (const Nat [])) (const instAddNat []))) (app (app (app (app (app (app (const HSub.hSub [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHSub [0]) (const Nat [])) (const instSubNat []))) (bvar 2)) (bvar 1))) (bvar 1))) (bvar 2))",
+          "conclusion_sha256": "4daad409c086fa4b39b264042f23b09c64c00e2b7acfc2533efff1a13bc1f944"
+        }
+      }
+    },
+    "EVEN": {
+      "claim": "EVEN",
+      "theorem": "Ampas.Claims.even_add_even",
+      "statement_sha256": "2fbbae7e93510eda9200ccfa57ff1f34b8f8304b78c167f90578e216d73cbca6",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "The sum of two even natural numbers is even.",
+            "conclusion": "Ampas.IsEven (a + b)",
+            "binders": [
+              {
+                "index": 0,
+                "name": "a",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 1,
+                "name": "b",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 2,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "Ampas.IsEven a",
+                "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+              },
+              {
+                "index": 3,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "Ampas.IsEven b",
+                "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [],
+          "via_this_repositorys_definitions": [
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "unmatched_statement_constants": [
+            "Nat",
+            "instAddNat",
+            "instHAdd",
+            "Ampas.IsEven",
+            "HAdd.hAdd"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "a",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 1,
+              "name": "b",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 2,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.IsEven a",
+              "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+            },
+            {
+              "index": 3,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.IsEven b",
+              "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+            }
+          ],
+          "data_binders": 2,
+          "hypothesis_binders": 2,
+          "order_sha256": "2228f6a8c06cb80be3feff948cf0010ffcceeb4bcebd2019052beb012933b99d"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 2,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.IsEven a",
+              "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+            },
+            {
+              "index": 3,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.IsEven b",
+              "type_sha256": "393603d3c60f4f38f5e1127439d10a9da9852a62d3a242e8ff1193093d5c55fa"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 2,
+            "guards_hypotheses": 2,
+            "necessity_guards": 2,
+            "necessity_status": [
+              "OK",
+              "OK"
+            ],
+            "non_vacuity_status": "OK",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [
+            {
+              "name": "Ampas.IsEven",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Nat → Prop",
+              "sha256": "e0705c9d7df0e4e45f499db43ac5db11477888618dc94e07645a99b125a0a28f"
+            }
+          ],
+          "count": 1,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "Ampas.IsEven (a + b)",
+          "conclusion_serialized": "(app (const Ampas.IsEven []) (app (app (app (app (app (app (const HAdd.hAdd [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHAdd [0]) (const Nat [])) (const instAddNat []))) (bvar 3)) (bvar 2)))",
+          "conclusion_sha256": "cd3af2b8cda42d8ce87e0546cbfd6b26b02086f695be40410eccdbafb814d7e4"
+        }
+      }
+    },
+    "DVD": {
+      "claim": "DVD",
+      "theorem": "Ampas.Claims.dvd_trans_nat",
+      "statement_sha256": "9c8ee47e9bd35e7c2e8afef6234bb77668bc361bb090ce4695c96e5d204a3ed5",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "Divisibility of natural numbers is transitive.",
+            "conclusion": "a ∣ c",
+            "binders": [
+              {
+                "index": 0,
+                "name": "a",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 1,
+                "name": "b",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 2,
+                "name": "c",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 3,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "a ∣ b",
+                "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+              },
+              {
+                "index": 4,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "b ∣ c",
+                "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "Dvd.dvd",
+              "note": "Every number divides 0, and 0 divides only 0. A claim about divisors usually excludes 0 and may not say so."
+            },
+            {
+              "const": "Nat.instDvd",
+              "note": "The instance behind `∣` on Nat; note `∣` (U+2223) is not the ASCII bar."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Nat"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "a",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 1,
+              "name": "b",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 2,
+              "name": "c",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 3,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "a ∣ b",
+              "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+            },
+            {
+              "index": 4,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "b ∣ c",
+              "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+            }
+          ],
+          "data_binders": 3,
+          "hypothesis_binders": 2,
+          "order_sha256": "5d3e44cd2d25d94231fdb0c1a2c4f52679a3f7e39487914ade80ef21ce050787"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 3,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "a ∣ b",
+              "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+            },
+            {
+              "index": 4,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "b ∣ c",
+              "type_sha256": "92ea0e3fc72053a63d94f676bdbcd7e7ed7f800a4c5cbbe4a3fedd390fef4e4e"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 2,
+            "guards_hypotheses": 2,
+            "necessity_guards": 2,
+            "necessity_status": [
+              "OK",
+              "OK"
+            ],
+            "non_vacuity_status": "OK",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "a ∣ c",
+          "conclusion_serialized": "(app (app (app (app (const Dvd.dvd [0]) (const Nat [])) (const Nat.instDvd [])) (bvar 4)) (bvar 2))",
+          "conclusion_sha256": "278a3860ad44bde5d60222fef89cc3daa6c2302b9442e809230274bdf9990288"
+        }
+      }
+    },
+    "GREATER": {
+      "claim": "GREATER",
+      "theorem": "Ampas.Claims.exists_greater",
+      "statement_sha256": "14aa148f4523361c890b710b19ea4df51ff58e844f661b2441a8246099433949",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "Every natural number has a strictly greater natural number.",
+            "conclusion": "∃ m, n < m",
+            "binders": [
+              {
+                "index": 0,
+                "name": "n",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "LT.lt",
+              "note": "On Nat, n < m unfolds to n + 1 ≤ m; a bound stated as < is one tighter than the same number stated as ≤."
+            },
+            {
+              "const": "instLTNat",
+              "note": "The instance behind `<` on Nat."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Exists",
+            "Nat"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "n",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            }
+          ],
+          "data_binders": 1,
+          "hypothesis_binders": 0,
+          "order_sha256": "01884e93202a91e5c1302da0d0393c954be1655e17422a0dffebf6c3b4aae503"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "∃ m, n < m",
+          "conclusion_serialized": "(app (app (const Exists [(S 0)]) (const Nat [])) (lam d (const Nat []) (app (app (app (app (const LT.lt [0]) (const Nat [])) (const instLTNat [])) (bvar 1)) (bvar 0))))",
+          "conclusion_sha256": "12ecafb58c3f998019b2732f34fb2b614ebe26c98cd83a927fdb6a11581f4e56"
+        }
+      }
+    },
+    "DIV": {
+      "claim": "DIV",
+      "theorem": "Ampas.Claims.div_self_pos",
+      "statement_sha256": "f4ab0d073fe1e8608f02bae7f542cb7e9fecf1860bdf812dd972218b2307c6b0",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "For every positive natural number n, n / n = 1.",
+            "conclusion": "n / n = 1",
+            "binders": [
+              {
+                "index": 0,
+                "name": "n",
+                "kind": "data",
+                "type": "Nat",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              },
+              {
+                "index": 1,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "0 < n",
+                "type_sha256": "4ecc34da1539489ce7c80c1793cc4f3778c61f04d33a398347a323e4a457d9a1"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "HDiv.hDiv",
+              "note": "Nat division truncates toward zero and n / 0 = 0, so a claim about division needs its divisor constrained."
+            },
+            {
+              "const": "Nat.instDiv",
+              "note": "The instance that makes `/` on Nat the truncating division."
+            },
+            {
+              "const": "LT.lt",
+              "note": "On Nat, n < m unfolds to n + 1 ≤ m; a bound stated as < is one tighter than the same number stated as ≤."
+            },
+            {
+              "const": "instLTNat",
+              "note": "The instance behind `<` on Nat."
+            },
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Eq",
+            "Nat",
+            "instHDiv"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "n",
+              "kind": "data",
+              "type": "Nat",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            },
+            {
+              "index": 1,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "0 < n",
+              "type_sha256": "4ecc34da1539489ce7c80c1793cc4f3778c61f04d33a398347a323e4a457d9a1"
+            }
+          ],
+          "data_binders": 1,
+          "hypothesis_binders": 1,
+          "order_sha256": "042b340e2c945ac489aac43a315b54c9c52eb910ad5f14ea9b37562395c6af6c"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 1,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "0 < n",
+              "type_sha256": "4ecc34da1539489ce7c80c1793cc4f3778c61f04d33a398347a323e4a457d9a1"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 1,
+            "guards_hypotheses": 1,
+            "necessity_guards": 1,
+            "necessity_status": [
+              "OK"
+            ],
+            "non_vacuity_status": "OK",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "n / n = 1",
+          "conclusion_serialized": "(app (app (app (const Eq [(S 0)]) (const Nat [])) (app (app (app (app (app (app (const HDiv.hDiv [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHDiv [0]) (const Nat [])) (const Nat.instDiv []))) (bvar 1)) (bvar 1))) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 1)) (app (const instOfNatNat []) (nat 1))))",
+          "conclusion_sha256": "ca31f23ce2dd4579bf5b75bde550f5c3f061c3a28cf1ca1c597e994db1f590ff"
+        }
+      }
+    },
+    "PL-IND": {
+      "claim": "PL-IND",
+      "theorem": "Ampas.Claims.pl_independent",
+      "statement_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "In classical propositional logic (Hilbert system A1-A3 + modus ponens), the theory {p0 -> p1} neither proves nor refutes p1.",
+            "conclusion": "Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
+            "binders": []
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Nat",
+            "Ampas.PL.Independent",
+            "Ampas.PL.T_imp",
+            "Ampas.PL.Fm.var"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [],
+          "data_binders": 0,
+          "hypothesis_binders": 0,
+          "order_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [
+            {
+              "name": "Ampas.PL.Derives",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.PL.Fm → Prop) → Ampas.PL.Fm → Prop",
+              "sha256": "c257d6e17813a89529b0f73d02e7c5ed1483e6009f22462d99fd7e13dffb11d3"
+            },
+            {
+              "name": "Ampas.PL.Fm",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "Type",
+              "sha256": "6cdb802f9a532b07b4323deaa97cad31a1097d0c9414a10adb7cda1c5d4e107b"
+            },
+            {
+              "name": "Ampas.PL.Independent",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.PL.Fm → Prop) → Ampas.PL.Fm → Prop",
+              "sha256": "708bdd1d8176badb2329c11f0cb214c45f7ee39d0e488063719606f13b6a0e59"
+            },
+            {
+              "name": "Ampas.PL.T_imp",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Prop",
+              "sha256": "46d6045353f6e0c0b7096f7ba82b05a764910d4df921452a9f60e0c535f24dd0"
+            },
+            {
+              "name": "Ampas.PL.Derives.a1",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm}, Ampas.PL.Derives T (φ.imp (ψ.imp φ))",
+              "sha256": "4e338163247e8786a4ec83c333907d3ed4fdc9c39128c7613349ab995ad70e06"
+            },
+            {
+              "name": "Ampas.PL.Derives.a2",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ χ : Ampas.PL.Fm}, Ampas.PL.Derives T ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ)))",
+              "sha256": "766220651d67c16180acfc15c763f33524f756ef4b6b99fd2ab1f0b2c34f0cb9"
+            },
+            {
+              "name": "Ampas.PL.Derives.a3",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm}, Ampas.PL.Derives T ((φ.neg.imp ψ.neg).imp (ψ.imp φ))",
+              "sha256": "64b63fd8df00a6c0384d87426944678ad4183c0db7bf144cc3d3e56b1e374a44"
+            },
+            {
+              "name": "Ampas.PL.Derives.hyp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ : Ampas.PL.Fm}, T φ → Ampas.PL.Derives T φ",
+              "sha256": "2402ebe2bd1c967bd652b355b4be74e7f406df8f900a3fedd3dbbbb3cdb45b25"
+            },
+            {
+              "name": "Ampas.PL.Derives.mp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm},\n  Ampas.PL.Derives T (φ.imp ψ) → Ampas.PL.Derives T φ → Ampas.PL.Derives T ψ",
+              "sha256": "c3d82a8244693c3d28c256c94a75d4dfb7a14d640bcde8dfc0a7e7435f433dc0"
+            },
+            {
+              "name": "Ampas.PL.Derives.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {motive : (a : Ampas.PL.Fm) → Ampas.PL.Derives T a → Prop},\n  (∀ {φ : Ampas.PL.Fm} (a : T φ), motive φ ⋯) →\n    (∀ {φ ψ : Ampas.PL.Fm}, motive (φ.imp (ψ.imp φ)) ⋯) →\n      (∀ {φ ψ χ : Ampas.PL.Fm}, motive ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ))) ⋯) →\n        (∀ {φ ψ : Ampas.PL.Fm}, motive ((φ.neg.imp ψ.neg).imp (ψ.imp φ)) ⋯) →\n          (∀ {φ ψ : Ampas.PL.Fm} (a : Ampas.PL.Derives T (φ.imp ψ)) (a_1 : Ampas.PL.Derives T φ),\n              motive (φ.imp ψ) a → motive φ a_1 → motive ψ ⋯) →\n            ∀ {a : Ampas.PL.Fm} (t : Ampas.PL.Derives T a), motive a t",
+              "sha256": "65f7e14193520c3d62b76e486a9613e4e6af0a94d872816fa72cc35e725768bb"
+            },
+            {
+              "name": "Ampas.PL.Fm.imp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "c4690fadc67cadf51158b20eda39e3e533ff3e37311ec401a109b6c9b11bc51b"
+            },
+            {
+              "name": "Ampas.PL.Fm.neg",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "7d52355f492aad87e81376b09a2511c431107e0938c147e4e8b7e8b2872ef3fc"
+            },
+            {
+              "name": "Ampas.PL.Fm.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.PL.Fm → Sort u} →\n  ((a : Nat) → motive (Ampas.PL.Fm.var a)) →\n    ((a a_1 : Ampas.PL.Fm) → motive a → motive a_1 → motive (a.imp a_1)) →\n      ((a : Ampas.PL.Fm) → motive a → motive a.neg) → (t : Ampas.PL.Fm) → motive t",
+              "sha256": "f90d6c358e30bba023d56b4438e3331f3f61b7f6277637319b55d5906190bac1"
+            },
+            {
+              "name": "Ampas.PL.Fm.var",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Nat → Ampas.PL.Fm",
+              "sha256": "2a69264fa48644c0433f72868117c7144d91423e7462b4616af295df2a289940"
+            }
+          ],
+          "count": 14,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "Ampas.PL.Independent Ampas.PL.T_imp (Ampas.PL.Fm.var 1)",
+          "conclusion_serialized": "(app (app (const Ampas.PL.Independent []) (const Ampas.PL.T_imp [])) (app (const Ampas.PL.Fm.var []) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 1)) (app (const instOfNatNat []) (nat 1)))))",
+          "conclusion_sha256": "1884ba9b452bf18b27d2f40a11cfe2370547f269809ccf1d564eef87f5d78699"
+        }
+      }
+    },
+    "EL-IND": {
+      "claim": "EL-IND",
+      "theorem": "Ampas.Claims.el_comm_independent",
+      "statement_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "The monoid axioms do not derive commutativity in equational logic, and adding commutativity does not trivialize the theory: x = y remains underivable. (Not \"inconsistent\": a pure equational theory always has a one-element model, so inconsistency in the usual sense is unreachable. The degenerate case the second conjunct excludes is trivialization -- every equation becoming derivable, which substitution would give from x = y.)",
+            "conclusion": "Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm",
+            "binders": []
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [],
+          "via_this_repositorys_definitions": [
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "unmatched_statement_constants": [
+            "Ampas.EL.Independent",
+            "Ampas.EL.comm",
+            "Ampas.EL.monoid"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [],
+          "data_binders": 0,
+          "hypothesis_binders": 0,
+          "order_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [
+            {
+              "name": "Ampas.EL.Derives",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.EL.Eqn → Prop) → Ampas.EL.Term → Ampas.EL.Term → Prop",
+              "sha256": "5ead00ed9f6d46bdad1c6cd323632271b2058e22ac0ac1c96490e79274b1d666"
+            },
+            {
+              "name": "Ampas.EL.Eqn",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "Type",
+              "sha256": "6cdb802f9a532b07b4323deaa97cad31a1097d0c9414a10adb7cda1c5d4e107b"
+            },
+            {
+              "name": "Ampas.EL.Independent",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.EL.Eqn → Prop) → Ampas.EL.Eqn → Prop",
+              "sha256": "dd7bb12f85989cd6e8eed871c2b97fc97af59782898a6989866d8fed8444b606"
+            },
+            {
+              "name": "Ampas.EL.Term",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "Type",
+              "sha256": "6cdb802f9a532b07b4323deaa97cad31a1097d0c9414a10adb7cda1c5d4e107b"
+            },
+            {
+              "name": "Ampas.EL.comm",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Eqn",
+              "sha256": "f06978ca6c1492b6d48f0094a791dd7fcd3fb1b0571526fdbb190a3db1d0a772"
+            },
+            {
+              "name": "Ampas.EL.monoid",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Eqn → Prop",
+              "sha256": "e460857b3eacbf54c91eb616e0abcc423bf3a4233fc485395f3cca13a4a1e02a"
+            },
+            {
+              "name": "Ampas.EL.x",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term",
+              "sha256": "6295459e4b376e8e76de6a2fb6e3a5933da16ba81cb4004f3adf107e405ee172"
+            },
+            {
+              "name": "Ampas.EL.y",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term",
+              "sha256": "dfec7a6810d0d1f8fedc79ba921cba35b9c1eabf24b01d87abe3b4d78dd555f1"
+            },
+            {
+              "name": "Ampas.EL.z",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term",
+              "sha256": "d5d42610d6a038e7fd789c4dfd9d48c51c0a174dcc914321000eda4ab0ea1012"
+            },
+            {
+              "name": "Ampas.EL.Derives.ax",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} {e : Ampas.EL.Eqn} (σ : Nat → Ampas.EL.Term),\n  E e → Ampas.EL.Derives E (Ampas.EL.Term.subst σ e.lhs) (Ampas.EL.Term.subst σ e.rhs)",
+              "sha256": "bfeb6d1c3133278213e087d28c9a188069c18e32f09aabef654849771fccf57d"
+            },
+            {
+              "name": "Ampas.EL.Derives.congr",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} {s s' t t' : Ampas.EL.Term},\n  Ampas.EL.Derives E s s' → Ampas.EL.Derives E t t' → Ampas.EL.Derives E (s.mul t) (s'.mul t')",
+              "sha256": "8cee3b68d4311727051712253b161e27888bf2f673eed9d1941b3b36541829ea"
+            },
+            {
+              "name": "Ampas.EL.Derives.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} {motive : (a a_1 : Ampas.EL.Term) → Ampas.EL.Derives E a a_1 → Prop},\n  (∀ {e : Ampas.EL.Eqn} (σ : Nat → Ampas.EL.Term) (a : E e),\n      motive (Ampas.EL.Term.subst σ e.lhs) (Ampas.EL.Term.subst σ e.rhs) ⋯) →\n    (∀ (t : Ampas.EL.Term), motive t t ⋯) →\n      (∀ {s t : Ampas.EL.Term} (a : Ampas.EL.Derives E s t), motive s t a → motive t s ⋯) →\n        (∀ {s t u : Ampas.EL.Term} (a : Ampas.EL.Derives E s t) (a_1 : Ampas.EL.Derives E t u),\n            motive s t a → motive t u a_1 → motive s u ⋯) →\n          (∀ {s s' t t' : Ampas.EL.Term} (a : Ampas.EL.Derives E s s') (a_1 : Ampas.EL.Derives E t t'),\n              motive s s' a → motive t t' a_1 → motive (s.mul t) (s'.mul t') ⋯) →\n            ∀ {a a_1 : Ampas.EL.Term} (t : Ampas.EL.Derives E a a_1), motive a a_1 t",
+              "sha256": "451f164c523227ef39176b1ce4f22fe470d20a0ef32fd5a80e5eba5a8e705127"
+            },
+            {
+              "name": "Ampas.EL.Derives.refl",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} (t : Ampas.EL.Term), Ampas.EL.Derives E t t",
+              "sha256": "b0900cd9b861519c43b5a449457e7d1d1e85c49bf2876015ef03938df3b5a631"
+            },
+            {
+              "name": "Ampas.EL.Derives.symm",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} {s t : Ampas.EL.Term}, Ampas.EL.Derives E s t → Ampas.EL.Derives E t s",
+              "sha256": "fbde327d3d97ff2c4659ddd7f3b2e244a74e6c31c235a362fe8fc4be58ce3548"
+            },
+            {
+              "name": "Ampas.EL.Derives.trans",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {E : Ampas.EL.Eqn → Prop} {s t u : Ampas.EL.Term},\n  Ampas.EL.Derives E s t → Ampas.EL.Derives E t u → Ampas.EL.Derives E s u",
+              "sha256": "709894bf1db288b4087576dbbb647d960769eb6f4cd1de4a565398ee3f80eef1"
+            },
+            {
+              "name": "Ampas.EL.Eqn.lhs",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Eqn → Ampas.EL.Term",
+              "sha256": "d55876b891db6fae0708fc73f11d7f1e5a0077d1d56055e518fcf1b782d1df18"
+            },
+            {
+              "name": "Ampas.EL.Eqn.mk",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term → Ampas.EL.Term → Ampas.EL.Eqn",
+              "sha256": "7c7516e1d9dfc98025fc75de3aca2af580bbe731711684c21536b1f014bcac8e"
+            },
+            {
+              "name": "Ampas.EL.Eqn.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Eqn → Sort u} →\n  ((lhs rhs : Ampas.EL.Term) → motive { lhs := lhs, rhs := rhs }) → (t : Ampas.EL.Eqn) → motive t",
+              "sha256": "db93bb0a3d6da78d45605f6daa96d99a7823bb80588011ab956f1b3b5170d03e"
+            },
+            {
+              "name": "Ampas.EL.Eqn.rhs",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Eqn → Ampas.EL.Term",
+              "sha256": "723801a33fb7a936975ff6d81c02729d0cbd77683bd72c3d746cf9a0b1de4375"
+            },
+            {
+              "name": "Ampas.EL.Term.below",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Term → Sort u} → Ampas.EL.Term → Sort (max 1 u)",
+              "sha256": "7f129e035297263868da5540326f284e3aebd5dd4e9b041fb270d16b819749fd"
+            },
+            {
+              "name": "Ampas.EL.Term.brecOn",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Term → Sort u} →\n  (t : Ampas.EL.Term) → ((t : Ampas.EL.Term) → Ampas.EL.Term.below t → motive t) → motive t",
+              "sha256": "0167cd204156a5183fb22ac108771aad1fa966e88c107221a039ef51bb302d0a"
+            },
+            {
+              "name": "Ampas.EL.Term.casesOn",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Term → Sort u} →\n  (t : Ampas.EL.Term) →\n    ((a : Nat) → motive (Ampas.EL.Term.var a)) →\n      motive Ampas.EL.Term.one → ((a a_1 : Ampas.EL.Term) → motive (a.mul a_1)) → motive t",
+              "sha256": "45d4cd4cfa5d8c63fac56974366032643f061e6524709e1a0f178e82c4c79659"
+            },
+            {
+              "name": "Ampas.EL.Term.mul",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term → Ampas.EL.Term → Ampas.EL.Term",
+              "sha256": "0fe61b25e62cf777070696ae69c60a15e154bc1fd389bd3c0da8053a3654f2b6"
+            },
+            {
+              "name": "Ampas.EL.Term.one",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.EL.Term",
+              "sha256": "879cc39597499bd92849e2468da1ab58977d263803df975e0220c191a9ae2f56"
+            },
+            {
+              "name": "Ampas.EL.Term.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Term → Sort u} →\n  ((a : Nat) → motive (Ampas.EL.Term.var a)) →\n    motive Ampas.EL.Term.one →\n      ((a a_1 : Ampas.EL.Term) → motive a → motive a_1 → motive (a.mul a_1)) → (t : Ampas.EL.Term) → motive t",
+              "sha256": "f19dad50847c7807c4f8e812d1b009798626e34827e85173f353a940cbb09797"
+            },
+            {
+              "name": "Ampas.EL.Term.subst",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(Nat → Ampas.EL.Term) → Ampas.EL.Term → Ampas.EL.Term",
+              "sha256": "7c20255722ba0c4f4fb55500183dcd438b31b99b73928a1f6d405076ff99ab3c"
+            },
+            {
+              "name": "Ampas.EL.Term.var",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Nat → Ampas.EL.Term",
+              "sha256": "1068894a3eedffee5ddf494d73ea743dda8689307c2158667ceb39f2f8465049"
+            },
+            {
+              "name": "Ampas.EL.Term.brecOn.go",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.EL.Term → Sort u} →\n  (t : Ampas.EL.Term) → ((t : Ampas.EL.Term) → Ampas.EL.Term.below t → motive t) → motive t ×' Ampas.EL.Term.below t",
+              "sha256": "939a3b29e1283b8362bb55387c5e2c2bfbf6cdd999b1863dcb4e7fe0febf47ab"
+            },
+            {
+              "name": "Ampas.EL.Term.subst._f",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(Nat → Ampas.EL.Term) → (x : Ampas.EL.Term) → Ampas.EL.Term.below x → Ampas.EL.Term",
+              "sha256": "f54f44a7af7e6a1c29a0ae5f33d6836bf011cbe28f093c374bc7ae4cdabfd031"
+            },
+            {
+              "name": "Ampas.EL.instReprTerm.repr.match_1",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(motive : Ampas.EL.Term → Sort u_1) →\n  (x : Ampas.EL.Term) →\n    ((a : Nat) → motive (Ampas.EL.Term.var a)) →\n      (Unit → motive Ampas.EL.Term.one) → ((a a_1 : Ampas.EL.Term) → motive (a.mul a_1)) → motive x",
+              "sha256": "e827efe45872c1b4c3a3c0ca9b938bc2a659be48421cc3885005bda5df40e50d"
+            }
+          ],
+          "count": 30,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "Ampas.EL.Independent Ampas.EL.monoid Ampas.EL.comm",
+          "conclusion_serialized": "(app (app (const Ampas.EL.Independent []) (const Ampas.EL.monoid [])) (const Ampas.EL.comm []))",
+          "conclusion_sha256": "474ac01d2388d8bda157bcab7dcf5e31b56182f272facbd3cc871b3c261e654a"
+        }
+      }
+    },
+    "PL-AXIOM-IND": {
+      "claim": "PL-AXIOM-IND",
+      "theorem": "Ampas.Claims.pl_a3_independent",
+      "statement_sha256": "1326b4b4ba1a48838d08350af9c4e82cfe10d45010b9a31d08ea1d2573e9e056",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "In the Hilbert system of AmpasRef.Defs, the A3 instance for p0 and p1 ((¬p0 → ¬p1) → (p1 → p0)) is not derivable from axioms A1 and A2 by modus ponens alone. Since a derivable schema would give every instance, this shows A3 is an independent axiom of the calculus.",
+            "conclusion": "False",
+            "binders": [
+              {
+                "index": 0,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "Ampas.PL.DerivesPos Ampas.PL.Empty Ampas.PL.a3_instance",
+                "type_sha256": "36fe2dcfb32f0843fbdfa7d91b4e5ed7a42dfba2b086304edff6a7f6d4fff276"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [],
+          "via_this_repositorys_definitions": [
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "unmatched_statement_constants": [
+            "Not",
+            "Ampas.PL.DerivesPos",
+            "Ampas.PL.Empty",
+            "Ampas.PL.a3_instance"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.PL.DerivesPos Ampas.PL.Empty Ampas.PL.a3_instance",
+              "type_sha256": "36fe2dcfb32f0843fbdfa7d91b4e5ed7a42dfba2b086304edff6a7f6d4fff276"
+            }
+          ],
+          "data_binders": 0,
+          "hypothesis_binders": 1,
+          "order_sha256": "8c96219566e96885654ebe48b45f0cdc4b9f0cd7df073db11c3ffdeab4c31ed1"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 0,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Ampas.PL.DerivesPos Ampas.PL.Empty Ampas.PL.a3_instance",
+              "type_sha256": "36fe2dcfb32f0843fbdfa7d91b4e5ed7a42dfba2b086304edff6a7f6d4fff276"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 1,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "REFUTATION",
+            "reconciliation": "refutation: the single antecedent is the refuted statement, not a hypothesis, so the guards report 0 where the binder telescope reports 1. A nontriviality lemma stands in for the witness and necessity guards.",
+            "nontriviality": "Ampas.Guards.pos_nontrivial",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [
+            {
+              "name": "Ampas.PL.DerivesPos",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.PL.Fm → Prop) → Ampas.PL.Fm → Prop",
+              "sha256": "c257d6e17813a89529b0f73d02e7c5ed1483e6009f22462d99fd7e13dffb11d3"
+            },
+            {
+              "name": "Ampas.PL.Empty",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Prop",
+              "sha256": "3e07cb9fecbdca69c0169b0b9b1f8b3147c9ebe585e19647c4857b173ed1f229"
+            },
+            {
+              "name": "Ampas.PL.Fm",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "Type",
+              "sha256": "6cdb802f9a532b07b4323deaa97cad31a1097d0c9414a10adb7cda1c5d4e107b"
+            },
+            {
+              "name": "Ampas.PL.a3_instance",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm",
+              "sha256": "c461807f54474f5f6a01685bbf7afd506854bbfa771e9d923e553f179e9f728d"
+            },
+            {
+              "name": "Ampas.PL.DerivesPos.a1",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm}, Ampas.PL.DerivesPos T (φ.imp (ψ.imp φ))",
+              "sha256": "dd899070d256468753def609197af75bac8a1fd5a1545e709fd34974fcd308f5"
+            },
+            {
+              "name": "Ampas.PL.DerivesPos.a2",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ χ : Ampas.PL.Fm},\n  Ampas.PL.DerivesPos T ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ)))",
+              "sha256": "bab963a6bf46a4f42aac902e4c4aaa0766419c6f22a10a8e9ca07a51e3b45593"
+            },
+            {
+              "name": "Ampas.PL.DerivesPos.hyp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ : Ampas.PL.Fm}, T φ → Ampas.PL.DerivesPos T φ",
+              "sha256": "9205a90444bc39176dcd233b0637f31d97a1d8986085039e4248b7bdfb4bf68a"
+            },
+            {
+              "name": "Ampas.PL.DerivesPos.mp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm},\n  Ampas.PL.DerivesPos T (φ.imp ψ) → Ampas.PL.DerivesPos T φ → Ampas.PL.DerivesPos T ψ",
+              "sha256": "2fe4572c594ad9af46c73b50ea5fdb6f251881f4d11f317c51a22a1930a9644b"
+            },
+            {
+              "name": "Ampas.PL.DerivesPos.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {motive : (a : Ampas.PL.Fm) → Ampas.PL.DerivesPos T a → Prop},\n  (∀ {φ : Ampas.PL.Fm} (a : T φ), motive φ ⋯) →\n    (∀ {φ ψ : Ampas.PL.Fm}, motive (φ.imp (ψ.imp φ)) ⋯) →\n      (∀ {φ ψ χ : Ampas.PL.Fm}, motive ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ))) ⋯) →\n        (∀ {φ ψ : Ampas.PL.Fm} (a : Ampas.PL.DerivesPos T (φ.imp ψ)) (a_1 : Ampas.PL.DerivesPos T φ),\n            motive (φ.imp ψ) a → motive φ a_1 → motive ψ ⋯) →\n          ∀ {a : Ampas.PL.Fm} (t : Ampas.PL.DerivesPos T a), motive a t",
+              "sha256": "737c1177657fdc684e047c9e02052b8e9efe0fe5c4540ce415bec86025e2faf6"
+            },
+            {
+              "name": "Ampas.PL.Fm.imp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "c4690fadc67cadf51158b20eda39e3e533ff3e37311ec401a109b6c9b11bc51b"
+            },
+            {
+              "name": "Ampas.PL.Fm.neg",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "7d52355f492aad87e81376b09a2511c431107e0938c147e4e8b7e8b2872ef3fc"
+            },
+            {
+              "name": "Ampas.PL.Fm.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.PL.Fm → Sort u} →\n  ((a : Nat) → motive (Ampas.PL.Fm.var a)) →\n    ((a a_1 : Ampas.PL.Fm) → motive a → motive a_1 → motive (a.imp a_1)) →\n      ((a : Ampas.PL.Fm) → motive a → motive a.neg) → (t : Ampas.PL.Fm) → motive t",
+              "sha256": "f90d6c358e30bba023d56b4438e3331f3f61b7f6277637319b55d5906190bac1"
+            },
+            {
+              "name": "Ampas.PL.Fm.var",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Nat → Ampas.PL.Fm",
+              "sha256": "2a69264fa48644c0433f72868117c7144d91423e7462b4616af295df2a289940"
+            }
+          ],
+          "count": 13,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "False",
+          "conclusion_serialized": "(const False [])",
+          "conclusion_sha256": "a3d3db1f7c262b5b3e137e72157244bca5227aeaa8b1a37435b96fa4d15658ee"
+        }
+      }
+    },
+    "PL-BOGUS": {
+      "claim": "PL-BOGUS",
+      "theorem": "Ampas.Claims.pl_bogus_independent",
+      "statement_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "In the Hilbert system of AmpasRef.Defs, the theory {p0 -> p1} neither proves nor refutes p1 -> p1.",
+            "conclusion": "Ampas.PL.Independent Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1))",
+            "binders": []
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Nat",
+            "Ampas.PL.Independent",
+            "Ampas.PL.T_imp",
+            "Ampas.PL.Fm.imp",
+            "Ampas.PL.Fm.var"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [],
+          "data_binders": 0,
+          "hypothesis_binders": 0,
+          "order_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [
+            {
+              "name": "Ampas.PL.Derives",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.PL.Fm → Prop) → Ampas.PL.Fm → Prop",
+              "sha256": "c257d6e17813a89529b0f73d02e7c5ed1483e6009f22462d99fd7e13dffb11d3"
+            },
+            {
+              "name": "Ampas.PL.Fm",
+              "kind": "inductive",
+              "module": "AmpasRef.Defs",
+              "type": "Type",
+              "sha256": "6cdb802f9a532b07b4323deaa97cad31a1097d0c9414a10adb7cda1c5d4e107b"
+            },
+            {
+              "name": "Ampas.PL.Independent",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "(Ampas.PL.Fm → Prop) → Ampas.PL.Fm → Prop",
+              "sha256": "708bdd1d8176badb2329c11f0cb214c45f7ee39d0e488063719606f13b6a0e59"
+            },
+            {
+              "name": "Ampas.PL.T_imp",
+              "kind": "def",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Prop",
+              "sha256": "46d6045353f6e0c0b7096f7ba82b05a764910d4df921452a9f60e0c535f24dd0"
+            },
+            {
+              "name": "Ampas.PL.Derives.a1",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm}, Ampas.PL.Derives T (φ.imp (ψ.imp φ))",
+              "sha256": "4e338163247e8786a4ec83c333907d3ed4fdc9c39128c7613349ab995ad70e06"
+            },
+            {
+              "name": "Ampas.PL.Derives.a2",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ χ : Ampas.PL.Fm}, Ampas.PL.Derives T ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ)))",
+              "sha256": "766220651d67c16180acfc15c763f33524f756ef4b6b99fd2ab1f0b2c34f0cb9"
+            },
+            {
+              "name": "Ampas.PL.Derives.a3",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm}, Ampas.PL.Derives T ((φ.neg.imp ψ.neg).imp (ψ.imp φ))",
+              "sha256": "64b63fd8df00a6c0384d87426944678ad4183c0db7bf144cc3d3e56b1e374a44"
+            },
+            {
+              "name": "Ampas.PL.Derives.hyp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ : Ampas.PL.Fm}, T φ → Ampas.PL.Derives T φ",
+              "sha256": "2402ebe2bd1c967bd652b355b4be74e7f406df8f900a3fedd3dbbbb3cdb45b25"
+            },
+            {
+              "name": "Ampas.PL.Derives.mp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {φ ψ : Ampas.PL.Fm},\n  Ampas.PL.Derives T (φ.imp ψ) → Ampas.PL.Derives T φ → Ampas.PL.Derives T ψ",
+              "sha256": "c3d82a8244693c3d28c256c94a75d4dfb7a14d640bcde8dfc0a7e7435f433dc0"
+            },
+            {
+              "name": "Ampas.PL.Derives.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "∀ {T : Ampas.PL.Fm → Prop} {motive : (a : Ampas.PL.Fm) → Ampas.PL.Derives T a → Prop},\n  (∀ {φ : Ampas.PL.Fm} (a : T φ), motive φ ⋯) →\n    (∀ {φ ψ : Ampas.PL.Fm}, motive (φ.imp (ψ.imp φ)) ⋯) →\n      (∀ {φ ψ χ : Ampas.PL.Fm}, motive ((φ.imp (ψ.imp χ)).imp ((φ.imp ψ).imp (φ.imp χ))) ⋯) →\n        (∀ {φ ψ : Ampas.PL.Fm}, motive ((φ.neg.imp ψ.neg).imp (ψ.imp φ)) ⋯) →\n          (∀ {φ ψ : Ampas.PL.Fm} (a : Ampas.PL.Derives T (φ.imp ψ)) (a_1 : Ampas.PL.Derives T φ),\n              motive (φ.imp ψ) a → motive φ a_1 → motive ψ ⋯) →\n            ∀ {a : Ampas.PL.Fm} (t : Ampas.PL.Derives T a), motive a t",
+              "sha256": "65f7e14193520c3d62b76e486a9613e4e6af0a94d872816fa72cc35e725768bb"
+            },
+            {
+              "name": "Ampas.PL.Fm.imp",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "c4690fadc67cadf51158b20eda39e3e533ff3e37311ec401a109b6c9b11bc51b"
+            },
+            {
+              "name": "Ampas.PL.Fm.neg",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Ampas.PL.Fm → Ampas.PL.Fm",
+              "sha256": "7d52355f492aad87e81376b09a2511c431107e0938c147e4e8b7e8b2872ef3fc"
+            },
+            {
+              "name": "Ampas.PL.Fm.rec",
+              "kind": "recursor",
+              "module": "AmpasRef.Defs",
+              "type": "{motive : Ampas.PL.Fm → Sort u} →\n  ((a : Nat) → motive (Ampas.PL.Fm.var a)) →\n    ((a a_1 : Ampas.PL.Fm) → motive a → motive a_1 → motive (a.imp a_1)) →\n      ((a : Ampas.PL.Fm) → motive a → motive a.neg) → (t : Ampas.PL.Fm) → motive t",
+              "sha256": "f90d6c358e30bba023d56b4438e3331f3f61b7f6277637319b55d5906190bac1"
+            },
+            {
+              "name": "Ampas.PL.Fm.var",
+              "kind": "constructor",
+              "module": "AmpasRef.Defs",
+              "type": "Nat → Ampas.PL.Fm",
+              "sha256": "2a69264fa48644c0433f72868117c7144d91423e7462b4616af295df2a289940"
+            }
+          ],
+          "count": 14,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "Ampas.PL.Independent Ampas.PL.T_imp ((Ampas.PL.Fm.var 1).imp (Ampas.PL.Fm.var 1))",
+          "conclusion_serialized": "(app (app (const Ampas.PL.Independent []) (const Ampas.PL.T_imp [])) (app (app (const Ampas.PL.Fm.imp []) (app (const Ampas.PL.Fm.var []) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 1)) (app (const instOfNatNat []) (nat 1))))) (app (const Ampas.PL.Fm.var []) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 1)) (app (const instOfNatNat []) (nat 1))))))",
+          "conclusion_sha256": "28a0bdd23a521e39aee778856a53b010d197c94587a7c5e8ad8c9cc4b1178795"
+        }
+      }
+    }
+  },
+  "totals": {
+    "claims": 10,
+    "items_per_claim": 6,
+    "machine_derivable_items": 5,
+    "guard_coverage_inconsistent": []
+  }
+}

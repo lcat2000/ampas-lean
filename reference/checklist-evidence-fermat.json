@@ -1,0 +1,252 @@
+{
+  "schema": "ampas-checklist-evidence/1",
+  "generated": "2026-10-14T13:12:46Z",
+  "catalogue": "reference/claims_fermat.json",
+  "reference_module": "AmpasRef.ChallengeFermat",
+  "what_this_is": [
+    "Per-item evidence for the fidelity checklist in the attestations",
+    "beside this file (ROADMAP 5.4). Each of the six checklist items",
+    "points at the object it is a claim about, derived from the frozen",
+    "statement and bound to its hash.",
+    "",
+    "It does not decide fidelity. `statement_matches_text` has no",
+    "machine evidence and says so: a kernel cannot compare a formal",
+    "object to an English sentence, which is what",
+    "docs/CONLECHE-EVALUATION.md measured when a checker carrying a",
+    "ZFC consistency proof accepted A06_wrong_statement.",
+    "",
+    "What it does is make a careless tick distinguishable from a",
+    "careful one, and make the distinction survive into the record."
+  ],
+  "items_with_no_machine_evidence": [
+    "statement_matches_text"
+  ],
+  "conventions_list_last_reviewed": "2026-10-14",
+  "claims": {
+    "FERMAT-CLAIM": {
+      "claim": "FERMAT-CLAIM",
+      "theorem": "Ampas.Claims.fermat_all_prime",
+      "statement_sha256": "5948dd88e7005ce34f454c3c79e55a7d8fc201d320b8222b8924c8c06322e215",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "Every Fermat number 2^(2^n) + 1 is prime (Fermat, c. 1640).",
+            "conclusion": "Nat.Prime (2 ^ 2 ^ n + 1)",
+            "binders": [
+              {
+                "index": 0,
+                "name": "n",
+                "kind": "data",
+                "type": "ℕ",
+                "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "HPow.hPow",
+              "note": "`^` is RIGHT-associative: `2 ^ 2 ^ n` is `2 ^ (2 ^ n)`, not `(2 ^ 2) ^ n`. A Fermat number is the former; the two agree only at n = 1."
+            },
+            {
+              "const": "instHPow",
+              "note": "The class instance behind `^`; which `Monoid` it resolves through decides what the base and exponent types are."
+            },
+            {
+              "const": "Nat.Prime",
+              "note": "Mathlib's `Nat.Prime` is irreducibility in ℕ: 0 and 1 are NOT prime and 2 is the smallest. A text defining a prime as 'divisible only by 1 and itself' admits 1 and does not match this."
+            },
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Nat",
+            "instAddNat",
+            "instHAdd",
+            "HAdd.hAdd",
+            "Monoid.toNPow",
+            "NPow.toPow",
+            "Nat.instMonoid"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": "n",
+              "kind": "data",
+              "type": "ℕ",
+              "type_sha256": "0b09138d55c459980159c572ab37cd67f72a4b274048cac63602a7240a5239d9"
+            }
+          ],
+          "data_binders": 1,
+          "hypothesis_binders": 0,
+          "order_sha256": "01884e93202a91e5c1302da0d0393c954be1655e17422a0dffebf6c3b4aae503"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [],
+          "guard_coverage": {
+            "hypothesis_binders": 0,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "NO_HYPOTHESES",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "Nat.Prime (2 ^ 2 ^ n + 1)",
+          "conclusion_serialized": "(app (const Nat.Prime []) (app (app (app (app (app (app (const HAdd.hAdd [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (const instHAdd [0]) (const Nat [])) (const instAddNat []))) (app (app (app (app (app (app (const HPow.hPow [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (app (const instHPow [0 0]) (const Nat [])) (const Nat [])) (app (app (const NPow.toPow [0]) (const Nat [])) (app (app (const Monoid.toNPow [0]) (const Nat [])) (const Nat.instMonoid []))))) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 2)) (app (const instOfNatNat []) (nat 2)))) (app (app (app (app (app (app (const HPow.hPow [0 0 0]) (const Nat [])) (const Nat [])) (const Nat [])) (app (app (app (const instHPow [0 0]) (const Nat [])) (const Nat [])) (app (app (const NPow.toPow [0]) (const Nat [])) (app (app (const Monoid.toNPow [0]) (const Nat [])) (const Nat.instMonoid []))))) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 2)) (app (const instOfNatNat []) (nat 2)))) (bvar 0)))) (app (app (app (const OfNat.ofNat [0]) (const Nat [])) (nat 1)) (app (const instOfNatNat []) (nat 1)))))",
+          "conclusion_sha256": "c619f8804c2f85b1495a499aa97452020d8bb42538695d7c9a56b244b82e22f4"
+        }
+      }
+    },
+    "FERMAT-F5": {
+      "claim": "FERMAT-F5",
+      "theorem": "Ampas.Claims.fermat_f5_not_prime",
+      "statement_sha256": "85554187c6362837dc0aefd0c269fef5d2faadb1eeb889489857571a7bbbe458",
+      "items": {
+        "statement_matches_text": {
+          "machine_derivable": false,
+          "why_not": "Whether the Lean statement says what the natural-language text says is a comparison between a formal object and a sentence in English. No property of the formal object settles it: con-leche accepts A06_wrong_statement, and con-leche is a checker with a model-theoretic consistency proof. The material below is what the reviewer must read side by side; the verdict is theirs and is recorded nowhere else.",
+          "material_to_read": {
+            "claim_text": "TRUE (Euler, 1732): the Fermat number with index 5, F_5 = 2^(2^5) + 1, is not prime. (It equals 4294967297 = 641 * 6700417; the factorization is the evidence, and the statement asserts only compositeness. \"Index 5\" rather than \"the fifth\": counting from F_0 it is the sixth term of the sequence. Wording corrected on the reviewer's finding, 2026-10-13.)",
+            "conclusion": "False",
+            "binders": [
+              {
+                "index": 0,
+                "name": null,
+                "kind": "hypothesis",
+                "type": "Nat.Prime (2 ^ 2 ^ 5 + 1)",
+                "type_sha256": "6cb2391f4416f756db8718b6728afa38330638d3ee59b38f90ddb373f676459a"
+              }
+            ]
+          }
+        },
+        "no_unintended_convention": {
+          "machine_derivable": true,
+          "in_the_statement": [
+            {
+              "const": "HPow.hPow",
+              "note": "`^` is RIGHT-associative: `2 ^ 2 ^ n` is `2 ^ (2 ^ n)`, not `(2 ^ 2) ^ n`. A Fermat number is the former; the two agree only at n = 1."
+            },
+            {
+              "const": "instHPow",
+              "note": "The class instance behind `^`; which `Monoid` it resolves through decides what the base and exponent types are."
+            },
+            {
+              "const": "Nat.Prime",
+              "note": "Mathlib's `Nat.Prime` is irreducibility in ℕ: 0 and 1 are NOT prime and 2 is the smallest. A text defining a prime as 'divisible only by 1 and itself' admits 1 and does not match this."
+            },
+            {
+              "const": "OfNat.ofNat",
+              "note": "A numeral's type is inferred, so `2` in a statement may not be the Nat the text means."
+            },
+            {
+              "const": "instOfNatNat",
+              "note": "The instance that makes a bare numeral a Nat; its absence where a numeral appears means the numeral is something else."
+            }
+          ],
+          "via_this_repositorys_definitions": [],
+          "unmatched_statement_constants": [
+            "Nat",
+            "Not",
+            "instAddNat",
+            "instHAdd",
+            "HAdd.hAdd",
+            "Monoid.toNPow",
+            "NPow.toPow",
+            "Nat.instMonoid"
+          ],
+          "conventions_list": {
+            "path": "reference/fidelity_conventions.json",
+            "last_reviewed": "2026-10-14",
+            "rules": 29
+          },
+          "limit": "An empty `in_the_statement` means no constant on that list appears, NOT that the statement has no convention trap. `unmatched_statement_constants` is what the list has no rule for; the list's own not_covered section names the known gaps."
+        },
+        "quantifier_order_checked": {
+          "machine_derivable": true,
+          "binder_sequence": [
+            {
+              "index": 0,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Nat.Prime (2 ^ 2 ^ 5 + 1)",
+              "type_sha256": "6cb2391f4416f756db8718b6728afa38330638d3ee59b38f90ddb373f676459a"
+            }
+          ],
+          "data_binders": 0,
+          "hypothesis_binders": 1,
+          "order_sha256": "209dc1d9685429065993880e4650a3d39653e845313ad0950ab4cfba1f3872b6"
+        },
+        "hypotheses_necessary_and_satisfiable": {
+          "machine_derivable": true,
+          "hypotheses": [
+            {
+              "index": 0,
+              "name": null,
+              "kind": "hypothesis",
+              "type": "Nat.Prime (2 ^ 2 ^ 5 + 1)",
+              "type_sha256": "6cb2391f4416f756db8718b6728afa38330638d3ee59b38f90ddb373f676459a"
+            }
+          ],
+          "guard_coverage": {
+            "hypothesis_binders": 1,
+            "guards_hypotheses": 0,
+            "necessity_guards": 0,
+            "necessity_status": [],
+            "non_vacuity_status": "REFUTATION",
+            "reconciliation": "refutation: the single antecedent is the refuted statement, not a hypothesis, so the guards report 0 where the binder telescope reports 1. A nontriviality lemma stands in for the witness and necessity guards.",
+            "nontriviality": "Ampas.Guards.fermat_nontrivial",
+            "consistent": true
+          }
+        },
+        "definitions_reviewed": {
+          "machine_derivable": true,
+          "project_definitions": [],
+          "count": 0,
+          "limit": "Lean's own definitions are excluded: a reviewer is not expected to have read Init. A statement with none of its own definitions rests entirely on Lean's, which is informative rather than missing -- and note that `AmpasRef.Defs` is NOT excluded even though the provenance layer trusts it, because a wrong `Ampas.IsEven` is the canonical fidelity failure and it lives there."
+        },
+        "conclusion_not_weakened": {
+          "machine_derivable": true,
+          "conclusion": "False",
+          "conclusion_serialized": "(const False [])",
+          "conclusion_sha256": "a3d3db1f7c262b5b3e137e72157244bca5227aeaa8b1a37435b96fa4d15658ee"
+        }
+      }
+    }
+  },
+  "totals": {
+    "claims": 2,
+    "items_per_claim": 6,
+    "machine_derivable_items": 5,
+    "guard_coverage_inconsistent": []
+  }
+}
