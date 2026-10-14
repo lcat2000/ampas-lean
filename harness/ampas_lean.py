@@ -720,7 +720,18 @@ def main(argv: list[str]) -> int:
             r_json["expected"] = item.get("expected")
             r_json["note"] = item.get("note", "")
             results.append(r_json)
-    out = {"results": results}
+    # ROADMAP 1.1: a verdict that does not name the kernel which issued it
+    # cannot be found again after a soundness disclosure. The provenance block
+    # goes in the VERDICT record rather than the signed formalization
+    # attestation, so adding it needs no re-signing: the attestation is about
+    # whether a statement says what a claim says, which no kernel version
+    # affects.
+    try:
+        from provenance import snapshot
+        prov = snapshot()
+    except Exception as e:                      # never fail a run over metadata
+        prov = {"error": f"{type(e).__name__}: {e}"}
+    out = {"provenance": prov, "results": results}
     if args.out:
         Path(args.out).write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
     print(json.dumps(out, indent=2, ensure_ascii=False))

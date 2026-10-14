@@ -85,9 +85,11 @@ note "bounded derivation search: PL-BOGUS must be refuted, and the kernel must a
 run "$PY" harness/derivation_search.py --out build/derivation_search.json
 note "triangulation: each equivalence must relate the two statements on record (ASSUMPTIONS A1d for what that is worth)"
 run "$PY" harness/triangulate.py --out build/triangulation.json
+note "which stored verdicts would not reproduce today (metadata only; nothing is re-executed)"
+run "$PY" harness/reverify.py --out build/reverification.json
 run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
-      tests/test_triangulation.py tests/test_record_consistency.py \
+      tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_portability.py -q
 RAN="$RAN 1"
 

@@ -49,7 +49,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
 | Derivation search | the 4 out of reach | PL-BOGUS refuted — kernel-accepted, no axioms; 3 NO_DERIVATION over a stated universe |
 | Triangulation | 3 claim pairs | 3 EQUIVALENT, checked against the named statements — and the method's limit proved as a theorem (A1d) |
-| Tests | 207 | all pass from a clean checkout (218 collected; the Mathlib fixtures skip below tier 3) |
+| Tests | 230 | all pass from a clean checkout (241 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because
@@ -151,6 +151,16 @@ evidence for each.
   decision procedure; those records say NOT_SEARCHABLE with the reason rather
   than passing quietly. ASSUMPTIONS A1b has the full list of ways to misread
   a clean result.
+- **A certificate now names the kernel that issued it — but only from
+  2026-10-14.** Every verdict record carries the Lean version and binary
+  hash, both kernels' identities, the pins, and an advisory status, so a
+  certificate can be found again after a soundness disclosure
+  (`harness/reverify.py` answers "which stored verdicts would not reproduce
+  today"). Two things to read carefully: a clean advisory result means "no
+  advisory in one hand-maintained list, as of its review date, names this
+  kernel" and **not** that the kernel is sound; and every record issued before
+  that date reports NO_PROVENANCE — thirty certified claims whose kernel
+  cannot be identified. ASSUMPTIONS A2b.
 - **Multiple kernels agreeing is weaker evidence than it looks.** In 2026
   several Lean kernel soundness bugs surfaced; for one of them, cross-checking
   with an independent kernel *also accepted* the illicit proof because of that

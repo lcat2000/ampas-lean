@@ -36,6 +36,10 @@ jobs:
         # Facts recorded in two places must agree. The A01 mislabel survived
         # nine rounds because two records of one event were never compared.
         run: python3 -m pytest tests/test_record_consistency.py -q
+      - name: kernel provenance and advisory wording
+        # A clean advisory result must read as a statement about one list on
+        # one date, never as "no known bugs". See ROADMAP 1.
+        run: python3 -m pytest tests/test_provenance.py -q
       - name: portability
         # No file read may depend on the machine's locale, and no step of the
         # signing path may need a POSIX shell. Both were found by a reviewer

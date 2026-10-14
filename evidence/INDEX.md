@@ -92,3 +92,21 @@ still be needed: if the field ever stops carrying the wrong value, the test
 fails and asks for the correction to be removed. A correction cannot be used
 to excuse an arbitrary value either — it must name the value the file
 actually contains.
+
+## reverification.json — which stored verdicts would not reproduce today
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    python3 harness/reverify.py --out build/reverification.json
+    python3 harness/reverify.py --rerun      # actually re-execute the corpus
+
+Compares each stored record's `provenance` block against the live toolchain
+and the current `reference/kernel_advisories.json`. States: AFFECTED,
+KERNEL_CHANGED, NO_PROVENANCE, SAME_KERNEL.
+
+**Read `re_execution` before reading the states.** Without `--rerun` nothing
+is re-executed, so SAME_KERNEL means a record would be *expected* to
+reproduce, not that it did.
+
+Today every stored record in `evidence/` is NO_PROVENANCE: they were issued
+before provenance was recorded, so their kernels cannot be identified from
+the record. That is thirty certified claims, and the gap closes forwards only.

@@ -19,13 +19,40 @@ Independence of implementations is not independence of failure.
 
 **What to do, in increasing order of strength:**
 
-1. **Record kernel provenance per verdict.** Each certificate should name the
-   kernel binaries, their revisions and their *known-bug status as of the run*,
-   so a certificate issued before a disclosure can be found and re-checked
-   afterwards. Cheap, and the thing most obviously missing today.
-2. **Re-verification on disclosure.** A command that re-runs every stored
-   attestation against current kernels and reports which certificates no longer
-   reproduce. Medium effort; needs the attestations to carry enough to replay.
+1. **Record kernel provenance per verdict.** *Done, 2026-10-14* --
+   `harness/provenance.py`, attached to every verdict record the driver
+   emits. It names the Lean version and binary hash, the primary kernel's
+   hash, the lean4lean pin and its toolchain discrepancy, the Mathlib pin, the
+   toolchain pin, whether the auditor was compiled or interpreted, and the
+   advisory status. It goes in the VERDICT record rather than the signed
+   formalization attestation, so it needs no re-signing: the attestation is
+   about whether a statement says what a claim says, which no kernel version
+   affects.
+
+   `reference/kernel_advisories.json` is the advisory list. The failure mode
+   it is built against is the opposite of the usual one: an empty or stale
+   list would make every certificate say "no known bugs". So a record says
+   "no advisory in THIS list, as of `last_reviewed`, names this kernel", the
+   list's own caveats are in the file, the consulted list's hash travels with
+   each record, and an entry whose affected range this repository has not
+   established leaves it EMPTY and says why -- inventing a version range
+   would turn a guess into a confident machine verdict. The one entry is the
+   Tao report, with `affected: {}` for exactly that reason.
+2. **Re-verification on disclosure.** *Done, 2026-10-14* --
+   `harness/reverify.py`, run at tier 1. It classifies each stored record
+   AFFECTED / KERNEL_CHANGED / NO_PROVENANCE / SAME_KERNEL, and it separates
+   a metadata comparison from an execution: a SAME_KERNEL record is one that
+   would be EXPECTED to reproduce, and `--rerun` is what establishes that it
+   does. Both branches were made to fire before being believed -- injecting
+   an advisory naming Lean 4.33.0 flipped an already-issued certificate to
+   AFFECTED.
+
+   **What it reports today, and this is the finding:** every stored record is
+   NO_PROVENANCE. Thirty certified claims across seven records, whose kernel
+   cannot be identified from the record, because they were all issued before
+   provenance was recorded. That gap closes going forward and cannot close
+   backwards -- the records that would need re-checking after a disclosure
+   are precisely the ones that cannot be matched to a kernel.
 3. **Add a checker that is different in kind, not just in authorship.** Both
    current kernels implement the same algorithm from the same specification. A
    *verified* kernel — one whose soundness is itself proved relative to a set
@@ -36,8 +63,11 @@ Independence of implementations is not independence of failure.
    axiom closures. This catches a library-level problem that any number of
    kernels would miss.
 
-**Done when:** a certificate names its kernels and their bug status, and
-`verify.sh` can answer "which stored certificates would not reproduce today".
+**Done when:** a certificate names its kernels and their bug status --
+reached for records issued from 2026-10-14 -- and `verify.sh` can answer
+"which stored certificates would not reproduce today" -- reached, and its
+answer for every pre-existing record is "its kernel cannot be identified".
+Items 3 and 4 remain.
 
 ## 2. Close the third check's inductive gap — but only in the safe direction
 

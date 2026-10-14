@@ -1,0 +1,55 @@
+{
+  "schema": "ampas-kernel-advisories/1",
+  "last_reviewed": "2026-10-14",
+  "reviewed_by": "the assistant that wrote the harness",
+  "what_this_is": [
+    "Known soundness advisories against the kernels this repository uses, so a",
+    "stored verdict can be matched against what was known about its kernel on the",
+    "day it was issued, and found again after a later disclosure.",
+    "",
+    "READ THIS BEFORE READING A CLEAN RESULT. An empty or stale list makes every",
+    "certificate say 'no known bugs', which is the most dangerous sentence this",
+    "repository could produce. So:",
+    "",
+    "  * A record citing this list says 'no advisory in THIS LIST, as of",
+    "    last_reviewed, names this kernel'. It does not say the kernel is sound,",
+    "    and harness/provenance.py words it that way deliberately.",
+    "  * This list is maintained by hand, by one party, with no notification",
+    "    channel. It is NOT a substitute for upstream advisories",
+    "    (github.com/leanprover/lean4 issues and releases) and will lag them.",
+    "  * `last_reviewed` is the only thing that makes a clean result meaningful.",
+    "    If it is old, the result is old, whatever the verdict says.",
+    "  * An entry with `affected: {}` matches nothing. That is deliberate where",
+    "    this repository has not established which revisions are affected --",
+    "    inventing a version range would make the matcher produce confident",
+    "    answers from a guess, which is worse than matching nothing and saying so."
+  ],
+  "advisories": [
+    {
+      "id": "EXT-2026-10-09-TAO",
+      "kind": "secondary report, not an upstream advisory",
+      "date": "2026-10-09",
+      "source": "https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/",
+      "summary": "Reports that several Lean kernel soundness bugs surfaced during 2026, and that for one of them cross-checking with an independently written kernel ALSO accepted the illicit proof, because that kernel had an unrelated bug of its own.",
+      "why_it_is_here": "It is the external evidence that weakens this repository's strongest claim -- that two independent kernels agreeing is strong evidence. Independence of implementations is not independence of failure. ASSUMPTIONS A2 states the consequence.",
+      "affected": {},
+      "affected_not_established": [
+        "This repository has NOT established which Lean revisions or which",
+        "lean4lean revisions the reported bugs affect. The source is a secondary",
+        "account that does not enumerate them, and nobody here has traced them to",
+        "upstream issues.",
+        "",
+        "So `affected` is empty and this advisory matches no kernel. It is recorded",
+        "because the report exists and bears directly on what this repository",
+        "claims -- not because a match could be computed. Filling in a plausible",
+        "version range would turn a guess into a confident machine verdict."
+      ],
+      "what_would_close_this": [
+        "Tracing the reported bugs to upstream issues or CVEs, recording their",
+        "affected revision ranges, and then re-running harness/reverify.py: any",
+        "stored verdict whose kernel falls in a range would be reported AFFECTED",
+        "and would need re-checking against a fixed toolchain."
+      ]
+    }
+  ]
+}

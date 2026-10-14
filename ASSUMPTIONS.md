@@ -260,6 +260,46 @@ previously described its trusted base as "smaller but not gone"; that external
 case shows the independence property itself can fail, which is a stronger
 caveat than the one originally written.
 
+### A2b. Kernel provenance, and what a clean advisory result is worth
+
+Since 2026-10-14 every verdict record names the kernels that issued it: the
+Lean version and binary hash, the primary kernel's hash, the lean4lean pin,
+the Mathlib pin, the toolchain pin, and whether the auditor was compiled or
+interpreted (`harness/provenance.py`). `harness/reverify.py` compares a
+stored record against the live toolchain and the current advisory list.
+
+**What this buys.** After a soundness disclosure, a certificate can be matched
+back to the binaries that issued it. That is the only thing that makes the
+question "which of our certificates does this affect?" answerable at all, and
+A2's whole point is that the question will be asked again.
+
+**What a clean advisory result does NOT mean.** `reference/kernel_advisories.json`
+is maintained by hand, by one party, with no notification channel. A record
+citing it says "no advisory in this list, as of `last_reviewed`, names this
+kernel". It does not say the kernel is sound, and the wording in the record is
+deliberately that shape -- a mechanism that produced "no known bugs" from a
+list nobody updated would be worse than having no list. The list's hash
+travels with each record, so a later edit cannot silently change what an old
+record claimed.
+
+The list's single entry is the Tao report, and its `affected` range is
+**empty**: this repository has not established which revisions the reported
+bugs touch, so the advisory matches no kernel and says why. A plausible
+version range would have made the matcher produce confident verdicts from a
+guess.
+
+**The gap this cannot close.** Every record issued before 2026-10-14 is
+reported NO_PROVENANCE -- thirty certified claims across seven records whose
+kernel cannot be identified from the record. Provenance works forwards only,
+and the records that would most need re-checking after a disclosure are
+exactly the ones that predate it.
+
+**A metadata match is not a reproduction.** `reverify.py` compares recorded
+provenance against the live toolchain; it re-executes nothing unless `--rerun`
+is passed. A SAME_KERNEL row means a record would be *expected* to reproduce.
+Reporting that as having reproduced would be a claim about an execution that
+never happened.
+
 ## A3. The third check corroborates the term layer only
 
 `harness/kernel3` is a from-scratch type checker in Python that shares no code
