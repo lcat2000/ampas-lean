@@ -239,12 +239,38 @@ finding above it would buy less than ROADMAP 5.2 expected.
 
 ## A2. Kernel soundness — and cross-checking is weaker evidence than it looks
 
-**Assumed:** that Lean's kernel is sound, or that two independent kernels do
-not share a soundness failure.
+**Assumed:** that Lean's kernel is sound, or that the two kernels this
+repository runs do not share a soundness failure.
 
 Certification requires both `leanchecker` (Lean's own kernel) and
-[lean4lean](https://github.com/digama0/lean4lean) (an independently written
-kernel that also checks inductives) to accept the submission.
+[lean4lean](https://github.com/digama0/lean4lean) to accept the submission.
+
+### The second kernel is not an independent implementation, and this repository said it was
+
+Until 2026-10-14 this section and the README described lean4lean as "an
+independently written kernel". **That was wrong, and upstream says so in its
+own README:**
+
+> It is derived directly from the C++ kernel implementation, and as such likely
+> shares some implementation bugs with it (it's not really an independent
+> implementation), although it also benefits from the same algorithmic
+> performance improvements existing in the C++ Lean kernel.
+>
+> — [digama0/lean4lean](https://github.com/digama0/lean4lean), README
+
+The [Lean Kernel Arena](https://arena.lean-lang.org/checker/lean4lean/) repeats
+the same characterisation. So the cross-check this repository runs is not two
+independent implementations agreeing; it is **two implementations of one
+algorithm, one derived from the other's C++ original, agreeing**. That is still
+worth running — lean4lean has found real kernel bugs, and the arena records it
+rejecting all 19 of its bug-regression tests — but what it buys is agreement
+between relatives, not independent confirmation.
+
+Where this claim was made and what replaced it is in ROADMAP 1.3. The field
+names in the records (`kernel_replay_independent`,
+`provenance.independent_kernel`) were kept so that stored verdicts stay
+readable, with the correction carried inside them; `evidence/environment.json`
+is annotated rather than rewritten, in `record_corrections`.
 
 **What remains assumed, with evidence against the strong reading:** in 2026
 several Lean kernel soundness bugs surfaced. One produced an illicit disproof
@@ -254,11 +280,12 @@ kernel (an outdated Nanoda) **also accepted** the illicit proof, because of
 that kernel's own unrelated bug
 ([Tao, 2026-10-09](https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/)).
 
-So: *independence of implementations is not independence of failure.* Two
-kernels agreeing is better than one, and it is not conclusive. This repository
-previously described its trusted base as "smaller but not gone"; that external
-case shows the independence property itself can fail, which is a stronger
-caveat than the one originally written.
+So: *independence of implementations is not independence of failure* — and for
+this pair the independence premise did not hold in the first place. Two kernels
+agreeing is better than one, and it is not conclusive. This repository
+previously described its trusted base as "smaller but not gone"; the external
+case shows the independence property itself can fail, and the correction above
+shows this pair never had it.
 
 ### A2b. Kernel provenance, and what a clean advisory result is worth
 

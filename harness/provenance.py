@@ -117,10 +117,35 @@ def snapshot(extra: dict | None = None) -> dict:
     except SystemExit:
         out["primary_kernel"] = {"error": "no leanchecker binary found"}
 
-    # the independent kernel is optional: tier 2 and up
+    # The second kernel is optional: tier 2 and up. The key is named
+    # `independent_kernel` because stored verdicts use that name and renaming
+    # it would make them unreadable -- but the name is WRONG, and the
+    # correction travels inside the block rather than in a document a reader
+    # of the record might not open.
     l4l = os.environ.get("AMPAS_LEAN4LEAN", "")
     pin = ROOT / "reference" / "lean4lean_pin.json"
-    ind: dict = {"present": bool(l4l)}
+    ind: dict = {
+        "present": bool(l4l),
+        "is_an_independent_implementation": False,
+        "independence_correction": [
+            "This key's NAME is inaccurate and is kept only so that verdicts",
+            "issued before 2026-10-14 stay readable. lean4lean is not an",
+            "independent implementation of the Lean kernel. Upstream's own",
+            "README says:",
+            "",
+            "  \"It is derived directly from the C++ kernel implementation, and",
+            "   as such likely shares some implementation bugs with it (it's",
+            "   not really an independent implementation)\"",
+            "",
+            "  -- https://github.com/digama0/lean4lean",
+            "",
+            "So a record showing both kernels accepting a submission records",
+            "AGREEMENT BETWEEN RELATIVES, not independent confirmation. That is",
+            "still worth having -- lean4lean has found real kernel bugs -- but",
+            "it is weaker than this repository claimed until 2026-10-14. See",
+            "ASSUMPTIONS A2 and ROADMAP 1.3.",
+        ],
+    }
     if l4l:
         ind["sha256"] = _sha256(Path(l4l))
     if pin.exists():

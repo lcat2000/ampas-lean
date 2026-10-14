@@ -17,7 +17,7 @@
 | --- | --- |
 | **沙箱編譯** | 以非特權帳號執行，受信任的 olean 掛成唯讀，限制 CPU、記憶體與輸出檔大小，編譯前後都對受信任檔案做雜湊比對 |
 | **核心重放**（`leanchecker`） | 用 Lean 自己的核心，從 olean 把每一個宣告重新檢查一遍 |
-| **第二套核心**（[lean4lean](https://github.com/digama0/lean4lean)） | 另一位作者獨立寫的核心，重檢同一批 olean。**兩套都通過**才可能認證 |
+| **第二套核心**（[lean4lean](https://github.com/digama0/lean4lean)） | 第二套核心重檢同一批 olean，**兩套都通過**才可能認證。上游自己的說法是「直接從 C++ kernel 實作衍生而來……並不真的是獨立實作」，所以這買到的是**近親之間的一致**，不是獨立確認——見 ASSUMPTIONS A2 |
 | **第三道檢查**（[`harness/kernel3`](docs/review-third-check.md)） | 用 Python 從零寫的型別檢查器，和 Lean 不共用任何程式碼。只對**項層**提供旁證 |
 | **公理稽核** | 把遞移用到的公理拿去對每條主張各自的政策；另外標記 `sorryAx`、原生求值、陳述裡出現的 `opaque`、`unsafe`、`partial` |
 | **依賴閉包檢查** | 陳述依賴到的每一個常數，**連定義本體一起**，跟參考環境逐一比對 |
@@ -90,7 +90,7 @@ pip install -r requirements.txt
 ./scripts/bootstrap.sh
 ./scripts/verify.sh 1
 
-# 第 2 層 — 加上第二套獨立核心
+# 第 2 層 — 加上第二套核心
 ./scripts/build-lean4lean.sh && ./scripts/verify.sh 2
 
 # 第 3 層 — 加上 Mathlib 的主張（約 20 分鐘，要從原始碼編譯 Mathlib）
@@ -107,7 +107,7 @@ pip install -r requirements.txt
 
 - **形式化忠不忠實，機器判不出來。** 凍結、簽章和 guard 能做到的是：讓人的判斷變成可稽核、可歸責、而且不會無聲走鐘。它們沒辦法讓那個判斷變正確。
 - **反例搜尋不是真的證據。** 它能做的是：不讓一條「明確為假」的陳述被凍結——這件事有價值，Fermat 的主張就是死在這裡。但「找不到反例」的意思是**在一個已登錄的小值範圍內**找不到；把範圍設成 Fermat 自己手上的證據（n ≤ 4），它就什麼都找不到。而且它對「陳述是否符合原文語意」完全沒有發言權。13 條裡有 4 條它根本碰不到，因為 `PL.Derives` 和 `EL.Derives` 沒有判定程序；那幾條的紀錄會寫 NOT_SEARCHABLE 並附上原因，而不是安靜地放行。完整的誤讀清單在 ASSUMPTIONS A1b。
-- **多套核心一致，證據力沒有看起來那麼高。** 2026 年陸續出現幾個 Lean 核心的健全性 bug，其中一個案例裡，拿另一套獨立核心去交叉檢查，結果**那套核心也接受了**那份非法證明——因為它自己有另一個無關的 bug（[Tao, 2026-10-09](https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/)）。**實作各自獨立，不等於失效各自獨立。**
+- **多套核心一致，證據力沒有看起來那麼高——而且比原本寫的更低。** 2026 年陸續出現幾個 Lean 核心的健全性 bug，其中一個案例裡，拿另一套獨立核心去交叉檢查，結果**那套核心也接受了**那份非法證明——因為它自己有另一個無關的 bug（[Tao, 2026-10-09](https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/)）。**實作各自獨立，不等於失效各自獨立。** 更正（2026-10-14）：這個倉庫原本把 lean4lean 說成「另一位作者獨立寫的核心」，那是錯的。上游自己的 README 寫著它「直接從 C++ kernel 實作衍生而來……並不真的是獨立實作」。所以這裡跑的交叉檢查，**獨立性這個前提從一開始就不成立**。見 ASSUMPTIONS A2 與 ROADMAP 1.3。
 - **第三道檢查只能旁證項層，僅此而已。** 它不會去推導一個 inductive 規格合不合法，而 `tests/forgeries/` 裡那兩個偽造，就是從這個缺口證出 `False` 的。它的來源查核會把這類宣告**明白列出來**，而不是替它們背書。
 - **受信任的基礎縮小了，但沒有消失。** Lean 的 **elaborator**（也就是產生 olean 的那一步）、作業系統、沙箱，全都還在信任範圍內。
 - **Mathlib 只涵蓋一條主張**，依賴錐 387 個 olean，不是整個程式庫。

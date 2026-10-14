@@ -117,7 +117,7 @@ What tier 1 runs:
 - the nine test suites: 231 pass and 11 skip at tier 1, out of 241 collected
   across `tests/` — the Mathlib fixtures skip without `AMPAS_MATHLIB_PATH`.
 
-## Tier 2 — the second independent kernel
+## Tier 2 — the second kernel
 
 ```bash
 ./scripts/build-lean4lean.sh

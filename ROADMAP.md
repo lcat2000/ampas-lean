@@ -58,6 +58,44 @@ Independence of implementations is not independence of failure.
    *verified* kernel — one whose soundness is itself proved relative to a set
    theory — fails differently. Con-Leche and the verified fragment of lean4lean
    are the candidates to evaluate.
+
+   ### 1.3a. The second kernel was never independent — correction, 2026-10-14
+
+   Evaluating the candidates turned up something about the kernels this
+   repository already runs. Until this date the README, ASSUMPTIONS A2 and
+   several scripts called lean4lean **"an independently written kernel"**.
+   Upstream says the opposite, in its own README:
+
+   > It is derived directly from the C++ kernel implementation, and as such
+   > likely shares some implementation bugs with it (it's not really an
+   > independent implementation), although it also benefits from the same
+   > algorithmic performance improvements existing in the C++ Lean kernel.
+   >
+   > — [digama0/lean4lean](https://github.com/digama0/lean4lean)
+
+   The [Lean Kernel Arena](https://arena.lean-lang.org/checker/lean4lean/)
+   repeats the characterisation. So **the premise of this repository's
+   cross-check never held**: tier 2 is two implementations of one algorithm
+   agreeing, one derived from the other's C++ original. A2 already said that
+   independence of implementations is not independence of failure, citing the
+   Tao report; the sharper point is that this pair had no independence to lose.
+
+   It is still worth running — lean4lean has found real kernel bugs, and the
+   arena records it rejecting all 19 of its bug-regression tests with the
+   expected errors — but what the records show is **agreement between
+   relatives**.
+
+   Corrected in ASSUMPTIONS A2 (where the claim was made), both READMEs,
+   `INSTALL.md`, `scripts/verify.sh`, `scripts/bootstrap.sh` and the CI job
+   name. The record field names (`kernel_replay_independent`,
+   `provenance.independent_kernel`) are **kept**, so that verdicts issued
+   before today stay readable, with the correction carried inside the
+   provenance block itself as `is_an_independent_implementation: false` plus
+   `independence_correction` — a reader of a stored verdict may never open
+   ASSUMPTIONS. `evidence/environment.json` said "Independently written kernel"
+   and is annotated in `record_corrections` rather than rewritten.
+   `tests/test_provenance.py` forbids the phrases, and found three more
+   occurrences than this correction started with.
 4. **Statement-level redundancy.** For a claim that matters, require two proofs
    by routes that share as little of the library as possible, and compare their
    axiom closures. This catches a library-level problem that any number of

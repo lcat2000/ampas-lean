@@ -28,7 +28,7 @@ statements. It goes through:
 | --- | --- |
 | **Sandboxed compile** | Unprivileged user, read-only trusted oleans, CPU/memory/file-size caps, trusted artifacts hashed before and after |
 | **Kernel replay** (`leanchecker`) | Lean's own kernel re-checks every declaration from the olean |
-| **Second kernel** ([lean4lean](https://github.com/digama0/lean4lean)) | An independently written kernel re-checks the same oleans. Certification requires **both** |
+| **Second kernel** ([lean4lean](https://github.com/digama0/lean4lean)) | A second kernel re-checks the same oleans; certification requires **both**. Upstream describes it as "derived directly from the C++ kernel implementation … not really an independent implementation", so this buys agreement between relatives, not independent confirmation — see ASSUMPTIONS A2 |
 | **Third check** ([`harness/kernel3`](docs/review-third-check.md)) | A from-scratch type checker in Python sharing no code with Lean — corroborates the *term layer* only |
 | **Axiom audit** | Transitive axioms against a per-claim policy; flags `sorryAx`, native evaluation, `opaque` in statements, `unsafe`, `partial` |
 | **Closure check** | Every constant the statement depends on, **including definition bodies**, compared against the reference |
@@ -137,7 +137,7 @@ pip install -r requirements.txt
 ./scripts/bootstrap.sh
 ./scripts/verify.sh 1
 
-# tier 2 — add the second independent kernel
+# tier 2 — add the second kernel
 ./scripts/build-lean4lean.sh && ./scripts/verify.sh 2
 
 # tier 3 — add the Mathlib claims (~20 min, builds Mathlib from source)

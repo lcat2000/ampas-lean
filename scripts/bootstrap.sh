@@ -79,6 +79,6 @@ say "Done"
 cat <<EOF
 Next:
   ./scripts/verify.sh                 run every tier this machine supports
-  ./scripts/build-lean4lean.sh        add the second independent kernel (tier 2)
+  ./scripts/build-lean4lean.sh        add the second kernel (tier 2)
   ./scripts/build-mathlib-tier.sh     add the Mathlib claims (tier 3, ~20 min)
 EOF

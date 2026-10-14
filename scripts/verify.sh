@@ -13,7 +13,7 @@
 #   1  Lean only.  The 16-submission core corpus through compile, kernel
 #                  replay, the third check and the auditor; the formalization
 #                  sign-off and its drift detection.
-#   2  + lean4lean A second, independently written kernel re-checks the same
+#   2  + lean4lean A second kernel re-checks the same
 #                  oleans. Certification requires both Lean kernels.
 #   3  + Mathlib   The Mathlib-backed claim and the external validation pair
 #                  (Fermat 1640 / Euler 1732).
@@ -113,7 +113,7 @@ RAN="$RAN 1"
 L4L=${AMPAS_LEAN4LEAN:-$ROOT/build/lean4lean/.lake/build/bin/lean4lean}
 if [ -x "$L4L" ]; then
   export AMPAS_LEAN4LEAN="$L4L"
-  say "Tier 2 — second independent kernel (lean4lean)"
+  say "Tier 2 — second kernel (lean4lean; derived from the C++ kernel, see ASSUMPTIONS A2)"
   run "$PY" harness/ampas_lean.py corpus/manifest.json \
         --out build/corpus_twokernels.json >/dev/null \
     && run "$PY" scripts/check_expectations.py build/corpus_twokernels.json --require-two-kernels

@@ -117,7 +117,7 @@ jobs:
   # Tier 2 clones and builds a second kernel, which is slow; nightly rather
   # than per-push.
   tier2:
-    name: tier 2 — second independent kernel
+    name: tier 2 — second kernel (lean4lean)
     runs-on: ubuntu-latest
     needs: tier1
     if: github.event_name == 'workflow_dispatch'

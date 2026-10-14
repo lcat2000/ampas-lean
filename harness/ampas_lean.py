@@ -163,7 +163,13 @@ def audit_fingerprint_path() -> Path:
         return AUDIT_BIN
     return HERE / "Audit.lean"
 
-# Round 2: a second, independently written kernel (lean4lean). When
+# Round 2: a second kernel (lean4lean). NOT an independent implementation --
+# upstream's own README says it "is derived directly from the C++ kernel
+# implementation, and as such likely shares some implementation bugs with it
+# (it's not really an independent implementation)". The field name
+# `kernel_replay_independent` is kept so that stored verdicts stay readable;
+# what it records is a second checker's agreement, not independence. See
+# ASSUMPTIONS A2. When
 # configured, a claim is certified only if BOTH kernels accept the
 # submission, and any disagreement is recorded as a finding in its own right.
 L4L_BIN = os.environ.get("AMPAS_LEAN4LEAN", "")
@@ -471,7 +477,8 @@ def check_submission(sub_path: Path, module: str, claims: list[dict],
             res.resource_exhausted.append(f"leanchecker ({_why(kc)})")
         if not res.kernel_replay:
             res.compile_stderr += "\n[leanchecker]\n" + _clip(kc.stdout + kc.stderr)
-        # second, independent kernel: a different implementation by a
+        # second kernel: a different implementation, but derived from the
+        # C++ kernel rather than independent of it (ASSUMPTIONS A2), by a
         # different author, re-checking the same compiled oleans
         if L4L_BIN:
             l4 = _run([L4L_BIN, module], work, lean_path, as_user,

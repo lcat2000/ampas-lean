@@ -133,3 +133,94 @@ def test_a_verdict_record_carries_its_provenance():
     assert prov.get("primary_kernel"), "no record of the primary kernel"
     assert prov.get("toolchain_pin"), "no toolchain pin recorded"
     assert prov.get("advisories", {}).get("advisories_last_reviewed")
+
+
+# ---------------------------------------------------------------------------
+# lean4lean is not an independent implementation (2026-10-14)
+#
+# Until this date the README and ASSUMPTIONS A2 called it "an independently
+# written kernel". Upstream's own README says the opposite -- "derived directly
+# from the C++ kernel implementation ... it's not really an independent
+# implementation" -- so every claim that two INDEPENDENT kernels agreed was
+# overclaiming. These tests exist so the phrase cannot come back.
+UPSTREAM_WORDS = "derived directly from the C++ kernel"
+
+
+# The exact wordings that were wrong. Forbidding the phrases themselves rather
+# than any mention of independence: the correction has to be able to quote what
+# it is correcting, and a paragraph-level heuristic could not tell the two
+# apart -- it flagged the correction's own first sentence, because the
+# upstream quote that exempts it is a blockquote in the next paragraph.
+FORBIDDEN = [
+    "an independently written kernel",
+    "an independently written\nkernel",
+    "second independent kernel",
+    "second, independently written kernel",
+    "two independent kernels agreeing",
+]
+
+
+def test_no_document_repeats_the_overclaim():
+    offenders = []
+    for path in sorted(ROOT.glob("*.md")) + sorted((ROOT / "docs").glob("*.md")) \
+            + sorted((ROOT / "scripts").glob("*.sh")) \
+            + sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+        text = path.read_text(encoding="utf-8")
+        flat = " ".join(text.split())
+        for phrase in FORBIDDEN:
+            needle = " ".join(phrase.split())
+            if needle in flat:
+                # allowed only where the text is quoting what it corrected
+                i = flat.index(needle)
+                window = flat[max(0, i - 220):i + 220].lower()
+                # Markers of a passage that is CORRECTING the phrase rather
+                # than making it. Kept narrow on purpose: the word
+                # "correction" alone would let any paragraph opt out.
+                if any(m in window for m in (
+                        "was wrong", "until 2026-10-14", "until this date",
+                        "described lean4lean as", "called lean4lean")):
+                    continue
+                offenders.append((path.name, needle))
+    assert not offenders, offenders
+
+
+def test_the_provenance_block_carries_the_correction_inside_itself():
+    """A reader of a stored verdict may never open ASSUMPTIONS. The key is
+    still called `independent_kernel` so old records stay readable, so the
+    block has to say in place that the name is wrong."""
+    import provenance
+    ind = provenance.snapshot()["independent_kernel"]
+    assert ind["is_an_independent_implementation"] is False
+    text = " ".join(ind["independence_correction"])
+    assert UPSTREAM_WORDS in text
+    assert "digama0/lean4lean" in text
+    assert "AGREEMENT BETWEEN RELATIVES" in text
+
+
+def test_the_environment_record_is_annotated_not_rewritten():
+    """The committed record said "Independently written kernel". That is what
+    was claimed at the time, so it stays, with a correction beside it."""
+    d = json.loads((ROOT / "evidence" / "environment.json").read_text(encoding="utf-8"))
+    corr = [c for c in d.get("record_corrections", [])
+            if "independent_kernel" in c.get("field", "")]
+    assert corr, "no correction recorded for the independence claim"
+    c = corr[0]
+    assert "Independently written kernel" in c["recorded_value"]
+    assert UPSTREAM_WORDS in c["why_wrong"]
+    assert c["why_not_regenerated"]
+    # and the original note must still be there, uncorrected
+    note = json.dumps(d, ensure_ascii=False)
+    assert "Independently written kernel" in note
+
+
+def test_assumptions_states_the_correction_where_the_claim_was_made():
+    text = (ROOT / "ASSUMPTIONS.md").read_text(encoding="utf-8")
+    body = text.split("## A2.")[1].split("## A3.")[0]
+    # strip blockquote markers first: flattening them in leaves "> " sitting
+    # between two words of the upstream quote, which is how this test first
+    # failed against a correction that was in fact present
+    body = "\n".join(line.lstrip("> ") for line in body.split("\n"))
+    a2 = " ".join(body.split())
+    assert UPSTREAM_WORDS in a2
+    assert "not really an independent implementation" in a2
+    assert "agreement between relatives" in a2.lower()
