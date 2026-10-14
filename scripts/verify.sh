@@ -93,7 +93,7 @@ run "$PY" harness/reverify.py --out build/reverification.json
 note "specification passes over the trusted reference set (a violation means the pass is wrong, not Lean)"
 if LEAN_PATH="$TRUSTED" lean --run harness/Export.lean --specs AmpasRef.Guards \
      build/guards.specs >/dev/null 2>&1; then
-  for SPEC_PASS in positivity recursor iota; do
+  for SPEC_PASS in positivity recursor iota safety; do
     run "$PY" harness/spec_diff.py --pass "$SPEC_PASS" \
           "build/${SPEC_PASS}_core.json" AmpasRef.Guards=build/guards.specs
   done
@@ -104,6 +104,7 @@ run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_positivity.py tests/test_recursor.py tests/test_iota.py \
+      tests/test_safety.py \
       tests/test_history_corpus.py tests/test_conleche_evaluation.py \
       tests/test_arena_result.py tests/test_ndjson.py \
       tests/test_portability.py -q
@@ -171,7 +172,7 @@ for r in rows:
   note "the specification passes over Mathlib's declarations"
   if LEAN_PATH="$AMPAS_TRUSTED_OLEAN:$MLPATH" lean --run harness/Export.lean \
        --specs AmpasRef.ChallengeMathlib build/mathlib.specs >/dev/null 2>&1; then
-    for SPEC_PASS in positivity recursor iota; do
+    for SPEC_PASS in positivity recursor iota safety; do
       run "$PY" harness/spec_diff.py --pass "$SPEC_PASS" \
             "build/${SPEC_PASS}_differential.json" \
             AmpasRef.Guards=build/guards.specs \

@@ -1,0 +1,46 @@
+{
+  "schema": "ampas-safety-differential/1",
+  "pass": "safety",
+  "reads": "every declaration's unsafe/partial flag",
+  "recorded_at": "2026-10-14T11:52:49+00:00",
+  "lean": "unknown",
+  "totals": {
+    "checked": 11771,
+    "ok": 11771,
+    "violations": 0,
+    "unclassified": 0
+  },
+  "sets": [
+    {
+      "environment": "AmpasRef.Guards",
+      "specs": "init.specs",
+      "declarations_in_export": 2133,
+      "checked": 2133,
+      "ok": 2133,
+      "violations": [],
+      "unclassified": [],
+      "unclassified_by_cause": {}
+    },
+    {
+      "environment": "AmpasRef.ChallengeMathlib",
+      "specs": "mathlib.specs",
+      "declarations_in_export": 9638,
+      "checked": 9638,
+      "ok": 9638,
+      "violations": [],
+      "unclassified": [],
+      "unclassified_by_cause": {}
+    }
+  ],
+  "means": [
+    "Neither exporter emits an unsafe or partial declaration by default --",
+    "lean4export needs --export-unsafe and harness/Export.lean has no",
+    "equivalent -- so a VIOLATION here would mean a declaration reached the",
+    "file that the exporter did not vouch for, and this run exits non-zero",
+    "on one.",
+    "",
+    "What this run does NOT establish: that the flag means what it says. It",
+    "reads a field. The arena's 140_falseFromUnsafe and",
+    "141_falseFromPartial are what showed the field was being dropped."
+  ]
+}

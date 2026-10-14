@@ -53,6 +53,7 @@ from kernel3.parse import parse_export            # noqa: E402
 from kernel3 import positivity as _positivity     # noqa: E402
 from kernel3 import recursor as _recursor         # noqa: E402
 from kernel3 import iota as _iota                 # noqa: E402
+from kernel3 import safety as _safety             # noqa: E402
 
 # Each pass: the module, the schema its record carries, the declaration kind it
 # reads, and the causes an UNCLASSIFIED can have. Naming the causes here rather
@@ -81,6 +82,12 @@ PASSES = {
             ("constructor not in export", ("is not in the export",)),
             ("motive shape", ("motive", "major premise", "conclusion is not an applied")),
         ],
+    },
+    "safety": {
+        "module": _safety,
+        "schema": "ampas-safety-differential/1",
+        "reads": "every declaration's unsafe/partial flag",
+        "causes": [],
     },
     "iota": {
         "module": _iota,
@@ -126,6 +133,17 @@ MEANS = {
         "three passes check a declaration against the rules Lean would have",
         "followed; none shows that Lean produced it. That is what the provenance",
         "gate is for, and ASSUMPTIONS A3 is written against that boundary.",
+    ],
+    "safety": [
+        "Neither exporter emits an unsafe or partial declaration by default --",
+        "lean4export needs --export-unsafe and harness/Export.lean has no",
+        "equivalent -- so a VIOLATION here would mean a declaration reached the",
+        "file that the exporter did not vouch for, and this run exits non-zero",
+        "on one.",
+        "",
+        "What this run does NOT establish: that the flag means what it says. It",
+        "reads a field. The arena's 140_falseFromUnsafe and",
+        "141_falseFromPartial are what showed the field was being dropped.",
     ],
     "recursor": [
         "Every recursor in these exports was generated and accepted by Lean's",

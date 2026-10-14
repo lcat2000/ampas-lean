@@ -66,7 +66,7 @@ sys.setrecursionlimit(%(rec)d)
 sys.path.insert(0, %(harness)r)
 from kernel3.ndjson import parse_ndjson
 from kernel3.check import check_env
-from kernel3 import positivity, recursor, iota
+from kernel3 import positivity, recursor, iota, safety
 
 path = sys.argv[1]
 out = {"frontend": "ok"}
@@ -91,7 +91,8 @@ out["unproved_theorems"] = [str(x) for x in r.get("unproved_theorems", [])][:5]
 out["introduced_assumptions"] = len(r.get("introduced_assumptions", []))
 
 passes = {}
-for name, mod in (("positivity", positivity), ("recursor", recursor), ("iota", iota)):
+for name, mod in (("positivity", positivity), ("recursor", recursor),
+                  ("iota", iota), ("safety", safety)):
     try:
         p = mod.check_env(env)
         passes[name] = {"checked": p["checked"], "ok": len(p["ok"]),

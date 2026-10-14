@@ -332,3 +332,75 @@ def test_an_arity_lie_is_never_approved(field):
     broken = dataclasses.replace(rec, **{field: getattr(rec, field) + 1})
     verdict, why = check_recursor(broken, env)
     assert verdict in ("VIOLATION", "UNCLASSIFIED"), why
+
+
+# ---------------------------------------------------------------------------
+# What the Lean Kernel Arena found (ROADMAP 6c, 2026-10-14)
+#
+# Three rules of this pass were wrong, and none of the four hand-written
+# forgeries nor the 3410-recursor differential over Init and Mathlib could
+# have found any of them. Each test below names the arena vector.
+def test_a_level_parameter_may_be_instantiated_to_prop():
+    """`bad/bugs/large-elim-param`: `MyBool : Sort u` with two constructors and
+    a recursor into `Sort v`. At `u := 0` that is a two-constructor Prop with a
+    large eliminator. The first version asked whether the sort was LITERALLY
+    zero and let `Sort u` through -- wrong in the ACCEPTING direction, which is
+    the direction ROADMAP 2 warned about."""
+    from kernel3.terms import sort, param, succ, ZERO, lmax, limax, Name
+    u = param(Name.mk(("u",)))
+    v = param(Name.mk(("v",)))
+    assert is_prop_valued(sort(ZERO))          # Prop
+    assert is_prop_valued(sort(u))             # Sort u -- u := 0 is legal
+    assert is_prop_valued(sort(lmax(u, v)))    # max u v -- both may be 0
+    assert is_prop_valued(sort(limax(u, v)))   # imax u v -- zero when v is
+    assert not is_prop_valued(sort(succ(u)))   # Sort (u+1): never Prop
+    assert not is_prop_valued(sort(succ(ZERO)))
+
+
+def test_a_recursor_with_no_family_is_a_violation_not_a_decline():
+    """`bad/bugs/orphan-rec`: a recursor with `all: []`, typed `False`. The
+    first version resolved the family to the recursor's own name, found that is
+    not an inductive, and DECLINED -- which let `rogue : False` through."""
+    env = load("control_small_elim.export")
+    rec = env.get(nm(env, "P.rec"))
+    import dataclasses
+    orphan = dataclasses.replace(rec, all_names=[], induct=None)
+    verdict, why = check_recursor(orphan, env)
+    assert verdict == "VIOLATION"
+    assert "declares no inductive family" in why
+
+
+def test_fewer_motives_than_family_members_is_a_violation():
+    """`bad/other/extra-rec` and `bad/tutorial/073_BogusRecursor`: a recursor
+    with ZERO motives. The first version tested `!=` and called both directions
+    "a nested inductive's auxiliary recursor", so too FEW motives was declined.
+    A nested auxiliary has MORE (Lean.Syntax.rec has 3 for a family of 1).
+    Measured over Init and Mathlib: 0 recursors have fewer, 183 have more."""
+    env = load("control_small_elim.export")
+    rec = env.get(nm(env, "P.rec"))
+    import dataclasses
+    verdict, why = check_recursor(dataclasses.replace(rec, num_motives=0), env)
+    assert verdict == "VIOLATION"
+    assert "one motive per member" in why
+    verdict2, why2 = check_recursor(dataclasses.replace(rec, num_motives=3), env)
+    assert verdict2 == "UNCLASSIFIED"
+    assert "auxiliary recursor" in why2
+
+
+def test_a_misnamed_recursor_is_a_violation():
+    """`bad/tutorial/136_misnamed_rec_user` and `137_dup_rec_def2`: a recursor
+    named something other than `<member>.rec`, so the name `I.rec` is free for
+    a user definition to occupy. Measured over the same 3410 recursors: every
+    one is `<member>.rec` or `<member>.rec_N`, with no exceptions to carve."""
+    env = load("control_small_elim.export")
+    rec = env.get(nm(env, "P.rec"))
+    import dataclasses
+    from kernel3.terms import Name
+    bad = dataclasses.replace(rec, name=Name.mk(("P", "not_rec")))
+    verdict, why = check_recursor(bad, env)
+    assert verdict == "VIOLATION"
+    assert "not `<member>.rec`" in why
+    # the nested auxiliary naming must still be accepted
+    aux = dataclasses.replace(rec, name=Name.mk(("P", "rec_1")), num_motives=2)
+    verdict2, _ = check_recursor(aux, env)
+    assert verdict2 == "UNCLASSIFIED"

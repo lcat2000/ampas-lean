@@ -51,6 +51,24 @@ LEVEL_KINDS = {"succ", "max", "imax", "param"}
 DECL_KINDS = {"def", "thm", "axiom", "opaque", "quot", "inductive"}
 
 
+def _mark_safety(decl, record: dict) -> None:
+    """Carry the record's `safety` / `isUnsafe` onto the declaration.
+
+    The AMPAS format has no field for either, because `harness/Export.lean`
+    emits only what the trusted reference environment contains and lean4export
+    excludes unsafe declarations unless `--export-unsafe` is passed. So an
+    absent flag means "safe" for both frontends, and a PRESENT one means the
+    file was made with that flag or by hand -- which is what the arena's
+    `140_falseFromUnsafe` and `141_falseFromPartial` do, and what
+    `harness/kernel3/safety.py` then objects to.
+
+    The first version of this frontend read both fields and threw them away,
+    so a `def` marked `unsafe` that a theorem then used was accepted.
+    """
+    decl.safety = str(record.get("safety") or
+                      ("unsafe" if record.get("isUnsafe") else "safe"))
+
+
 class NdjsonError(Exception):
     """A record this frontend does not understand, with its line number."""
 
@@ -188,12 +206,16 @@ def _record(o, env, names, levels, exprs, N, L, E, LP):
     v = o[k]
 
     if k in ("def", "thm", "opaque"):
-        env.add(Decl({"def": "def", "thm": "thm", "opaque": "opaque"}[k],
-                     N(v["name"]), E(v["type"]), LP(v.get("levelParams")),
-                     value=E(v["value"])))
+        d = Decl({"def": "def", "thm": "thm", "opaque": "opaque"}[k],
+                 N(v["name"]), E(v["type"]), LP(v.get("levelParams")),
+                 value=E(v["value"]))
+        env.add(d)
+        _mark_safety(d, v)
         return
     if k == "axiom":
-        env.add(Decl("ax", N(v["name"]), E(v["type"]), LP(v.get("levelParams"))))
+        d = Decl("ax", N(v["name"]), E(v["type"]), LP(v.get("levelParams")))
+        env.add(d)
+        _mark_safety(d, v)
         return
     if k == "quot":
         env.add(Decl("quot", N(v["name"]), E(v["type"]), LP(v.get("levelParams"))))
@@ -201,7 +223,7 @@ def _record(o, env, names, levels, exprs, N, L, E, LP):
 
     # an inductive BLOCK: types, then constructors, then recursors, so the Env
     # ends up in the same order the AMPAS format's separate lines produce
-    for t in v.get("types") or []:
+    for t in v.get("types") or []:  # noqa: PLR1704
         env.add(Decl("ind", N(t["name"]), E(t["type"]), LP(t.get("levelParams")),
                      num_params=int(t["numParams"]),
                      num_indices=int(t["numIndices"]),
@@ -209,19 +231,25 @@ def _record(o, env, names, levels, exprs, N, L, E, LP):
                      is_reflexive=bool(t.get("isReflexive")),
                      all_names=LP(t.get("all")),
                      ctors=LP(t.get("ctors"))))
-        env.decls[N(t["name"])].num_nested = int(t.get("numNested", 0))
+        d = env.decls[N(t["name"])]
+        d.num_nested = int(t.get("numNested", 0))
+        _mark_safety(d, t)
     for c in v.get("ctors") or []:
-        env.add(Decl("ctor", N(c["name"]), E(c["type"]), LP(c.get("levelParams")),
-                     induct=N(c["induct"]), cidx=int(c["cidx"]),
-                     num_params=int(c["numParams"]),
-                     num_fields=int(c["numFields"])))
+        d = Decl("ctor", N(c["name"]), E(c["type"]), LP(c.get("levelParams")),
+                 induct=N(c["induct"]), cidx=int(c["cidx"]),
+                 num_params=int(c["numParams"]),
+                 num_fields=int(c["numFields"]))
+        env.add(d)
+        _mark_safety(d, c)
     for r in v.get("recs") or []:
-        env.add(Decl("rec", N(r["name"]), E(r["type"]), LP(r.get("levelParams")),
-                     num_params=int(r["numParams"]),
-                     num_indices=int(r["numIndices"]),
-                     num_motives=int(r["numMotives"]),
-                     num_minors=int(r["numMinors"]),
-                     k=bool(r.get("k")),
-                     all_names=LP(r.get("all")),
-                     rules=[(N(x["ctor"]), int(x["nfields"]), E(x["rhs"]))
-                            for x in (r.get("rules") or [])]))
+        d = Decl("rec", N(r["name"]), E(r["type"]), LP(r.get("levelParams")),
+                 num_params=int(r["numParams"]),
+                 num_indices=int(r["numIndices"]),
+                 num_motives=int(r["numMotives"]),
+                 num_minors=int(r["numMinors"]),
+                 k=bool(r.get("k")),
+                 all_names=LP(r.get("all")),
+                 rules=[(N(x["ctor"]), int(x["nfields"]), E(x["rhs"]))
+                        for x in (r.get("rules") or [])])
+        env.add(d)
+        _mark_safety(d, r)

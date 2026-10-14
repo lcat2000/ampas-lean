@@ -47,6 +47,7 @@ not against this one.
 """
 from __future__ import annotations
 
+from .positivity import occurs
 from .terms import Expr, bvar, const, apps, param
 
 # Imported, never restated.
@@ -54,6 +55,7 @@ from .terms import BVAR, CONST, APP, LAM, PI, LET  # noqa: E402
 
 NOT_IN_EXPORT = "NOT_IN_EXPORT"
 NESTED = "NESTED_AUXILIARY_RECURSOR"
+AMBIGUOUS_FIELD = "RECURSIVENESS_NEEDS_REDUCTION"
 
 # Elaboration gadgets. `optParam α d` and `autoParam α tac` are both
 # definitionally `α` -- they carry a default value and a tactic for the
@@ -167,8 +169,30 @@ def strip_gadgets(e: Expr) -> Expr:
         return e
 
 
-def _recursive_fields(ctor, family) -> list:
-    """(field index, field type, head name) for each field of the family's type."""
+def _recursive_fields(ctor, family) -> tuple[list, str | None]:
+    """((field index, field type, head name)…, reason to decline).
+
+    A field is recursive when its type's conclusion is headed by a member of
+    the family. That test is SYNTACTIC, and Lean's is not: Lean decides
+    recursiveness after delta-reduction, so a field typed
+    `constType (I α) (I α)` -- headed by a DEFINITION that unfolds to expose
+    the family -- is recursive to Lean and not to this test.
+
+    The first version of this pass answered "not recursive" there and derived
+    a rule with no recursive call, then reported Lean's legitimate rule
+    forged. It did that to three of the arena's tests
+    (`055_reduceCtorParam.mk`, `119_reduceCtorParamRefl.mk`,
+    `120_reduceCtorParamRefl2.mk`), and the 3410-recursor differential over
+    Init and Mathlib could not have caught it: neither library has a
+    constructor field whose type needs unfolding to reveal its recursion.
+
+    Rather than bring reduction into a pass written to avoid depending on it,
+    the ambiguous case DECLINES: a field whose type mentions the family
+    anywhere but is not headed by a family member is one this pass cannot
+    classify, so there is no derivation to compare against. That turns three
+    false rejections into three honest declines, in the direction the pass's
+    discipline requires.
+    """
     cdoms, _ = _telescope(ctor.type)
     out = []
     for i, f in enumerate(cdoms[ctor.num_params:]):
@@ -176,7 +200,13 @@ def _recursive_fields(ctor, family) -> list:
         head, _ = _head_and_args(concl)
         if head.kind == CONST and head.name in family:
             out.append((i, f, head.name))
-    return out
+        elif occurs(f, family):
+            return [], (
+                f"{AMBIGUOUS_FIELD}: field {i} mentions the inductive family "
+                f"but its type is not headed by a family member, so whether "
+                f"it is recursive depends on reduction, which this pass does "
+                f"not do")
+    return out, None
 
 
 def expected_rhs(rec, ctor, minor_index: int, env, family):
@@ -228,7 +258,10 @@ def expected_rhs(rec, ctor, minor_index: int, env, family):
 
     body_args = [bvar(at(P + M + N + i)) for i in range(K)]
 
-    for i, ftype, head_name in _recursive_fields(ctor, family):
+    recursive, decline = _recursive_fields(ctor, family)
+    if decline is not None:
+        return None, decline
+    for i, ftype, head_name in recursive:
         ind = env.get(head_name)
         if ind is None:
             return None, f"{NOT_IN_EXPORT}: the field's inductive {head_name} is absent"

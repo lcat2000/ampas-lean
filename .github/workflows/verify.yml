@@ -40,13 +40,13 @@ jobs:
         # A clean advisory result must read as a statement about one list on
         # one date, never as "no known bugs". See ROADMAP 1.
         run: python3 -m pytest tests/test_provenance.py -q
-      - name: specification passes — positivity, recursor shape, iota rules
+      - name: specification passes — positivity, recursor, iota, safety
         # Each forgery must be rejected on the property it forges and must
         # pass the other two, UNCLASSIFIED must never count as a pass, and no
         # OK may relax the provenance gate. See ROADMAP 2a, 2b and 2c.
         run: >-
           python3 -m pytest tests/test_positivity.py tests/test_recursor.py
-          tests/test_iota.py -q
+          tests/test_iota.py tests/test_safety.py -q
       - name: arena result record
         # kernel3's first external measurement (ROADMAP 6c). The result is
         # poor -- 23 of 72 bad tests accepted -- and these tests keep it poor

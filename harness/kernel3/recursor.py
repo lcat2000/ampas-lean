@@ -51,14 +51,21 @@ specification, and ASSUMPTIONS A3 stands.
 """
 from __future__ import annotations
 
-from .terms import Expr
+from .terms import Expr, ZERO
 
 # Imported, never restated: a reorder in terms.py would otherwise make this
 # pass inspect nothing and report every recursor clean.
 from .terms import BVAR, SORT, CONST, APP, PI  # noqa: E402
+from .terms import is_never_zero as _level_never_zero  # noqa: E402
 
 # reasons that are the export's scope rather than the declaration's shape
 FIELD_TYPE_NOT_IN_EXPORT = "FIELD_TYPE_NOT_IN_EXPORT"
+
+
+def _rec_aux_name(name: str, member: str) -> bool:
+    """`I.rec_1`, `I.rec_2`, … -- the auxiliary recursors of a nested inductive."""
+    pre = f"{member}.rec_"
+    return name.startswith(pre) and name[len(pre):].isdigit()
 
 
 def _telescope(e: Expr) -> tuple[list, Expr]:
@@ -85,9 +92,33 @@ def result_sort(ty: Expr):
 
 
 def is_prop_valued(ty: Expr) -> bool:
-    """Does this type end in `Prop`? `Sort u` with `u` a parameter does not."""
+    """Does this type end in a sort that MAY BE `Prop`?
+
+    Not "is the sort literally zero". A level PARAMETER may be instantiated to
+    zero: an inductive declared `I : Sort u` becomes a `Prop` at `u := 0`, and
+    if it has two constructors then a recursor into `Sort v` is unsound at that
+    instantiation. The first version of this function asked whether the sort
+    was literally `zero` and returned False for `Sort u` -- wrong in the
+    ACCEPTING direction, and exactly what ROADMAP 2 warned a mistake here
+    would be.
+
+    Neither the hand-written forgeries nor the 3410-recursor differential over
+    Init and Mathlib could find it: every Prop-valued inductive in those
+    libraries is declared `Prop` literally, and every `Sort`-parameterised one
+    is `Sort (u+1)`, which is provably nonzero. The arena's
+    `bad/bugs/large-elim-param` is `MyBool : Sort u` with two constructors and
+    a recursor into `Sort v`, and it is how this was found.
+
+    So the question is the safe one: could this sort be `Prop`? It could,
+    unless the level is provably greater than zero -- which `terms`'s own
+    `is_never_zero` already decides, and which is True for `succ` of
+    anything, for a `max` with a nonzero side, and for an `imax` whose right
+    side is nonzero.
+    """
     s = result_sort(ty)
-    return s is not None and s.kind == "zero"
+    if s is None:
+        return False
+    return not _level_never_zero(s)
 
 
 def field_is_proof(ty: Expr, ctx: list, pos: int, env):
@@ -172,16 +203,56 @@ def subsingleton(induct, env) -> tuple[str, str]:
 
 def check_recursor(rec, env) -> tuple[str, str]:
     """(verdict, reason) for one recursor. OK | VIOLATION | UNCLASSIFIED."""
-    family = list(rec.all_names) or [rec.induct or rec.name]
+    # A recursor must declare the inductive family it eliminates. An empty
+    # `all` with no `induct` is not an undecidable shape -- it is a recursor
+    # belonging to nothing, which is how the arena's `orphan-rec` smuggles in
+    # `rogue : False`. The first version of this pass resolved the family to
+    # the recursor's OWN name, found that that is not an inductive, and
+    # declined; declining let the declaration through.
+    if not rec.all_names and rec.induct is None:
+        return "VIOLATION", (
+            "the recursor declares no inductive family (`all` is empty), so it "
+            "is not the recursor of anything and its type is unconstrained")
+    family = list(rec.all_names) or [rec.induct]
     inds = [env.get(n) for n in family]
     if any(i is None or i.kind != "ind" for i in inds):
-        return "UNCLASSIFIED", "a family member is not an inductive in this export"
+        return "UNCLASSIFIED", (
+            "a declared family member is not an inductive in this export, "
+            "which a truncated export can also cause")
 
-    if rec.num_motives != len(family):
+    # FEWER motives than family members is malformed: a recursor needs one
+    # motive per member it can eliminate. MORE is the nested inductive's
+    # auxiliary recursor, which this pass does not model. The first version
+    # tested `!=` and called both cases nested, so a recursor with ZERO
+    # motives -- the arena's `extra-rec` and `073_BogusRecursor` -- was
+    # declined rather than rejected. Measured over the 3410 recursors of Init
+    # and Mathlib: 0 have fewer motives than family members and 183 have more.
+    if rec.num_motives < len(family):
+        return "VIOLATION", (
+            f"{rec.num_motives} motives for a family of {len(family)}: a "
+            f"recursor needs one motive per member of its family")
+    if rec.num_motives > len(family):
         return "UNCLASSIFIED", (
             f"{rec.num_motives} motives for a family of {len(family)}: this is "
             f"an auxiliary recursor of a nested inductive, whose shape this "
             f"pass does not model")
+
+    # The name ties the recursor to its inductive. Lean generates `I.rec` for
+    # each member `I`, and `I.rec_N` for a nested inductive's auxiliaries; a
+    # recursor named anything else is not one Lean produced for this family,
+    # and the arena's `136_misnamed_rec_user` is exactly that -- a
+    # `misnamed_rec.not_rec` whose type can then say what it likes.
+    #
+    # This is closer to the provenance gate's question ("did Lean make this")
+    # than to a typing rule, which is why it is stated as a measurement: over
+    # the same 3410 recursors, EVERY name is `<member>.rec` or `<member>.rec_N`
+    # and there are no exceptions to carve out.
+    stem = str(rec.name)
+    if not any(stem == f"{m}.rec" or _rec_aux_name(stem, str(m)) for m in family):
+        return "VIOLATION", (
+            f"the recursor is named `{stem}`, which is not `<member>.rec` or "
+            f"`<member>.rec_N` for any member of the family it declares "
+            f"({', '.join(str(m) for m in family)})")
 
     total_ctors = sum(len(i.ctors) for i in inds)
     if rec.num_minors != total_ctors:
@@ -274,21 +345,26 @@ def check_recursor(rec, env) -> tuple[str, str]:
                 f"fields, so two proofs need not be the same term")
 
     if not is_prop_valued(target.type):
-        return "OK", "the inductive is not a Prop, so any elimination is fine"
+        return "OK", ("the inductive's sort is provably greater than zero, so it "
+                      "cannot be a Prop at any instantiation and any "
+                      "elimination is fine")
     if mconcl.a.kind == "zero":
-        return "OK", "Prop inductive eliminating into Prop"
+        return "OK", "a possibly-Prop inductive eliminating into Prop"
 
     # large elimination of a Prop: sound only for a subsingleton
     if len(family) > 1:
         return "UNCLASSIFIED", (
             "large elimination of a mutual Prop family: this pass does not "
             "decide it")
+    literal = (result_sort(target.type) or ZERO).kind == "zero"
+    what = "a Prop" if literal else (
+        "an inductive whose sort may be instantiated to Prop")
     verdict, why = subsingleton(target, env)
     if verdict == "YES":
-        return "OK", f"large elimination of a Prop, permitted: {why}"
+        return "OK", f"large elimination of {what}, permitted: {why}"
     if verdict == "NO":
-        return "VIOLATION", f"large elimination of a Prop: {why}"
-    return "UNCLASSIFIED", f"large elimination of a Prop, undecided: {why}"
+        return "VIOLATION", f"large elimination of {what}: {why}"
+    return "UNCLASSIFIED", f"large elimination of {what}, undecided: {why}"
 
 
 def check_env(env) -> dict:

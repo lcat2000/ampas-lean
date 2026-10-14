@@ -330,3 +330,46 @@ def test_module_docstring_states_the_boundary():
     assert "provenance gate" in doc
     assert "UNCLASSIFIED" in doc
     assert "declaration set" in doc
+
+
+# ---------------------------------------------------------------------------
+# What the arena found (ROADMAP 6c, 2026-10-14)
+def test_a_field_whose_recursiveness_needs_reduction_is_declined():
+    """`good/tutorial/055_reduceCtorParam.mk` and two siblings. The pass decides
+    whether a constructor field is recursive from the HEAD of its type's
+    conclusion, syntactically; Lean decides it after delta-reduction. A field
+    typed `constType (I α) (I α)` is headed by a definition that unfolds to
+    expose the family, so Lean emits a recursive call and the first version of
+    this pass derived a rule without one -- then reported Lean's legitimate
+    rule forged.
+
+    The 3410-recursor differential could not have found it: neither Init nor
+    Mathlib has a constructor field whose type needs unfolding to reveal its
+    recursion. The ambiguous case now DECLINES."""
+    from kernel3.iota import _recursive_fields, AMBIGUOUS_FIELD
+    env = load("control_iota")
+    rec = env.get(nm(env, "Two.rec"))
+    family = list(rec.all_names)
+    ctor = env.get(rec.rules[0][0])
+    fields, decline = _recursive_fields(ctor, family)
+    assert decline is None, "Two.mk has no field that mentions the family"
+
+    # a field that mentions the family without being headed by it
+    import dataclasses
+    from kernel3.terms import pi, const, apps, Name
+    fam = family[0]
+    other = const(Name.mk(("constType",)), [])
+    weird = pi(Name.mk(("x",)), apps(other, [const(fam, []), const(fam, [])]),
+               const(fam, []))
+    faked = dataclasses.replace(ctor, type=weird, num_params=0, num_fields=1)
+    fields2, decline2 = _recursive_fields(faked, family)
+    assert fields2 == []
+    assert decline2 is not None and AMBIGUOUS_FIELD in decline2
+
+
+def test_the_declining_case_does_not_fire_on_the_real_libraries():
+    """If it did, the committed differential record would carry it, and the
+    fix would have been a trade of false rejections for lost coverage."""
+    d = json.loads(DIFF.read_text(encoding="utf-8"))
+    for s in d["sets"]:
+        assert s["unclassified_by_cause"].get("other", 0) == 0, s["environment"]
