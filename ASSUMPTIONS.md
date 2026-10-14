@@ -312,28 +312,33 @@ exactly:
 
 **Assumed and NOT checked:** that an inductive declaration is a legitimate
 specification. Three properties make it one — strict positivity, the shape of
-the generated recursor, and its iota rules — and **one of the three is now
-checked**, by a separate pass:
+the generated recursor, and its iota rules — and **two of the three are now
+checked**, each by its own separate pass:
 
-> `harness/kernel3/positivity.py` decides strict positivity, and classifies
-> rather than judges: a shape it cannot decide comes back `UNCLASSIFIED`, not
-> `OK`. Differentially tested over 3285 inductives from the trusted reference
-> set and the Mathlib set — 0 violations, 45 unclassified, all 45 the nested
-> shape (a recursive occurrence under another inductive's parameter)
-> — in `evidence/positivity_differential.json`.
+> `harness/kernel3/positivity.py` decides strict positivity.
+> `harness/kernel3/recursor.py` decides the recursor's shape: arities, one
+> iota rule per constructor of the member being eliminated, the `k` flag, and
+> the elimination universe, where large elimination of a `Prop` is allowed
+> only for a subsingleton.
 >
-> It changes nothing about a verdict. The provenance gate below is unchanged,
-> and an `OK` from this pass is **not** a checked specification: the recursor's
-> shape and the iota rules remain assumed, so a specification that passes
-> positivity can still be a forgery. `forge_large_elim` is exactly that — a
-> forged *recursor*, which positivity cannot see and which only provenance
-> catches.
+> Both classify rather than judge: a shape neither can decide comes back
+> `UNCLASSIFIED`, never `OK`. Both are differentially tested against the
+> declaration sets Lean itself accepts — 3285 inductives and 3410 recursors,
+> **0 violations** — in `evidence/positivity_differential.json` and
+> `evidence/recursor_differential.json`.
+>
+> **Neither changes a verdict, and two of three is not a checked
+> specification.** The iota rules' right-hand sides are still assumed: the
+> recursor pass counts the rules and checks which constructor each belongs to,
+> not what a rule computes. So a declaration that passes both passes can still
+> be a forgery, and the provenance gate below is unchanged and is still what
+> stops one producing a clean result.
 
 This is the classic source of unsoundness, and it is exploitable:
 
 | Forgery (`tests/forgeries/`) | Original behaviour |
 | --- | --- |
-| `Prop` large elimination: a `Prop` with two constructors plus a hand-written recursor eliminating into `Sort u`. Proof irrelevance then makes two types interchangeable | `9/9 checked, 0 errors`, **`False` proved** |
+| `Prop` large elimination: a `Prop` with two constructors plus a hand-written recursor eliminating into `Sort u`. Proof irrelevance then makes two types interchangeable | `9/9 checked, 0 errors`, **`False` proved** — now rejected on its recursor's shape by the recursor pass |
 | Non-positive inductive: `Bad.mk : (Bad → MyFalse) → Bad` plus the diagonal argument | `7/7 checked, 0 errors`, **`False` proved** — now rejected on its specification by the positivity pass |
 | Control: the same recursor restricted to `Prop` (legitimate small elimination) | **correctly rejected** |
 

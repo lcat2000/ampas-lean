@@ -101,7 +101,7 @@ judges: `OK`, `VIOLATION`, or `UNCLASSIFIED` for a shape it cannot decide.
 arrow — and `MyFalse`, in the same export, still passes, so the pass is not
 simply rejecting arrows.
 
-Differentially tested (`harness/positivity_diff.py`,
+Differentially tested (`harness/spec_diff.py --pass positivity`,
 `evidence/positivity_differential.json`): **3285 inductives** across the
 trusted reference set and the Mathlib set, **0 violations**, **45
 unclassified**, all 45 of one cause — a recursive occurrence under another
@@ -124,19 +124,56 @@ originally written here:
   `tests/test_positivity.py::test_positivity_does_not_relax_the_provenance_gate`
   fails if a positivity `OK` is ever wired into it.
 
-### 2b. Recursor shape — not done
+### 2b. Recursor shape — done, 2026-10-14
 
-The remaining half. `forge_large_elim.export` is the live vector: a `Prop`
-inductive given a large-eliminating recursor, which proves `False` by
-extracting data from a proof. Checking it means checking the motive's
-universe, the minor premises' shapes against the constructors, and the `k`
-flag — each in the widening direction, so the same discipline applies: its own
-pass, its own differential test over the sets both kernels accept, and
-`UNCLASSIFIED` rather than a guess.
+`harness/kernel3/recursor.py`, same discipline: its own pass, its own tests,
+`UNCLASSIFIED` rather than a guess. `forge_large_elim.export` is now rejected
+on its recursor — a `Prop` with two constructors cannot be eliminated into a
+large `Sort`, because the recursor would read which constructor was used and
+proof irrelevance makes the two indistinguishable — while its control, the
+same recursor restricted to `Prop`, passes.
 
-**Done when:** `forge_large_elim` is rejected on its recursor's shape rather
-than only by provenance, and the differential test over both declaration sets
-is clean for that pass too.
+What the pass checks: one motive per family member and one minor premise per
+constructor; exactly one iota rule per constructor of the member being
+eliminated, each with that constructor's own field count; parameter and index
+counts against that member; `k` only for a single-constructor, field-free
+`Prop`; and the elimination universe, where large elimination of a `Prop` is
+allowed only for a subsingleton — at most one constructor, every field either
+a proof or an argument the conclusion's indices already pin down. `Eq.refl`'s
+`a` is the second case, `And.intro`'s fields the first.
+
+Differentially tested (`harness/spec_diff.py --pass recursor`,
+`evidence/recursor_differential.json`): **3410 recursors**, **0 violations**,
+263 unclassified under two named causes — a field type needing a definition
+the `--specs` export does not carry (80), and the auxiliary recursors a nested
+inductive generates over the nesting type (183).
+
+**The differential test earned its place here.** The first version of the
+rules check assumed a mutual family's recursor carries iota rules for every
+constructor in the family. Nineteen Mathlib recursors came back VIOLATION, all
+of them legitimate: a mutual recursor carries rules for the member it
+eliminates, which the pass now reads off the conclusion rather than off the
+declaration's name. Without the differential test that rule would have shipped
+rejecting valid code — and a rule wrong in one direction can be wrong in the
+other.
+
+### 2c. The iota rules — not done
+
+The third and last assumed property, and the one that needs real work: the
+pass above counts the rules and checks which constructor each belongs to, not
+what a rule computes. A forged right-hand side is still accepted on its
+specification and caught only by provenance. Checking it means re-deriving
+each rule's expected right-hand side from the constructor's fields and the
+motive, which is close to generating the recursor — so the widening risk is
+the highest of the three and the same discipline is the minimum.
+
+**Done when:** a forgery that alters one iota rule's right-hand side, added to
+`tests/forgeries/`, is rejected on that rule, and the differential test over
+both declaration sets is clean.
+
+**Until then:** ASSUMPTIONS A3 stands. Two of three properties checked is not
+a checked specification, and the provenance gate is still what makes a forged
+inductive unable to produce a clean result.
 
 ## 3. Fix the two recorded incompleteness findings, or document them as permanent
 

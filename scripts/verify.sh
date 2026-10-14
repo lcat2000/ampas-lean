@@ -87,21 +87,23 @@ note "triangulation: each equivalence must relate the two statements on record (
 run "$PY" harness/triangulate.py --out build/triangulation.json
 note "which stored verdicts would not reproduce today (metadata only; nothing is re-executed)"
 run "$PY" harness/reverify.py --out build/reverification.json
-# strict positivity, differentially: every inductive Lean itself accepted must
-# pass, so a VIOLATION here is a bug in the pass and exits non-zero. The
-# Mathlib set is added at tier 3, where Mathlib is on the path.
-note "strict positivity over the trusted reference set (a violation means the pass is wrong, not Lean)"
+# the specification passes, differentially: every declaration Lean itself
+# accepted must pass, so a VIOLATION here is a bug in the pass and exits
+# non-zero. The Mathlib set is added at tier 3, where Mathlib is on the path.
+note "specification passes over the trusted reference set (a violation means the pass is wrong, not Lean)"
 if LEAN_PATH="$TRUSTED" lean --run harness/Export.lean --specs AmpasRef.Guards \
      build/guards.specs >/dev/null 2>&1; then
-  run "$PY" harness/positivity_diff.py build/positivity_core.json \
-        AmpasRef.Guards=build/guards.specs
+  for SPEC_PASS in positivity recursor; do
+    run "$PY" harness/spec_diff.py --pass "$SPEC_PASS" \
+          "build/${SPEC_PASS}_core.json" AmpasRef.Guards=build/guards.specs
+  done
 else
   note "skipped — could not export AmpasRef.Guards specifications"
 fi
 run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
-      tests/test_positivity.py tests/test_portability.py -q
+      tests/test_positivity.py tests/test_recursor.py tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }
@@ -148,13 +150,16 @@ if [ -f "$MT/.lake/build/lib/lean/AmpasRef/ChallengeMathlib.olean" ]; then
 
   # the differential test that matters: Mathlib is where the inductive shapes
   # this pass cannot decide actually live, and it must decline them rather
-  # than approve them (reproduces evidence/positivity_differential.json)
-  note "strict positivity over Mathlib's inductives"
+  # than approve them (reproduces the committed evidence/*_differential.json)
+  note "the specification passes over Mathlib's declarations"
   if LEAN_PATH="$AMPAS_TRUSTED_OLEAN:$MLPATH" lean --run harness/Export.lean \
        --specs AmpasRef.ChallengeMathlib build/mathlib.specs >/dev/null 2>&1; then
-    run "$PY" harness/positivity_diff.py build/positivity_differential.json \
-          AmpasRef.Guards=build/guards.specs \
-          AmpasRef.ChallengeMathlib=build/mathlib.specs
+    for SPEC_PASS in positivity recursor; do
+      run "$PY" harness/spec_diff.py --pass "$SPEC_PASS" \
+            "build/${SPEC_PASS}_differential.json" \
+            AmpasRef.Guards=build/guards.specs \
+            AmpasRef.ChallengeMathlib=build/mathlib.specs
+    done
   else
     note "skipped — could not export the Mathlib specifications"
   fi

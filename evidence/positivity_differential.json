@@ -1,9 +1,11 @@
 {
   "schema": "ampas-positivity-differential/1",
-  "recorded_at": "2026-10-14T03:30:34+00:00",
+  "pass": "positivity",
+  "reads": "inductive specifications",
+  "recorded_at": "2026-10-14T04:48:18+00:00",
   "lean": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
   "totals": {
-    "inductives_checked": 3285,
+    "checked": 3285,
     "ok": 3240,
     "violations": 0,
     "unclassified": 45
@@ -13,7 +15,7 @@
       "environment": "AmpasRef.Guards",
       "specs": "init.specs",
       "declarations_in_export": 2133,
-      "inductives_checked": 625,
+      "checked": 625,
       "ok": 624,
       "violations": [],
       "unclassified": [
@@ -21,13 +23,16 @@
           "Lean.Syntax",
           "Lean.Syntax.node: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
         ]
-      ]
+      ],
+      "unclassified_by_cause": {
+        "nested inductive": 1
+      }
     },
     {
       "environment": "AmpasRef.ChallengeMathlib",
       "specs": "mathlib.specs",
       "declarations_in_export": 9638,
-      "inductives_checked": 2660,
+      "checked": 2660,
       "ok": 2616,
       "violations": [],
       "unclassified": [
@@ -207,7 +212,10 @@
           "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie",
           "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.mk: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
         ]
-      ]
+      ],
+      "unclassified_by_cause": {
+        "nested inductive": 44
+      }
     }
   ],
   "means": [
@@ -216,14 +224,13 @@
     "harness/kernel3/positivity.py and this run exits non-zero on one.",
     "",
     "UNCLASSIFIED is the pass declining to decide, which is the safe",
-    "direction; the count is here so growth in it is visible.",
+    "direction; the counts by cause are here so growth in it is visible.",
     "",
     "What this run does NOT establish: that a specification which comes",
     "back OK is checked. Positivity is one of three properties kernel3",
     "assumes about an inductive -- the recursor's shape and the iota",
-    "rules are the other two, and neither is checked anywhere in this",
-    "repository. kernel3's provenance gate is what stops a forged",
-    "specification producing a clean result, and this pass does not",
-    "relax it."
+    "rules are the other two. kernel3's provenance gate is what stops a",
+    "forged specification producing a clean result, and this pass does",
+    "not relax it."
   ]
 }

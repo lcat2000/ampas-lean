@@ -17,7 +17,8 @@ diff your run against the record.
 | `review_verification_mathlib.json` | the same for the Mathlib claim | the same with `AMPAS_CLAIMS` |
 | `baseline_fresh_replay.json` | `leanchecker --fresh`: all of Init replayed into an empty kernel (a one-off baseline, ~3 min) | `baseline()` in `harness/ampas_lean.py` |
 | `sample_reports.json` | full driver output for a few submissions, as a format sample | driver output |
-| `positivity_differential.json` | the positivity pass run over every inductive in the trusted reference set and the Mathlib set | `harness/positivity_diff.py` (see below) |
+| `positivity_differential.json` | the positivity pass run over every inductive in the trusted reference set and the Mathlib set | `harness/spec_diff.py` (see below) |
+| `recursor_differential.json` | the recursor-shape pass run over every recursor in the same two sets | the same, `--pass recursor` |
 | `corpus_results.json` | round-1 record (single kernel) | history |
 | `corpus_results_twokernels.json` | round-2 record (two kernels, no third check) | history |
 | `corpus_results_mathlib.json` | round-2 Mathlib record | history |
@@ -112,19 +113,28 @@ Today every stored record in `evidence/` is NO_PROVENANCE: they were issued
 before provenance was recorded, so their kernels cannot be identified from
 the record. That is thirty certified claims, and the gap closes forwards only.
 
-## positivity_differential.json — strict positivity, differentially tested
+## positivity_differential.json, recursor_differential.json
+
+Two of `harness/kernel3`'s three assumed properties, each checked by its own
+pass and each differentially tested.
 
     export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
     LEAN_PATH=$AMPAS_TRUSTED_OLEAN lean --run harness/Export.lean \
         --specs AmpasRef.Guards build/guards.specs
-    python3 harness/positivity_diff.py build/positivity_core.json \
+    python3 harness/spec_diff.py --pass positivity build/positivity_core.json \
+        AmpasRef.Guards=build/guards.specs
+    python3 harness/spec_diff.py --pass recursor build/recursor_core.json \
         AmpasRef.Guards=build/guards.specs
 
-`scripts/verify.sh` runs this at tier 1 and adds the Mathlib set at tier 3,
-which is where the committed record comes from.
+`scripts/verify.sh` runs both at tier 1 and adds the Mathlib set at tier 3,
+which is where the committed records come from.
 
 `harness/kernel3/positivity.py` decides strict positivity for an inductive
-specification. **Read the asymmetry before reading the numbers:**
+specification; `harness/kernel3/recursor.py` decides the generated recursor's
+shape — arities, one iota rule per constructor of the member being eliminated,
+the `k` flag, and the elimination universe, where large elimination of a `Prop`
+is permitted only for a subsingleton. **Read the asymmetry before reading the
+numbers:**
 
 - a **VIOLATION** over these sets would be a bug in the pass, not a finding
   about Lean — Lean's own kernel accepted every one of these declarations when
@@ -135,14 +145,32 @@ specification. **Read the asymmetry before reading the numbers:**
 - **OK** says this pass agrees with Lean where it has an opinion. It does
   **not** say the specification is checked.
 
-The record: 3285 inductives, 0 violations, 45 unclassified — all 45 the nested
-shape, a recursive occurrence under another inductive's parameter (`Array`,
-mostly), which needs that inductive's own positivity.
+The records: **3285 inductives, 0 violations, 45 unclassified** — all 45 the
+nested shape, a recursive occurrence under another inductive's parameter
+(`Array`, mostly), which needs that inductive's own positivity. And **3410
+recursors, 0 violations, 263 unclassified** under two named causes: a field
+type needing a definition the `--specs` export does not carry (80, since that
+export is assumed declarations only), and the auxiliary recursors a nested
+inductive generates over the nesting type (183).
 
-**What a clean result here does not buy.** Positivity is one of three
-properties `harness/kernel3` assumes about an inductive; the recursor's shape
-and the iota rules are the other two and neither is checked anywhere in this
-repository. So a specification that passes positivity can still be a forgery —
-`tests/forgeries/forge_large_elim.export` is one, and it passes this pass
-because what it forges is the recursor. The provenance gate is what catches
-it, and this pass does not relax it. ASSUMPTIONS A3 and ROADMAP 2.
+`unclassified_by_cause` must account for every declined declaration, with
+nothing under `other`. A new cause hiding in a catch-all is how one of these
+passes would quietly stop covering something.
+
+**What a clean result here does not buy.** The two passes catch different
+forgeries and neither subsumes the other: `forge_positivity.export` has a
+legitimate recursor and passes the recursor pass, `forge_large_elim.export`
+has a legitimate inductive and passes positivity. And the third property —
+what each iota rule actually computes — is checked by nothing here. So a
+declaration passing both passes is still not a checked specification; the
+provenance gate is what catches a forged one, and neither pass relaxes it.
+ASSUMPTIONS A3 and ROADMAP 2.
+
+**One finding from building it**, because it is the reason the differential
+test is a requirement and not a formality: the recursor pass's first rules
+check assumed a mutual family's recursor carries iota rules for every
+constructor in the family. Nineteen Mathlib recursors came back VIOLATION, all
+legitimate — a mutual recursor carries rules for the member it eliminates. The
+pass now reads that member off the recursor's conclusion. A rule that was
+wrong in the rejecting direction could as easily have been wrong in the
+accepting one.

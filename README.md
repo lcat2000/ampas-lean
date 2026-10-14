@@ -233,10 +233,11 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 
 1. Replace cross-kernel agreement as the strongest claim — it is now known to
    be defeatable — with something stronger, and say what that would be.
-2. Finish the third check's inductive-specification gap. Strict positivity is
-   done (a separate pass, 3285 inductives differentially tested, 0 violations,
-   45 declined as undecidable by it); the recursor's shape and the iota rules
-   are still assumed, so a specification that passes positivity can still be a
+2. Finish the third check's inductive-specification gap. Two of its three
+   assumed properties are now checked, each by a separate differentially
+   tested pass: strict positivity (3285 inductives, 0 violations) and the
+   recursor's shape (3410 recursors, 0 violations). The iota rules' right-hand
+   sides are still assumed, so a declaration that passes both can still be a
    forgery and the provenance gate is what catches it.
 3. Bind the signing key to an identity outside this repository. As of
    2026-10-13 all 13 attestations are signed by a key held by the repository

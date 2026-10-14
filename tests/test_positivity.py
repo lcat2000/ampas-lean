@@ -204,17 +204,18 @@ def test_differential_record_is_consistent():
     d = json.loads(DIFF.read_text(encoding="utf-8"))
     assert d["schema"] == "ampas-positivity-differential/1"
     t = d["totals"]
-    assert t["inductives_checked"] == sum(s["inductives_checked"] for s in d["sets"])
+    assert t["checked"] == sum(s["checked"] for s in d["sets"])
     assert t["ok"] == sum(s["ok"] for s in d["sets"])
     assert t["unclassified"] == sum(len(s["unclassified"]) for s in d["sets"])
     for s in d["sets"]:
-        assert s["inductives_checked"] == (
+        assert s["checked"] == (
             s["ok"] + len(s["violations"]) + len(s["unclassified"])), s["environment"]
+        assert sum(s["unclassified_by_cause"].values()) == len(s["unclassified"])
 
 
 def test_differential_record_reports_no_violation():
     """Over declaration sets Lean's own kernel accepted, a violation would be
-    a bug in the pass -- Lean accepted the declaration. harness/positivity_diff.py
+    a bug in the pass -- Lean accepted the declaration. harness/spec_diff.py
     exits non-zero on one; this pins the committed result."""
     d = json.loads(DIFF.read_text(encoding="utf-8"))
     assert d["totals"]["violations"] == 0
@@ -230,7 +231,7 @@ def test_differential_record_covers_both_environments():
     envs = {s["environment"] for s in d["sets"]}
     assert "AmpasRef.Guards" in envs
     assert any("Mathlib" in e for e in envs), envs
-    assert d["totals"]["inductives_checked"] > 1000
+    assert d["totals"]["checked"] > 1000
 
 
 def test_differential_record_does_not_claim_the_specification_is_checked():

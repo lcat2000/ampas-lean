@@ -1,0 +1,1111 @@
+{
+  "schema": "ampas-recursor-differential/1",
+  "pass": "recursor",
+  "reads": "recursors",
+  "recorded_at": "2026-10-14T04:48:19+00:00",
+  "lean": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
+  "totals": {
+    "checked": 3410,
+    "ok": 3147,
+    "violations": 0,
+    "unclassified": 263
+  },
+  "sets": [
+    {
+      "environment": "AmpasRef.Guards",
+      "specs": "init.specs",
+      "declarations_in_export": 2133,
+      "checked": 627,
+      "ok": 597,
+      "violations": [],
+      "unclassified": [
+        [
+          "Array.Mem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Array.Mem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "BitVec.DivModState.Lawful.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: BitVec.DivModState.Lawful.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "BitVec.DivModState.Poised.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: BitVec.DivModState.Poised.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "LawfulGetElem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: LawfulGetElem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "LawfulMonadAttach.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: LawfulMonadAttach.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "Lean.Grind.OrderedRing.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Lean.Grind.OrderedRing.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "Lean.Order.MonoBind.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Lean.Order.MonoBind.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Lean.Syntax.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Syntax.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Syntax.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "NeZero.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: NeZero.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Asymm.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Asymm.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Irrefl.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Irrefl.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.IsPreorder.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.IsPreorder.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.PRange.LawfulUpwardEnumerable.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.PRange.LawfulUpwardEnumerable.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Slice.Self.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Slice.Self.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Pos.Raw.IsValid.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Defs.0.String.Pos.Raw.IsValid.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Pos.Raw.IsValidForSlice.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Pos.Raw.IsValidForSlice.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestMatch.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestMatchAt.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestMatchAt.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestRevMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestRevMatch.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestRevMatchAt.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestRevMatchAt.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsMatch.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsRevMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsRevMatch.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.StrictPatternModel.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.StrictPatternModel.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.StrictBackwardPattern.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.StrictBackwardPattern.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.StrictForwardPattern.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.StrictForwardPattern.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Vector.Mem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Vector.Mem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "_private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.IsTable.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.IsTable.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "_private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.PartialMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.PartialMatch.mk field 0's type cannot be decided from this export"
+        ]
+      ],
+      "unclassified_by_cause": {
+        "field type not in export": 27,
+        "nested auxiliary recursor": 3
+      }
+    },
+    {
+      "environment": "AmpasRef.ChallengeMathlib",
+      "specs": "mathlib.specs",
+      "declarations_in_export": 9638,
+      "checked": 2783,
+      "ok": 2550,
+      "violations": [],
+      "unclassified": [
+        [
+          "AddIrreducible.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: AddIrreducible.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Aesop.Frontend.RuleExpr.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.Frontend.RuleExpr.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.Frontend.RuleExpr.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_1",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_10",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_2",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_3",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_4",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_5",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_6",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_7",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_8",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_9",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.IndexingMode.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.IndexingMode.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.IndexingMode.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.MVarClusterUnsafe.rec",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.RappUnsafe.rec",
+          "13 motives for a family of 3: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.Script.StepTree.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.Script.StepTree.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Aesop.Script.StepTree.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Array.Mem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Array.Mem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "BitVec.DivModState.Lawful.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: BitVec.DivModState.Lawful.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "BitVec.DivModState.Poised.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: BitVec.DivModState.Poised.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "DecompositionMonoid.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: DecompositionMonoid.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "EmbeddingLike.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: EmbeddingLike.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Irreducible.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Irreducible.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsAddRegular.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsAddRegular.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsAddTorsionFree.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsAddTorsionFree.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsBotOneClass.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsBotOneClass.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsBotZeroClass.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsBotZeroClass.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsCompl.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsCompl.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsLeftCancelAdd.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsLeftCancelAdd.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsLeftCancelMul.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsLeftCancelMul.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsLeftCancelMulZero.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsLeftCancelMulZero.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsMulTorsionFree.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsMulTorsionFree.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsRegular.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsRegular.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsRightCancelAdd.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsRightCancelAdd.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsRightCancelMul.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsRightCancelMul.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "IsRightCancelMulZero.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: IsRightCancelMulZero.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "LawfulGetElem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: LawfulGetElem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "LawfulMonadAttach.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: LawfulMonadAttach.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "Lean.AsyncList.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.AsyncList.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.AsyncList.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.AsyncList.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec_1",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec_2",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.Cases.rec",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.Code.rec",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Compiler.LCNF.FunDecl.rec",
+          "6 motives for a family of 4: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Data.Trie.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Data.Trie.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Data.Trie.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_1",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_2",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_3",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_4",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_5",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_6",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_7",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Block.rec_8",
+          "9 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Inline.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Inline.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Inline.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Part.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Part.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Doc.Part.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_1",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_2",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_3",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_4",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_5",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_6",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.RCases.RCasesPatt.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.RCases.RCasesPatt.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_1",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_2",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_3",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_4",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_5",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_6",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_7",
+          "8 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_1",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_2",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_3",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_4",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_5",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_6",
+          "7 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Grind.OrderedRing.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Lean.Grind.OrderedRing.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "Lean.IR.Alt.rec",
+          "4 motives for a family of 2: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.Alt.rec_1",
+          "4 motives for a family of 2: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.Alt.rec_2",
+          "4 motives for a family of 2: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.FnBody.rec",
+          "4 motives for a family of 2: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.IRType.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.IRType.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.IR.IRType.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec_1",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec_2",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec_3",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec_4",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Json.rec_5",
+          "6 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_1",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_2",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_3",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_4",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Level.PP.Result.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Level.PP.Result.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_1",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_2",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_3",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_4",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.MessageData.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.MessageData.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.MessageData.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplit.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitPred.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DiseqCnstr.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DiseqCnstrProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DvdCnstr.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DvdCnstrProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_1",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_2",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_3",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_4",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_5",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_6",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_7",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_8",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_9",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstrProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.LeCnstr.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.LeCnstrProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.UnsatProof.rec",
+          "21 motives for a family of 12: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Match.Example.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Match.Example.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Match.Pattern.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Meta.Match.Pattern.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Order.MonoBind.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Lean.Order.MonoBind.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Lean.Parser.Tactic.MCasesPat.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Parser.Tactic.MCasesPat.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Parser.Tactic.MRefinePat.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Parser.Tactic.MRefinePat.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Syntax.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Syntax.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Syntax.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_1",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_2",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_3",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_4",
+          "5 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "Nat.AtLeastTwo.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Nat.AtLeastTwo.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "NeZero.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: NeZero.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "ProofWidgets.Html.rec",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "ProofWidgets.Html.rec_1",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "ProofWidgets.Html.rec_2",
+          "3 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "RelHomClass.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: RelHomClass.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Set.OrdConnected.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Set.OrdConnected.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Asymm.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Asymm.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Do.Internal.MayReturn.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Do.Internal.MayReturn.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Do.SPred.Tactic.HasFrame.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Do.SPred.Tactic.HasFrame.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Do.SPred.Tactic.IsAnd.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Do.SPred.Tactic.IsAnd.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Do.SPred.Tactic.IsPure.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Do.SPred.Tactic.IsPure.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Do.SPred.Tactic.SimpAnd.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Do.SPred.Tactic.SimpAnd.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Irrefl.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Irrefl.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.IsPreorder.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.IsPreorder.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.PRange.LawfulUpwardEnumerable.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.PRange.LawfulUpwardEnumerable.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Std.Slice.Self.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Std.Slice.Self.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Pos.Raw.IsValid.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Defs.0.String.Pos.Raw.IsValid.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Pos.Raw.IsValidForSlice.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Pos.Raw.IsValidForSlice.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestMatch.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestMatchAt.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestMatchAt.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestRevMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestRevMatch.mk field 1's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsLongestRevMatchAt.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsLongestRevMatchAt.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsMatch.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.IsRevMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.IsRevMatch.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.Model.StrictPatternModel.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.Model.StrictPatternModel.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.StrictBackwardPattern.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.StrictBackwardPattern.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "String.Slice.Pattern.StrictForwardPattern.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: String.Slice.Pattern.StrictForwardPattern.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "Vector.Mem.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: Vector.Mem.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "ZeroLEOneClass.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: ZeroLEOneClass.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl.rec",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl.rec_1",
+          "2 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "_private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.IsTable.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.IsTable.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "_private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.PartialMatch.rec",
+          "large elimination of a Prop, undecided: FIELD_TYPE_NOT_IN_EXPORT: _private.Init.Data.String.Lemmas.Pattern.String.ForwardSearcher.0.String.Slice.Pattern.Model.ForwardSliceSearcher.PartialMatch.mk field 0's type cannot be decided from this export"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_1",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_2",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_3",
+          "4 motives for a family of 1: this is an auxiliary recursor of a nested inductive, whose shape this pass does not model"
+        ]
+      ],
+      "unclassified_by_cause": {
+        "field type not in export": 53,
+        "nested auxiliary recursor": 180
+      }
+    }
+  ],
+  "means": [
+    "Every recursor in these exports was generated and accepted by Lean's",
+    "own kernel when the modules were built, so a VIOLATION would be a bug",
+    "in harness/kernel3/recursor.py and this run exits non-zero on one.",
+    "",
+    "UNCLASSIFIED is the pass declining to decide. Two causes dominate and",
+    "neither is about the recursor: a field type that needs a definition",
+    "the --specs export does not carry, and the auxiliary recursors a",
+    "nested inductive generates over the nesting type.",
+    "",
+    "What this run does NOT establish: that the iota rules are right. This",
+    "pass counts them and checks which constructor each belongs to; it",
+    "does not check that a rule computes what the constructor's fields say",
+    "it should. The iota rules are the third assumed property and remain",
+    "unchecked, so kernel3's provenance gate is unchanged."
+  ]
+}
