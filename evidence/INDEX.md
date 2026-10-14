@@ -64,3 +64,31 @@ refutation rests on nothing at all.
 For the other three, read `bound` before reading `outcome`: NO_DERIVATION
 means nothing was found inside that universe, and nothing more. ASSUMPTIONS
 A1c is the full statement of what it is and is not worth.
+
+## record_corrections — known-wrong fields in a historical record
+
+`evidence/corpus_results_threechecks.json` carries a `record_corrections`
+entry. It names a field this repository now knows to be wrong in that file,
+the value recorded, the correct value, and why the file was annotated rather
+than regenerated.
+
+The case: `third_check.status` for `A01_kernel_bypass` reads
+`DISAGREEMENT (unadjudicated)`. All three checkers in fact agreed — the
+declaration was rejected by the third check and by both Lean kernels, and
+`kernel_replay: false` / `kernel_replay_independent: false` are recorded in
+the same file. The status was computed from the third check's errors alone and
+never consulted them. `evidence/ablation.json` recorded the truth
+("primary kernel, independent kernel, third check") the whole time; the two
+records disagreed for nine rounds and nothing compared them.
+
+**Why it was not regenerated.** This file is the tier-3 reference run, with
+lean4lean and the Mathlib corpus. Re-running it here would produce a tier-1
+core-only record and lose the `independent kernel` signal and the Mathlib
+rows — replacing a historical record instead of annotating it. No verdict in
+the file was ever affected: A01 is rejected either way.
+
+`tests/test_record_consistency.py` honours the annotation and requires it to
+still be needed: if the field ever stops carrying the wrong value, the test
+fails and asks for the correction to be removed. A correction cannot be used
+to excuse an arbitrary value either — it must name the value the file
+actually contains.

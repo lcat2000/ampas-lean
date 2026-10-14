@@ -34,19 +34,44 @@ RESULTS = [ROOT / "build" / "corpus_core.json",
 POSITIVE = "kernel-checked; statement matches the reference; axioms within policy"
 
 
-def _load() -> list[dict]:
+def _load() -> tuple[list[dict], dict]:
+    """The results, and any corrections recorded against that file.
+
+    `evidence/` holds the reference run, made with the pre-2026-10-14
+    labeller, so it carries a status this repository now knows to be wrong.
+    Regenerating it here would replace a tier-3 record with a tier-1 one and
+    lose signals -- falsifying a historical record instead of annotating it.
+    So the file carries a `record_corrections` entry and these tests honour
+    it: a field named there is checked against the CORRECTED value, and a
+    correction that stops being needed makes the test fail rather than pass
+    quietly."""
     for p in RESULTS:
         if p.exists():
             d = json.loads(p.read_text(encoding="utf-8"))
             subs = d if isinstance(d, list) else d.get("submissions", d.get("results", []))
             if subs:
-                return subs
+                corr = {}
+                if isinstance(d, dict):
+                    for c in d.get("record_corrections", []):
+                        for mod in c["affects"]:
+                            corr[(mod, c["field"])] = c
+                return subs, corr
     pytest.skip("no corpus results on disk; run ./scripts/verify.sh 1")
 
 
 @pytest.fixture(scope="module")
-def subs() -> list[dict]:
+def loaded() -> tuple[list[dict], dict]:
     return _load()
+
+
+@pytest.fixture(scope="module")
+def subs(loaded) -> list[dict]:
+    return loaded[0]
+
+
+@pytest.fixture(scope="module")
+def corrections(loaded) -> dict:
+    return loaded[1]
 
 
 def test_certified_agrees_with_the_reasons_beside_it(subs):
@@ -78,7 +103,7 @@ def test_inconclusive_agrees_with_recorded_resource_exhaustion(subs):
                     f"no resource exhaustion recorded for the submission")
 
 
-def test_third_check_status_is_recomputable_from_its_own_errors(subs):
+def test_third_check_status_is_recomputable_from_its_own_errors(subs, corrections):
     """The status label must follow from the error list and the kernels'
     result. This is the exact pair that disagreed for nine rounds."""
     for s in subs:
@@ -87,6 +112,16 @@ def test_third_check_status_is_recomputable_from_its_own_errors(subs):
             continue
         where = s.get("module", "?")
         errors = tc.get("errors") or []
+        fix = corrections.get((where, "results[].third_check.status"))
+        if fix is not None:
+            # A known-wrong field in a historical record. The correction has to
+            # BE the corrected value, so an annotation cannot excuse an
+            # arbitrary one, and it has to still be needed.
+            assert tc.get("status") == fix["recorded_value"], (
+                f"{where}: a correction is recorded for a value this file no "
+                f"longer contains; remove the correction")
+            tc = dict(tc, status=fix["correct_value"],
+                      unadjudicated_disagreement=False)
         replay_ok = s.get("kernel_replay") and (
             s.get("kernel_replay_independent") is not False)
         status = tc.get("status", "")

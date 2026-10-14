@@ -1407,5 +1407,19 @@
       "expected": "rejected",
       "note": "custom relation under hijacked notation."
     }
+  ],
+  "record_corrections": [
+    {
+      "field": "results[].third_check.status",
+      "affects": [
+        "A01_kernel_bypass"
+      ],
+      "recorded_value": "DISAGREEMENT (unadjudicated)",
+      "correct_value": "CORROBORATION (the third check also rejected; the Lean kernels rejected too)",
+      "found": "2026-10-14",
+      "why_wrong": "The status was computed from the third check's error list alone and never consulted the kernel replay result, but whether an objection is a disagreement depends entirely on that. A01's bad declaration was rejected by the third check AND by both Lean kernels (kernel_replay: false, kernel_replay_independent: false, both recorded in this same file), so all three checkers agreed. The `signals` list in evidence/ablation.json recorded that correctly the whole time; the two records disagreed for nine rounds and nothing compared them.",
+      "why_not_regenerated": "This file is the record of the tier-3 reference run, with lean4lean and the Mathlib corpus. Regenerating it here would replace it with a tier-1 core-only run and lose the `independent kernel` signal and the Mathlib rows -- replacing a historical record rather than annotating it. The verdicts in this file were never affected: A01 is rejected either way.",
+      "fixed_in": "harness/ampas_lean.py, commit of 2026-10-14; see tests/test_record_consistency.py"
+    }
   ]
 }
