@@ -390,17 +390,48 @@ def test_mathlib_claim_third_check_disagreement_is_adjudicated_not_a_veto(mathli
     assert c["corroboration"] == "DISAGREEMENT (adjudicated: checker incompleteness)"
 
 
-def test_an_unadjudicated_third_check_disagreement_blocks(corpus):
-    """The other half of the rule: A01's rejection by the third check is NOT in
-    the adjudication file, so it blocks. Dropping the gate entirely would have
-    thrown away the one place the third check found a real problem."""
+def test_the_third_check_corroborates_a_shared_rejection(corpus):
+    """A01's bad declaration is rejected by the third check AND by the Lean
+    kernel replay, so the third check CORROBORATED them there.
+
+    This test asserted the opposite until 2026-10-14 -- that A01 was "the one
+    place the third check found a real problem" and that its status was
+    `DISAGREEMENT (unadjudicated)`. Both were wrong, and the test was pinning
+    the mistake: the status was computed from the third check's errors alone,
+    which cannot tell a disagreement from a corroboration because the third
+    check does not know the kernels' result.
+
+    Worth stating plainly: **the corpus contains no genuine unadjudicated
+    disagreement.** The rule that one would block certification is real and is
+    exercised by `test_a_shared_rejection_is_corroboration_not_disagreement`
+    at the unit level, in both directions. It is not exercised by any
+    submission here, and the old test gave the impression that it was."""
     r = corpus["A01_kernel_bypass"]
     tc = r["third_check"]
     if not tc.get("run"):
         pytest.skip("third check not run")
-    assert tc["unadjudicated_disagreement"]
-    assert tc["status"] == "DISAGREEMENT (unadjudicated)"
+    assert tc["status"].startswith("CORROBORATION"), tc["status"]
+    assert tc.get("corroborated_rejection") is True
+    assert tc["unadjudicated_disagreement"] is False
+    # it still blocks -- the kernels rejected it, which is the real reason
     assert not any(c["certified"] for c in r["claims"])
+    joined = " ".join(c for cl in r["claims"] for c in cl["reasons"])
+    assert "the Lean kernels accept" not in joined
+
+
+def test_no_corpus_submission_has_an_unadjudicated_disagreement(corpus):
+    """The gate exists for a case the corpus does not contain. Recording that
+    is the point: a gate with no live instance is untested by the corpus, and
+    a reader counting on it should know that rather than infer coverage from
+    the gate's existence."""
+    for name, r in corpus.items():
+        tc = r.get("third_check", {})
+        if not tc.get("run"):
+            continue
+        assert not tc.get("unadjudicated_disagreement"), (
+            f"{name} now has an unadjudicated third-check disagreement -- that "
+            f"is a finding to look at, and this test should become an "
+            f"assertion about it rather than about its absence")
 
 
 def test_shadowing_a_mathlib_definition_is_caught(mathlib_corpus):
