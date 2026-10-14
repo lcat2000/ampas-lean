@@ -27,6 +27,17 @@ def signals(r: dict) -> list[str]:
     if tc.get("run") and tc.get("errors"):
         out.append("third check")
     for c in r["claims"]:
+        # Structured tags when the record has them. The substring matching
+        # below is the fallback for records written before 2026-10-14, and it
+        # is why this function needed replacing: rewording a reason without
+        # changing its meaning dropped its layer from the table silently, so
+        # an attack caught by the statement comparator appeared to be caught
+        # by nothing. tests/test_record_consistency.py fails on that now.
+        if c.get("signals"):
+            out.extend(c["signals"])
+            for f in c["flags"]:
+                out.append(f.split(":", 1)[0])
+            continue
         for reason in c["reasons"]:
             low = reason.lower()
             if "axioms outside the policy" in low:

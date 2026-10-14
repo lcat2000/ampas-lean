@@ -49,7 +49,7 @@ pretend otherwise. See [docs/review-formalization.md](docs/review-formalization.
 | Counterexample search | 13 statements | 1 refuted (Fermat's claim, at n = 5, as it should be), 8 searched clean, 4 out of reach and recorded as such |
 | Derivation search | the 4 out of reach | PL-BOGUS refuted — kernel-accepted, no axioms; 3 NO_DERIVATION over a stated universe |
 | Triangulation | 3 claim pairs | 3 EQUIVALENT, checked against the named statements — and the method's limit proved as a theorem (A1d) |
-| Tests | 193 | all pass from a clean checkout (204 collected; the Mathlib fixtures skip below tier 3) |
+| Tests | 207 | all pass from a clean checkout (218 collected; the Mathlib fixtures skip below tier 3) |
 
 Every attack is rejected **by the layer that should catch it**, not merely
 rejected — `build/ablation.json` records which signal fired for each, because

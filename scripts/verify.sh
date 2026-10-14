@@ -87,7 +87,8 @@ note "triangulation: each equivalence must relate the two statements on record (
 run "$PY" harness/triangulate.py --out build/triangulation.json
 run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
-      tests/test_triangulation.py tests/test_portability.py -q
+      tests/test_triangulation.py tests/test_record_consistency.py \
+      tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }

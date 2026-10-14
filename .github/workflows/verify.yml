@@ -32,6 +32,10 @@ jobs:
         # The limit of the method must be stated in the record, and the
         # provenance of each rendering with it. See ASSUMPTIONS A1d.
         run: python3 -m pytest tests/test_triangulation.py -q
+      - name: cross-record consistency
+        # Facts recorded in two places must agree. The A01 mislabel survived
+        # nine rounds because two records of one event were never compared.
+        run: python3 -m pytest tests/test_record_consistency.py -q
       - name: portability
         # No file read may depend on the machine's locale, and no step of the
         # signing path may need a POSIX shell. Both were found by a reviewer

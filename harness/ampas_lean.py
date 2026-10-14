@@ -342,6 +342,13 @@ class ClaimVerdict:
     # DISAGREEMENT (adjudicated/unadjudicated), or NOT_RUN. Certification
     # rests on the two Lean kernels; this records the corroboration.
     corroboration: str = "NOT_RUN"
+    # Which LAYER blocked, as tags rather than prose. harness/ablation.py used
+    # to classify the `reasons` strings by substring match, so a
+    # meaning-preserving reword of a reason silently removed a signal from the
+    # "which layer caught each attack" table -- and that table is the evidence
+    # that no single layer is doing all the work. Tags are set where the reason
+    # is appended, by the code that knows which layer it was.
+    signals: list[str] = field(default_factory=list)
     # true when no verdict was reached because a checker ran out of CPU, wall
     # clock or memory. NOT certified, but not a rejection either.
     inconclusive: bool = False
@@ -618,6 +625,7 @@ def _verdict(claim: dict, t: dict, kernel_ok: bool,
                            "this is not a statement about the proof.")
         return v
     if not t or not t.get("found"):
+        v.signals.append("theorem missing")
         v.reasons.append("the submission does not declare this theorem")
         return v
     v.kind = t.get("kind", "")
@@ -630,6 +638,7 @@ def _verdict(claim: dict, t: dict, kernel_ok: bool,
 
     if v.kind != "theorem":
         v.reasons.append(f"declared as {v.kind}, not a theorem")
+        v.signals.append("kind!=theorem")
     if not kernel_ok:
         # Two different things block here and they must not be reported as one.
         # A third-check objection is a DISAGREEMENT only when the Lean kernels
@@ -649,17 +658,21 @@ def _verdict(claim: dict, t: dict, kernel_ok: bool,
     st = v.statement
     if not st.get("closure_ok"):
         diff = st.get("closure_differing", []) + st.get("closure_missing", [])
+        v.signals.append("closure")
         v.reasons.append("statement rests on redefined or missing constants: "
                          + ", ".join(diff[:8]))
     if st.get("extra_constants"):
+        v.signals.append("closure")
         v.reasons.append("statement uses constants outside the reference: "
                          + ", ".join(st["extra_constants"][:8]))
     match_ok = st.get("strict_equal") if comparator == "strict" else (
         st.get("strict_equal") or st.get("kernel_defeq") is True)
     if not match_ok:
+        v.signals.append("statement")
         v.reasons.append(f"statement does not match the reference ({comparator})")
     extra_axioms = sorted(set(v.axioms) - allowed_axioms)
     if extra_axioms:
+        v.signals.append("axiom-policy")
         v.reasons.append("axioms outside the policy: " + ", ".join(extra_axioms))
     bad_flags = [f for f in v.flags if f.split(":")[0] in FORBIDDEN_ALWAYS]
     if bad_flags:
