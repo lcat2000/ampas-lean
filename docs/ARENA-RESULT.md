@@ -1,0 +1,140 @@
+# kernel3 against the Lean Kernel Arena: the first external measurement
+
+**ROADMAP 6.** `harness/kernel3` has three specification passes, each
+differentially tested over 3410 recursors, and four adversarial vectors — all
+four written in this repository. "Thirteen attacks with recorded catching
+layers is evidence that those thirteen are caught, and nothing more" applies to
+the third check as much as to the corpus, and nothing inside this repository
+can fix it.
+
+The [Lean Kernel Arena](https://arena.lean-lang.org/) publishes 198 tests for
+exactly this layer: **72 that must be rejected** (19 of them regressions for
+real Lean kernel bugs) and **126 that must be accepted**. Third-party,
+adversarial, and not written with `kernel3` in mind.
+
+Full per-test record: [`evidence/arena_run.json`](../evidence/arena_run.json).
+Reproduce with `harness/arena_run.py`.
+
+## The numbers
+
+| configuration | wrongly accepted | wrongly rejected | correct | declined |
+| --- | --- | --- | --- | --- |
+| `term_only` — what AMPAS's third check does today | **28** | 9 | 151 | 10 |
+| `with_spec_passes` — plus positivity, recursor, iota | **23** | 12 | 153 | 10 |
+
+By the arena's own ranking — wrongly-accepted first — 23 is a poor score. The
+honest comparison: con-leche and lean4lean each have **0**.
+
+## kernel3 wrongly accepts 23 of the 72
+
+This is not a surprise in *kind*. [ASSUMPTIONS A3](../ASSUMPTIONS.md) has always
+said the inductive specification layer is assumed rather than checked, and
+that
+
+> point this checker at an olean of unknown provenance — the case where an
+> independent checker is most valuable — and the hole is live.
+
+The arena *is* that case. What changed is that the sentence was an argument and
+is now a measurement with 23 named tests:
+
+| cause | n | tests |
+| --- | --- | --- |
+| inductive specification well-formedness | 8 | `047_inductBadNonSort2`, `049_inductTooFewParams`, `050_inductWrongCtorParams`, `051_inductWrongCtorResParams`, `052_inductWrongCtorResLevel`, `053_inductInIndex`, `056_reduceCtorType.mk`, `061_typeWithTooHighTypeField.mk` |
+| projection typing on `Prop` / `imax` | 5 | `proj-of-imax-prop`, `090_projProp2`, `092_projProp4`, `093_projProp5`, `094_projProp6` |
+| recursor well-formedness | 4 | `orphan-rec`, `extra-rec`, `073_BogusRecursor`, `136_misnamed_rec_user` |
+| declaration well-formedness | 2 | `012_nonPropThm`, `014_selfProof` |
+| `unsafe` / `partial` flags the frontend drops | 2 | `140_falseFromUnsafe`, `141_falseFromPartial` |
+| elimination universe: a level **parameter** may be zero | 1 | `large-elim-param` |
+| a duplicate shape `Env.add` does not catch | 1 | `137_dup_rec_def2` |
+
+In AMPAS's own pipeline most of these are contained: the provenance gate
+reports any assumed declaration whose fingerprint is not in the trusted
+baseline, and that baseline comes from an olean Lean itself compiled. **That
+containment is real and it is not an excuse.** The arena measures the checker,
+and the checker is what A3 describes.
+
+## What the three specification passes bought, measured from outside
+
+Of the 28 bad tests the term layer accepts, the passes added by
+[ROADMAP 2a–2c](../ROADMAP.md) reject **5**:
+
+- `large-elim-prop-bool` — the recursor pass
+- `nat-rec-rules` — the iota pass
+- `054_indNeg`, `057_indNegReducible`, `117_reflOccLeft` — positivity
+
+`forge_large_elim` and `forge_iota` were written here to exercise the first two
+shapes. The arena confirms them against vectors nobody here wrote, which is the
+first external evidence that those passes do anything.
+
+## What the passes cost: three false rejections, and the bug behind them
+
+All three come from the iota pass, all have one cause, and **only the arena
+could have found it**:
+
+`055_reduceCtorParam.mk`, `119_reduceCtorParamRefl.mk`,
+`120_reduceCtorParamRefl2.mk`.
+
+The pass decides whether a constructor field is *recursive* by looking at the
+head of its type's conclusion, **syntactically**. Lean decides it after
+δ-reduction. In these tests the field's type is `constType (I α) (I α)` —
+headed by a *definition* that unfolds to expose the family — so Lean generates
+a recursive call, the pass derives a rule without one, and then reports the
+legitimate rule forged.
+
+The Init and Mathlib differential (3410 recursors, 0 violations) could not have
+found this: **neither library has a constructor field whose type needs
+unfolding to reveal its recursion.** The arena has three, and names them after
+the behaviour.
+
+The pair `055` (good) and `056` (bad) states the problem as sharply as it can
+be stated: the pass **rejects the valid one and accepts the invalid one**.
+
+## The nine term-layer false rejections confirm the adjudication list
+
+Independent of the specification passes, the term layer rejects 9 tests that
+must be accepted — and every one is an incompleteness already recorded in
+`reference/third_check_adjudications.json` or its immediate neighbourhood:
+
+- `Nat.decidableBallLT.match_5` appears **by name** — TC-02, the nested `imax`
+  identity `level_leq` cannot decide;
+- `108_unitEta1`, `109_unitEta2`, `075_typeSingletonRecReduction`,
+  `proj-cheap-struct` are the structure-eta and
+  to-constructor-when-structure area TC-01 describes;
+- `church-numerals`, `grind-ring-5`, `magma-list-*`, `init-prelude` are the
+  same mechanisms at library scale.
+
+These are in the **rejecting** direction, which is the safe one. The arena
+confirming them is the first external evidence that the adjudications describe
+real mechanisms rather than convenient ones.
+
+## The ten declines
+
+Six are `bad/tutorial/dup_*`: duplicate declarations, which `kernel3`'s
+`Env.add` refuses outright, so the environment never builds. That is the right
+*outcome* for a bad test by a legitimate mechanism — but the mechanism is the
+**reader**, not the type checker, and this record says so rather than counting
+them as rejections.
+
+Four are `good/perf` tests that hit the 180-second per-test timeout. A timeout
+is not a verdict. Performance was never a claim of this checker: it is a
+from-scratch Python type checker whose purpose is corroborating one submission,
+not library-scale throughput.
+
+## What is not claimed
+
+- **That this is a good result.** It is not. 23 against 0 for the two checkers
+  AMPAS compares itself to.
+- **That it is a surprise.** `kernel3` is a term-layer checker and says so; the
+  arena measures full kernels.
+- **That the 23 are all equally out of scope.** At least four are bugs in work
+  this repository has just finished: `large-elim-param` is a rule of the
+  recursor pass that is wrong in the **accepting** direction (a level
+  *parameter* may be instantiated to zero, making a two-constructor inductive
+  a `Prop`, and the pass treats a parameter as "not a `Prop`"); `orphan-rec` is
+  a shape the pass *declines* where it could decide; and the two
+  `unsafe`/`partial` tests are flags the NDJSON frontend reads and throws away.
+
+Those four, and the iota recursive-field bug above, are what the next round
+addresses. The measurement is recorded first, before any of them is touched,
+so that the improvement is measured against a number that was written down
+before it was known how to improve it.

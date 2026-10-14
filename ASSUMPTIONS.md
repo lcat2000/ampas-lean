@@ -415,6 +415,21 @@ mistake becomes unsoundness. Instead a provenance gate reports any assumed
 declaration whose fingerprint is not in the trusted baseline as an
 `introduced_assumption`, so neither forgery yields a clean result.
 
+**Measured from outside, 2026-10-14.** `harness/kernel3` was run against the
+[Lean Kernel Arena](https://arena.lean-lang.org/)'s 198 tests — the first
+external, adversarial measurement of this checker
+([`docs/ARENA-RESULT.md`](docs/ARENA-RESULT.md), `evidence/arena_run.json`).
+**It wrongly accepts 23 of the 72 tests that must be rejected** (28 without the
+three specification passes). By the arena's ranking that is a poor score;
+con-leche and lean4lean each have 0. The paragraph below was an argument and is
+now a measurement with 23 named tests, grouped by cause in the record.
+
+The three specification passes reject 5 of the 28 the term layer takes, which
+is the first external evidence they do anything — and they cause 3 false
+rejections from one bug the 3410-recursor differential could not have found:
+the iota pass decides whether a constructor field is recursive syntactically,
+where Lean decides it after δ-reduction.
+
 **In this pipeline the hole is unreachable**, because the export comes from an
 olean the submitter compiled with Lean, and a forged inductive does not survive
 Lean's own elaborator and kernel. That is to say: the assumption is discharged

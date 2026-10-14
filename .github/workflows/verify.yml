@@ -47,6 +47,11 @@ jobs:
         run: >-
           python3 -m pytest tests/test_positivity.py tests/test_recursor.py
           tests/test_iota.py -q
+      - name: arena result record
+        # kernel3's first external measurement (ROADMAP 6c). The result is
+        # poor -- 23 of 72 bad tests accepted -- and these tests keep it poor
+        # in the record until the checker improves.
+        run: python3 -m pytest tests/test_arena_result.py tests/test_ndjson.py -q
       - name: con-leche evaluation record
         # The verified-kernel evaluation (ROADMAP 1.3b). Three of its four runs
         # are easy to overclaim: the A04 decline is the axiom layer rather than

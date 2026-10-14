@@ -105,6 +105,7 @@ run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_positivity.py tests/test_recursor.py tests/test_iota.py \
       tests/test_history_corpus.py tests/test_conleche_evaluation.py \
+      tests/test_arena_result.py tests/test_ndjson.py \
       tests/test_portability.py -q
 RAN="$RAN 1"
 
