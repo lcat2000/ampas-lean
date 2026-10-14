@@ -92,9 +92,51 @@ be written straight into the checker:
 - keep `tests/forgeries/` as the regression floor, and add forgeries for each
   newly covered property.
 
-**Done when:** both existing forgeries are rejected on their *specification*
-rather than reported as introduced assumptions, and the differential test over
-Mathlib's inductives is clean.
+### 2a. Strict positivity — done, 2026-10-14
+
+`harness/kernel3/positivity.py`, a separate pass that classifies rather than
+judges: `OK`, `VIOLATION`, or `UNCLASSIFIED` for a shape it cannot decide.
+`forge_positivity.export` is now rejected on its specification —
+`Bad.mk : (Bad → MyFalse) → Bad` puts the recursive occurrence left of an
+arrow — and `MyFalse`, in the same export, still passes, so the pass is not
+simply rejecting arrows.
+
+Differentially tested (`harness/positivity_diff.py`,
+`evidence/positivity_differential.json`): **3285 inductives** across the
+trusted reference set and the Mathlib set, **0 violations**, **45
+unclassified**, all 45 of one cause — a recursive occurrence under another
+inductive's parameter (`Array`, mostly), which needs that inductive's own
+positivity and which this pass declines rather than approves. A violation
+there would be a bug in the pass, since Lean's own kernel accepted the
+declaration, so the script exits non-zero on one.
+
+**What it does not close.** Two things, and the first corrects the "done when"
+originally written here:
+
+- **`forge_large_elim.export` is not a positivity forgery.** It forges a
+  *recursor*. Positivity has nothing to say about it, it comes back clean from
+  this pass, and it must still be caught by the provenance gate. The original
+  wording — "both existing forgeries are rejected on their specification" —
+  asked positivity to do something it cannot; only one of the two forgeries is
+  in its scope.
+- **Passing is still not a checked specification.** Positivity is one of three
+  assumed properties. `kernel3`'s provenance gate is unchanged and
+  `tests/test_positivity.py::test_positivity_does_not_relax_the_provenance_gate`
+  fails if a positivity `OK` is ever wired into it.
+
+### 2b. Recursor shape — not done
+
+The remaining half. `forge_large_elim.export` is the live vector: a `Prop`
+inductive given a large-eliminating recursor, which proves `False` by
+extracting data from a proof. Checking it means checking the motive's
+universe, the minor premises' shapes against the constructors, and the `k`
+flag — each in the widening direction, so the same discipline applies: its own
+pass, its own differential test over the sets both kernels accept, and
+`UNCLASSIFIED` rather than a guess.
+
+**Done when:** `forge_large_elim` is rejected on its recursor's shape rather
+than only by provenance, and the differential test over both declaration sets
+is clean for that pass too.
 
 ## 3. Fix the two recorded incompleteness findings, or document them as permanent
 

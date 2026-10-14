@@ -1,0 +1,229 @@
+{
+  "schema": "ampas-positivity-differential/1",
+  "recorded_at": "2026-10-14T03:30:34+00:00",
+  "lean": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
+  "totals": {
+    "inductives_checked": 3285,
+    "ok": 3240,
+    "violations": 0,
+    "unclassified": 45
+  },
+  "sets": [
+    {
+      "environment": "AmpasRef.Guards",
+      "specs": "init.specs",
+      "declarations_in_export": 2133,
+      "inductives_checked": 625,
+      "ok": 624,
+      "violations": [],
+      "unclassified": [
+        [
+          "Lean.Syntax",
+          "Lean.Syntax.node: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ]
+      ]
+    },
+    {
+      "environment": "AmpasRef.ChallengeMathlib",
+      "specs": "mathlib.specs",
+      "declarations_in_export": 9638,
+      "inductives_checked": 2660,
+      "ok": 2616,
+      "violations": [],
+      "unclassified": [
+        [
+          "Aesop.Frontend.RuleExpr",
+          "Aesop.Frontend.RuleExpr.node: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Aesop.GoalUnsafe",
+          "Aesop.GoalUnsafe.mk: argument 0 mentions the family but its conclusion is headed by 3/Aesop.GoalData; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Aesop.IndexingMode",
+          "Aesop.IndexingMode.or: argument 0 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Aesop.MVarClusterUnsafe",
+          "Aesop.MVarClusterUnsafe.mk: argument 0 mentions the family but its conclusion is headed by 3/Aesop.MVarClusterData; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Aesop.RappUnsafe",
+          "Aesop.RappUnsafe.mk: argument 0 mentions the family but its conclusion is headed by 3/Aesop.RappData; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Aesop.Script.StepTree",
+          "Aesop.Script.StepTree.node: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.AsyncList",
+          "Lean.AsyncList.delayed: argument 2 mentions the family but its conclusion is headed by 3/Lean.Server.ServerTask; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Compiler.LCNF.Cases",
+          "Lean.Compiler.LCNF.Cases.mk: argument 4 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Data.Trie",
+          "Lean.Data.Trie.node: argument 3 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Doc.Block",
+          "Lean.Doc.Block.ul: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Doc.Inline",
+          "Lean.Doc.Inline.emph: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Doc.Part",
+          "Lean.Doc.Part.mk: argument 7 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Elab.InfoTree",
+          "Lean.Elab.InfoTree.node: argument 1 mentions the family but its conclusion is headed by 3/Lean.PersistentArray; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Elab.Tactic.RCases.RCasesPatt",
+          "Lean.Elab.Tactic.RCases.RCasesPatt.tuple: argument 1 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot",
+          "Lean.Elab.Tactic.TacticParsedSnapshot.mk: argument 0 mentions the family but its conclusion is headed by 3/Lean.Language.TransformedSnap; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code",
+          "Lean.Elab.Term.Do.Code.match: argument 4 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.IR.FnBody",
+          "Lean.IR.FnBody.case: argument 3 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.IR.IRType",
+          "Lean.IR.IRType.struct: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Json",
+          "Lean.Json.arr: argument 0 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot",
+          "Lean.Language.Lean.CommandParsedSnapshot.mk: argument 4 mentions the family but its conclusion is headed by 3/Option; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Language.SnapshotTree",
+          "Lean.Language.SnapshotTree.mk: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Level.PP.Result",
+          "Lean.Level.PP.Result.maxNode: argument 0 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol",
+          "Lean.Lsp.DocumentSymbol.mk: argument 0 mentions the family but its conclusion is headed by 3/Lean.Lsp.DocumentSymbolAux; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy",
+          "Lean.Lsp.Ipc.CallHierarchy.mk: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy",
+          "Lean.Lsp.Ipc.ModuleHierarchy.mk: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.MessageData",
+          "Lean.MessageData.trace: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie",
+          "Lean.Meta.DiscrTree.Trie.node: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitPred",
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitPred.mk: argument 3 mentions the family but its conclusion is headed by 3/Option; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitProof",
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitProof.last: argument 0 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstrProof",
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstrProof.mul: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.Match.Example",
+          "Lean.Meta.Match.Example.ctor: argument 1 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Meta.Match.Pattern",
+          "Lean.Meta.Match.Pattern.ctor: argument 3 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Parser.Tactic.MCasesPat",
+          "Lean.Parser.Tactic.MCasesPat.tuple: argument 0 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Parser.Tactic.MRefinePat",
+          "Lean.Parser.Tactic.MRefinePat.tuple: argument 0 mentions the family but its conclusion is headed by 3/List; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.PersistentArrayNode",
+          "Lean.PersistentArrayNode.node: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.PersistentHashMap.Node",
+          "Lean.PersistentHashMap.Node.entries: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.PrefixTreeNode",
+          "Lean.PrefixTreeNode.Node: argument 4 mentions the family but its conclusion is headed by 3/Std.TreeMap.Raw; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Syntax",
+          "Lean.Syntax.node: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Widget.MsgEmbed",
+          "Lean.Widget.MsgEmbed.widget: argument 1 mentions the family but its conclusion is headed by 3/Lean.Widget.TaggedText; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Lean.Widget.TaggedText",
+          "Lean.Widget.TaggedText.append: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder",
+          "Mathlib.Tactic.Translate.ArgReorder.mk: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "ProofWidgets.Html",
+          "ProofWidgets.Html.element: argument 2 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl",
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl.thunk: argument 2 mentions the family but its conclusion is headed by 3/Thunk; this is the nested-inductive shape, which this pass does not decide"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie",
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.mk: argument 1 mentions the family but its conclusion is headed by 3/Array; this is the nested-inductive shape, which this pass does not decide"
+        ]
+      ]
+    }
+  ],
+  "means": [
+    "Every inductive in these exports was accepted by Lean's own kernel",
+    "when the modules were built, so a VIOLATION would be a bug in",
+    "harness/kernel3/positivity.py and this run exits non-zero on one.",
+    "",
+    "UNCLASSIFIED is the pass declining to decide, which is the safe",
+    "direction; the count is here so growth in it is visible.",
+    "",
+    "What this run does NOT establish: that a specification which comes",
+    "back OK is checked. Positivity is one of three properties kernel3",
+    "assumes about an inductive -- the recursor's shape and the iota",
+    "rules are the other two, and neither is checked anywhere in this",
+    "repository. kernel3's provenance gate is what stops a forged",
+    "specification producing a clean result, and this pass does not",
+    "relax it."
+  ]
+}

@@ -12,6 +12,7 @@
 | `review_verification_mathlib.json` | Mathlib 主張（PRIMES）同上 | 同上，加 `AMPAS_CLAIMS` |
 | `baseline_fresh_replay.json` | `leanchecker --fresh`：把 Init 全部重放進空核心（一次性基準，約 3 分鐘） | `harness/ampas_lean.py` 的 `baseline()` |
 | `sample_reports.json` | 幾份提交的完整判定輸出範例 | 驅動程式輸出 |
+| `positivity_differential.json` | 正性 pass 跑過受信任參考環境與 Mathlib 環境裡的每一個歸納型 | `harness/positivity_diff.py`（見下） |
 | `corpus_results.json` | 第一輪紀錄（單一核心） | 歷史 |
 | `corpus_results_twokernels.json` | 第二輪紀錄（兩套核心，無第三道檢查） | 歷史 |
 | `corpus_results_mathlib.json` | 第二輪的 Mathlib 紀錄 | 歷史 |
@@ -47,3 +48,34 @@
 
 另外三條，先讀 `bound` 再讀 `outcome`：NO_DERIVATION 的意思是「在那個範圍內沒找
 到」，僅此而已。完整說明見 ASSUMPTIONS A1c。
+
+## positivity_differential.json — 嚴格正性的差分測試
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    LEAN_PATH=$AMPAS_TRUSTED_OLEAN lean --run harness/Export.lean \
+        --specs AmpasRef.Guards build/guards.specs
+    python3 harness/positivity_diff.py build/positivity_core.json \
+        AmpasRef.Guards=build/guards.specs
+
+`scripts/verify.sh` 在 tier 1 跑這一段，tier 3 再加上 Mathlib 那一組——committed
+的那份紀錄就是 tier 3 產生的。
+
+`harness/kernel3/positivity.py` 判斷一個歸納型規格是否嚴格正性。**先讀這個不
+對稱，再讀數字：**
+
+- 在這些集合上出現 **VIOLATION**，那是**這道 pass 的 bug**，不是對 Lean 的發
+  現——這些宣告在模組編譯時全部被 Lean 自己的核心接受過。腳本遇到就以非零結束。
+- **UNCLASSIFIED** 是這道 pass 拒絕下判斷，那是錯誤被允許走的方向。每一筆都連
+  同理由記下來，所以它變多的時候看得見，而不是默默變多。
+- **OK** 的意思是：在這道 pass 有意見的地方，它與 Lean 一致。它**不**表示那份
+  規格被檢查過了。
+
+紀錄本身：3285 個歸納型、0 個違反、45 個 unclassified——這 45 個全是同一種形狀，
+即遞迴出現被放在另一個歸納型的參數底下（多半是 `Array`），要判它得先算那個歸納
+型自己的正性。
+
+**乾淨的結果買不到什麼。** `harness/kernel3` 對一個歸納型假設三件事，正性只是其
+中一件；遞子（recursor）的形狀與 iota 規則是另外兩件，這個倉庫裡沒有任何地方檢
+查它們。所以通過正性檢查的規格仍然可能是偽造的——`tests/forgeries/forge_large_elim.export`
+就是一個，而且它通過這道 pass，因為它偽造的是遞子。擋下它的是來源查核，而這道
+pass 沒有放寬它。見 ASSUMPTIONS A3 與 ROADMAP 2。

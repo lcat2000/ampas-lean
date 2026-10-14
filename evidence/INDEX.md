@@ -17,6 +17,7 @@ diff your run against the record.
 | `review_verification_mathlib.json` | the same for the Mathlib claim | the same with `AMPAS_CLAIMS` |
 | `baseline_fresh_replay.json` | `leanchecker --fresh`: all of Init replayed into an empty kernel (a one-off baseline, ~3 min) | `baseline()` in `harness/ampas_lean.py` |
 | `sample_reports.json` | full driver output for a few submissions, as a format sample | driver output |
+| `positivity_differential.json` | the positivity pass run over every inductive in the trusted reference set and the Mathlib set | `harness/positivity_diff.py` (see below) |
 | `corpus_results.json` | round-1 record (single kernel) | history |
 | `corpus_results_twokernels.json` | round-2 record (two kernels, no third check) | history |
 | `corpus_results_mathlib.json` | round-2 Mathlib record | history |
@@ -110,3 +111,38 @@ reproduce, not that it did.
 Today every stored record in `evidence/` is NO_PROVENANCE: they were issued
 before provenance was recorded, so their kernels cannot be identified from
 the record. That is thirty certified claims, and the gap closes forwards only.
+
+## positivity_differential.json — strict positivity, differentially tested
+
+    export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
+    LEAN_PATH=$AMPAS_TRUSTED_OLEAN lean --run harness/Export.lean \
+        --specs AmpasRef.Guards build/guards.specs
+    python3 harness/positivity_diff.py build/positivity_core.json \
+        AmpasRef.Guards=build/guards.specs
+
+`scripts/verify.sh` runs this at tier 1 and adds the Mathlib set at tier 3,
+which is where the committed record comes from.
+
+`harness/kernel3/positivity.py` decides strict positivity for an inductive
+specification. **Read the asymmetry before reading the numbers:**
+
+- a **VIOLATION** over these sets would be a bug in the pass, not a finding
+  about Lean — Lean's own kernel accepted every one of these declarations when
+  the modules were built. The script exits non-zero on one.
+- **UNCLASSIFIED** is the pass declining to decide, which is the direction a
+  mistake is allowed to go. It is recorded with a reason per declaration so
+  that growth in it is visible rather than silent.
+- **OK** says this pass agrees with Lean where it has an opinion. It does
+  **not** say the specification is checked.
+
+The record: 3285 inductives, 0 violations, 45 unclassified — all 45 the nested
+shape, a recursive occurrence under another inductive's parameter (`Array`,
+mostly), which needs that inductive's own positivity.
+
+**What a clean result here does not buy.** Positivity is one of three
+properties `harness/kernel3` assumes about an inductive; the recursor's shape
+and the iota rules are the other two and neither is checked anywhere in this
+repository. So a specification that passes positivity can still be a forgery —
+`tests/forgeries/forge_large_elim.export` is one, and it passes this pass
+because what it forges is the recursor. The provenance gate is what catches
+it, and this pass does not relax it. ASSUMPTIONS A3 and ROADMAP 2.

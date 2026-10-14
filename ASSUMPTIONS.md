@@ -311,13 +311,30 @@ exactly:
 > fingerprint.
 
 **Assumed and NOT checked:** that an inductive declaration is a legitimate
-specification — strict positivity, the shape of the generated recursor, and its
-iota rules. This is the classic source of unsoundness, and it is exploitable:
+specification. Three properties make it one — strict positivity, the shape of
+the generated recursor, and its iota rules — and **one of the three is now
+checked**, by a separate pass:
+
+> `harness/kernel3/positivity.py` decides strict positivity, and classifies
+> rather than judges: a shape it cannot decide comes back `UNCLASSIFIED`, not
+> `OK`. Differentially tested over 3285 inductives from the trusted reference
+> set and the Mathlib set — 0 violations, 45 unclassified, all 45 the nested
+> shape (a recursive occurrence under another inductive's parameter)
+> — in `evidence/positivity_differential.json`.
+>
+> It changes nothing about a verdict. The provenance gate below is unchanged,
+> and an `OK` from this pass is **not** a checked specification: the recursor's
+> shape and the iota rules remain assumed, so a specification that passes
+> positivity can still be a forgery. `forge_large_elim` is exactly that — a
+> forged *recursor*, which positivity cannot see and which only provenance
+> catches.
+
+This is the classic source of unsoundness, and it is exploitable:
 
 | Forgery (`tests/forgeries/`) | Original behaviour |
 | --- | --- |
 | `Prop` large elimination: a `Prop` with two constructors plus a hand-written recursor eliminating into `Sort u`. Proof irrelevance then makes two types interchangeable | `9/9 checked, 0 errors`, **`False` proved** |
-| Non-positive inductive: `Bad.mk : (Bad → MyFalse) → Bad` plus the diagonal argument | `7/7 checked, 0 errors`, **`False` proved** |
+| Non-positive inductive: `Bad.mk : (Bad → MyFalse) → Bad` plus the diagonal argument | `7/7 checked, 0 errors`, **`False` proved** — now rejected on its specification by the positivity pass |
 | Control: the same recursor restricted to `Prop` (legitimate small elimination) | **correctly rejected** |
 
 The control matters: it shows the hole is in the *assumed specification layer*,
