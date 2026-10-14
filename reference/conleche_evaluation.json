@@ -1,0 +1,162 @@
+{
+  "schema": "ampas-conleche-evaluation/1",
+  "recorded_at": "2026-10-14",
+  "purpose": [
+    "ROADMAP 1.3 asks for a checker different in KIND, not just in authorship,",
+    "because the two kernels this repository runs implement the same algorithm",
+    "-- and, as ROADMAP 1.3a records, one is derived from the other's C++",
+    "original. This is the evaluation of the candidate that is different in",
+    "kind: con-leche, whose acceptance of a declaration set is PROVED in Lean",
+    "to imply that the set has a model in set theory."
+  ],
+  "checker": {
+    "name": "con-leche",
+    "repo": "https://github.com/leanprover/con-leche",
+    "revision": "dd695ca631306626e3bff8df30208fc594779d75",
+    "toolchain": "leanprover/lean4:v4.35.0-rc3",
+    "binary_sha256": "06163e6c992dde994c66af2e6dd0e5f69250dc321a9a75b4e36f5328df0700b2",
+    "authorship_note": [
+      "Upstream states that the checker and its consistency proof were written",
+      "by Claude (Fable and Opus) under supervision by Joachim Breitner at the",
+      "Lean FRO. Recorded because this repository is itself about AI-assisted",
+      "proof work, and because it cuts the way this repository argues about its",
+      "own artefacts: what makes the checker worth trusting is a machine-checked",
+      "theorem, not who or what typed it."
+    ],
+    "input_format": "lean4export NDJSON, format version 3.1.0",
+    "built": "the FULL build, 660 Lake jobs, including the proof lane (ConLeche.MainTheorem). A verified kernel whose verification one has not built is not evidence of anything."
+  },
+  "the_theorem": {
+    "names": [
+      "ConLeche.no_False_declaration",
+      "ConLeche.model_exists"
+    ],
+    "axioms_checked_here": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "how_checked": "#print axioms on both, against the build produced here",
+    "no_sorry": true,
+    "what_it_says": "model_exists: if checkDecls accepts a declaration array in verified mode, the resulting environment has a model in a set theory V. no_False_declaration: a file declaring a theorem of type False is never accepted.",
+    "the_hypothesis_not_discharged_here": [
+      "Both theorems are parameterised over `(V : Type w) [SetTheory V]` -- an",
+      "interface for ZF without infinity and choice, plus an omega-chain of",
+      "Grothendieck universes in Tarski form. The theorems are CONDITIONAL on",
+      "such a V existing.",
+      "",
+      "Upstream discharges that from Mathlib's ZFSet under Carneiro's",
+      "omega-many-inaccessibles hypothesis, in theorem",
+      "`carneiro_implies_conleche` in the separate `bridge/lean4lean-model`",
+      "package. THAT PACKAGE WAS NOT BUILT HERE (it needs Mathlib at con-leche's",
+      "toolchain). So what was verified on this machine is the conditional",
+      "statement, not the instantiation of its hypothesis."
+    ]
+  },
+  "runs": [
+    {
+      "input": "AmpasRef.Guards (the trusted reference environment and its guards)",
+      "declarations_in_export": 58127,
+      "outcome": "DECLINED",
+      "message": "not implemented yet: use of the sorryAx axiom in value of Ampas.Claims.pl_bogus_independent",
+      "seconds": 33,
+      "peak_rss_gib": 0.43,
+      "reading": "Correct, and it is about AMPAS's design rather than about con-leche: the reference module states each frozen claim as `theorem ... := sorry`, so the environment contains sorryAx in a value by construction. The reference environment therefore CANNOT be checked by con-leche as such; what can be checked is a submission's own closure."
+    },
+    {
+      "input": "corpus/Genuine.lean (a genuine submission, certified by AMPAS)",
+      "declarations_in_export": 58107,
+      "outcome": "ACCEPTED",
+      "message": "accepted 58107 declarations (--verified)",
+      "seconds": 43,
+      "peak_rss_gib": 0.39,
+      "reading": "The result that matters for ROADMAP 1.3: a genuine submission's entire closure -- the proof plus all of Init/Lean/Std it depends on -- is accepted by a checker whose acceptance is proved to imply a set-theoretic model. Cheaper than expected: 43 seconds and 0.39 GiB on two cores."
+    },
+    {
+      "input": "corpus/attacks/A04_native_lie.lean (native_decide; BOTH Lean kernels accept it)",
+      "outcome": "DECLINED",
+      "message": "not implemented yet: non-standard axiom (…native_decide.ax_1_1)",
+      "seconds": 3,
+      "peak_rss_gib": 0.42,
+      "reading": [
+        "Both Lean kernels accept this submission (kernel_replay: true,",
+        "kernel_replay_independent: true, in evidence/corpus_results_threechecks.json).",
+        "con-leche does not. So a checker different in kind does refuse",
+        "something the Lean kernels take.",
+        "",
+        "BUT READ THE REASON BEFORE CREDITING IT. The refusal is con-leche's",
+        "AXIOM RESTRICTION -- it accepts only the three standard axioms -- which",
+        "is the same layer AMPAS's own axiom policy already occupies, and which",
+        "already flags this submission as NATIVE_EVALUATION. The model-theoretic",
+        "proof did no work here. Calling this 'the verified kernel caught an",
+        "attack the Lean kernels accepted' would be exactly the overclaim",
+        "ROADMAP 1.3a corrects about lean4lean.",
+        "",
+        "Note also that 'not implemented yet' is a DECLINE, not a rejection on",
+        "the merits. A decline is not evidence that a proof is wrong."
+      ]
+    },
+    {
+      "input": "corpus/attacks/A06_wrong_statement.lean (a real proof of `∀ a, a + a = a + a` filed as `add_comm_nat`)",
+      "declarations_in_export": 58102,
+      "outcome": "ACCEPTED",
+      "message": "accepted 58102 declarations (--verified)",
+      "seconds": 40,
+      "peak_rss_gib": 0.42,
+      "reading": [
+        "THE HEADLINE RESULT, and it is a negative one. A checker whose",
+        "acceptance is PROVED to imply a set-theoretic model accepts a genuine",
+        "proof of the wrong statement, because the proof is genuine and the",
+        "statement is a theorem -- just not the claim it is filed under.",
+        "",
+        "So the fidelity gap is not a weakness of unverified kernels that a",
+        "verified one closes. It is outside what ANY kernel decides, however",
+        "strong its soundness proof. In AMPAS only the statement comparator and",
+        "a human reading stand between this submission and a certificate, and",
+        "adding con-leche would not change that by one step. ASSUMPTIONS A1."
+      ]
+    }
+  ],
+  "third_party_evidence_not_produced_here": {
+    "source": "https://arena.lean-lang.org/",
+    "note": [
+      "The Lean Kernel Arena benchmarks ~28 Lean proof checkers against shared",
+      "suites: soundness (proofs that must be rejected), completeness (proofs",
+      "that must be accepted), 19 bug-regression tests, corner cases and",
+      "performance. It is third-party and adversarial, which is what ROADMAP 6",
+      "asks for and what nothing in this repository can supply about itself.",
+      "",
+      "As read on 2026-10-14 it reported con-leche with 0 wrongly accepted and 0",
+      "wrongly rejected, 3 soundness and 6 completeness declines, and mathlib in",
+      "~24.7 min / 7.1 GB; and lean4lean with 0 wrongly accepted, 0 wrongly",
+      "rejected, and mathlib in ~38.8 min / 11.6 GB. Those numbers are the",
+      "arena's, not this repository's, and a round was in progress when read."
+    ]
+  },
+  "verdict": {
+    "is_different_in_kind": true,
+    "would_integrating_it_strengthen_a_certificate": true,
+    "what_it_adds": "A third acceptance whose meaning is not 'another implementation agrees' but 'the accepted declaration set has a model in set theory'. Against the Tao finding -- that two implementations can share a failure -- and against ROADMAP 1.3a -- that this repository's second kernel is derived from the first -- that is a genuinely different kind of evidence.",
+    "what_it_does_not_add": [
+      "Anything about formalization fidelity (the A06 run).",
+      "Anything the axiom policy does not already catch on the attack corpus",
+      "(the A04 run).",
+      "An unconditional soundness guarantee: the theorem is conditional on a",
+      "set theory interface whose instantiation was not built here.",
+      "A check of AMPAS's reference environment, which contains `sorry` by",
+      "design."
+    ],
+    "integration_decision": [
+      "Recorded as an OPTIONAL tier, scripts/check-with-conleche.sh, and not",
+      "wired into verify.sh's default path. The reasons are cost, not doubt: it",
+      "needs a second 3 GB toolchain (Lean 4.35.0-rc3 against this suite's",
+      "4.33.0), a 660-job build of the checker and its proofs, a build of",
+      "lean4export at v4.33.0 to read this suite's oleans, and a ~333 MB NDJSON",
+      "export per submission. Making that a default would make a clean checkout",
+      "unverifiable on an ordinary machine.",
+      "",
+      "What IS wired in: nothing silently. A certificate does not claim a",
+      "con-leche acceptance unless one was run and recorded."
+    ]
+  }
+}

@@ -280,6 +280,29 @@ kernel (an outdated Nanoda) **also accepted** the illicit proof, because of
 that kernel's own unrelated bug
 ([Tao, 2026-10-09](https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/)).
 
+### What a third kind of checker would and would not add
+
+A checker whose soundness is itself proved — not another implementation of the
+same algorithm — is different evidence. [con-leche](https://github.com/leanprover/con-leche)
+was evaluated on 2026-10-14 (`docs/CONLECHE-EVALUATION.md`,
+`reference/conleche_evaluation.json`), built in full including its proof lane,
+and it **accepts a genuine AMPAS submission's whole closure** in 43 seconds. If
+it accepts a declaration set, that set is proved to have a model in set theory.
+That is worth more than a second relative of the C++ kernel.
+
+Two things it does not buy, both measured rather than assumed:
+
+- it **declines** `A04_native_lie` for its *axiom restriction* — the layer this
+  suite's axiom policy already occupies — not by its model analysis, so it adds
+  no new detection there;
+- it **accepts** `A06_wrong_statement`, a genuine proof of
+  `∀ a, a + a = a + a` filed under `add_comm_nat`. **A1 is not a weakness of
+  unverified kernels that a verified one closes.** It is outside what any
+  kernel decides.
+
+And its theorem is conditional on a set-theory interface whose instantiation
+was not built here.
+
 So: *independence of implementations is not independence of failure* — and for
 this pair the independence premise did not hold in the first place. Two kernels
 agreeing is better than one, and it is not conclusive. This repository

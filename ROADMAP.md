@@ -96,6 +96,71 @@ Independence of implementations is not independence of failure.
    and is annotated in `record_corrections` rather than rewritten.
    `tests/test_provenance.py` forbids the phrases, and found three more
    occurrences than this correction started with.
+   ### 1.3b. con-leche evaluated — done, 2026-10-14
+
+   [con-leche](https://github.com/leanprover/con-leche) is the candidate that
+   is different in kind: an external checker written in Lean, with its own term
+   representation, carrying a theorem proved in Lean that **if it accepts a
+   declaration set, that set has a model in set theory** — so no accepted
+   theorem's statement is false in the model, and a file declaring
+   `theorem … : False` is never accepted.
+
+   Full account, with every number:
+   [`docs/CONLECHE-EVALUATION.md`](docs/CONLECHE-EVALUATION.md) and
+   `reference/conleche_evaluation.json`. Reproduce with
+   `scripts/check-with-conleche.sh`.
+
+   **Built in full** — 660 Lake jobs including the proof lane, because a
+   verified kernel whose verification one has not built is not evidence of
+   anything — and both theorems checked against that build:
+   `no_False_declaration` and `model_exists` depend on
+   `propext, Classical.choice, Quot.sound` and nothing else. No `sorryAx`.
+   They are, however, **conditional** on `[SetTheory V]`; the upstream bridge
+   that discharges that from Mathlib's `ZFSet` under Carneiro's
+   ω-many-inaccessibles hypothesis is a separate package that was **not** built
+   here.
+
+   | input | outcome | time | peak RSS |
+   | --- | --- | --- | --- |
+   | `AmpasRef.Guards` (the reference environment) | **declined** — `sorryAx` in a value | 33 s | 0.43 GiB |
+   | `corpus/Genuine.lean` (a certified submission) | **accepted**, 58107 declarations | 43 s | 0.39 GiB |
+   | `A04_native_lie` — **both Lean kernels accept it** | **declined** — non-standard axiom | 3 s | 0.42 GiB |
+   | `A06_wrong_statement` | **accepted**, 58102 declarations | 40 s | 0.42 GiB |
+
+   - A genuine submission's whole closure is accepted, in 43 seconds — the
+     result this item asked for, and cheaper than tier 1.
+   - The reference environment cannot be checked at all, because this suite
+     states frozen claims as `theorem … := sorry`. That is about AMPAS's
+     design; the thing to check is a submission.
+   - **A04 must not be miscredited.** con-leche refuses it for its *axiom
+     restriction*, the layer AMPAS's own axiom policy already occupies and
+     which already flags it `NATIVE_EVALUATION`. The model proof did no work
+     there, and "not implemented yet" is a decline rather than a rejection on
+     the merits. Calling it "the verified kernel caught what the Lean kernels
+     accepted" would be the same overclaim 1.3a corrects.
+   - **A06 is accepted, and that is the finding that matters.** A genuine proof
+     of `∀ a, a + a = a + a` filed as `add_comm_nat` is a theorem, and a
+     checker whose acceptance implies a set-theoretic model accepts it. So the
+     fidelity gap is **not** a weakness of unverified kernels that a verified
+     one closes — it is outside what any kernel decides. Only the statement
+     comparator and a human reading stand between A06 and a certificate, and
+     con-leche changes that by nothing.
+
+   **Integrated as an optional script, not a tier of `verify.sh`.** Cost, not
+   doubt: a second 3 GB toolchain, a 660-job build, lean4export at this suite's
+   own 4.33.0, and a ~333 MB export per submission. A default that heavy would
+   make a clean checkout unverifiable on an ordinary machine. Nothing is
+   claimed silently — a certificate mentions a con-leche acceptance only if one
+   was run and recorded.
+
+   **Also found while evaluating:** the
+   [Lean Kernel Arena](https://arena.lean-lang.org/), a third-party adversarial
+   benchmark of ~28 Lean checkers (proofs that must be rejected, proofs that
+   must be accepted, 19 bug-regression tests). That is the kind of external
+   corpus item 6 asks for, for the layer `harness/kernel3` occupies, and
+   nothing in this repository can supply it about itself. Running `kernel3`
+   against the arena suite is the obvious next item and is **not** done.
+
 4. **Statement-level redundancy.** For a claim that matters, require two proofs
    by routes that share as little of the library as possible, and compare their
    axiom closures. This catches a library-level problem that any number of

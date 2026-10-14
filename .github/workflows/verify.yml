@@ -47,6 +47,12 @@ jobs:
         run: >-
           python3 -m pytest tests/test_positivity.py tests/test_recursor.py
           tests/test_iota.py -q
+      - name: con-leche evaluation record
+        # The verified-kernel evaluation (ROADMAP 1.3b). Three of its four runs
+        # are easy to overclaim: the A04 decline is the axiom layer rather than
+        # the model proof, the A06 acceptance is negative, and the theorem is
+        # conditional on a set theory not instantiated here.
+        run: python3 -m pytest tests/test_conleche_evaluation.py -q
       - name: historical corpus records
         # The externally-set claims (ROADMAP 6a): a false claim must be
         # recorded false in the field the harness reads, no sign-off may be

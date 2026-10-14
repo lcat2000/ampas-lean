@@ -104,7 +104,8 @@ run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_positivity.py tests/test_recursor.py tests/test_iota.py \
-      tests/test_history_corpus.py tests/test_portability.py -q
+      tests/test_history_corpus.py tests/test_conleche_evaluation.py \
+      tests/test_portability.py -q
 RAN="$RAN 1"
 
 [ "$WANT" -lt 2 ] && { say "Stopping at tier $WANT"; exit $FAILED; }

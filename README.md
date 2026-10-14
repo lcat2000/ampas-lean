@@ -273,8 +273,16 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 
 [ROADMAP.md](ROADMAP.md), in priority order. The top items:
 
-1. Replace cross-kernel agreement as the strongest claim — it is now known to
-   be defeatable — with something stronger, and say what that would be.
+1. Replace cross-kernel agreement as the strongest claim. It is defeatable
+   (Tao, 2026-10-09) and, worse, **this suite's second kernel was never an
+   independent implementation** — upstream calls it "derived directly from the
+   C++ kernel implementation" (ROADMAP 1.3a, corrected 2026-10-14).
+   [con-leche](https://github.com/leanprover/con-leche), whose acceptance is
+   *proved* to imply a set-theoretic model, accepts a genuine submission here
+   in 43 seconds and is available as an optional tier
+   (`scripts/check-with-conleche.sh`, [evaluation](docs/CONLECHE-EVALUATION.md)).
+   It also **accepts `A06_wrong_statement`** — so a verified kernel does not
+   close the fidelity gap either.
 2. The third check's three assumed inductive properties are now each checked
    by a separate, differentially tested pass — positivity (3285 inductives),
    the recursor's shape and the iota rules (3410 recursors each), 0 violations
