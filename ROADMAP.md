@@ -157,23 +157,71 @@ declaration's name. Without the differential test that rule would have shipped
 rejecting valid code — and a rule wrong in one direction can be wrong in the
 other.
 
-### 2c. The iota rules — not done
+### 2c. The iota rules — done, 2026-10-14
 
-The third and last assumed property, and the one that needs real work: the
-pass above counts the rules and checks which constructor each belongs to, not
-what a rule computes. A forged right-hand side is still accepted on its
-specification and caught only by provenance. Checking it means re-deriving
-each rule's expected right-hand side from the constructor's fields and the
-motive, which is close to generating the recursor — so the widening risk is
-the highest of the three and the same discipline is the minimum.
+`harness/kernel3/iota.py`. The recursor pass counts the rules and checks which
+constructor each belongs to; this one **re-derives each rule's right-hand side**
+from the constructor and the recursor and compares it, so an `OK` means the
+stored rule *is* the derived one rather than that it looks plausible:
 
-**Done when:** a forgery that alters one iota rule's right-hand side, added to
-`tests/forgeries/`, is rejected on that rule, and the differential test over
-both declaration sets is clean.
+    λ p… m… n… f…, nᶜ f₀ … f_{k-1} rec₀ … rec_{j-1}
 
-**Until then:** ASSUMPTIONS A3 stands. Two of three properties checked is not
-a checked specification, and the provenance gate is still what makes a forged
-inductive unable to produce a clean result.
+with one recursive call per recursive field, each `λ b…, Iₖ.rec levels p… m…
+n… (that field's indices) (fᵢ b…)` — the callee being the recursor of the
+member the *field* is of, which is a sibling's in a mutual family.
+
+Differentially tested (`harness/spec_diff.py --pass iota`,
+`evidence/iota_differential.json`): **3410 recursors, 0 violations, 183
+unclassified** — every one of the 183 the auxiliary recursors of a nested
+inductive. So **3227 recursors' rules are exactly re-derivable**.
+
+**New vectors, and they had to be Lean-generated** — unlike the other three,
+which are hand-written. What needed demonstrating is that a tampered rule is
+invisible in an *otherwise clean* export, so the base had to be clean;
+`control_small_elim` is the vector that is supposed to be rejected, so nothing
+derived from it could show this. Two pairs, each differing from its control in
+one line of one `#REC`:
+
+| pair | third check | iota pass |
+| --- | --- | --- |
+| `control_iota` / `forge_iota` — `Two.rec`'s two rules swapped, nothing exercising them | `8/8 checked, 0 errors` **for both** | clean / **VIOLATION** |
+| `control_iota_exercised` / `forge_iota_exercised` — the same swap plus `pick_fst : pick a b Two.fst = a := rfl` | clean / **rejects `pick_fst`** | clean / **VIOLATION** |
+
+The first pair is the hole: a swapped rule costs nothing to a checker that
+does not read the rules. The second is the consequence: once a term depends on
+the rule, what the kernel proves changes — `pick a b Two.fst = a` is true of
+`pick` as declared and becomes unprovable, and by the swap's symmetry `rfl`
+instead proves `pick a b Two.fst = b`, which is false of it.
+
+**Neither forgery proves `False`, and neither can.** A minor premise's required
+type comes from the recursor's *type*, and the forged reduction only changes
+the result side, so the hard minor still blocks any `False` construction. A
+wrong iota rule gives a *consistent* system that computes something other than
+the declaration says — the ASSUMPTIONS A1 failure mode, where a proof passes
+under the definitions actually used, not an inconsistency. That is a weaker
+exploit than the other two forgeries and is recorded as such.
+
+**Three bugs in this pass, each found only by the differential test**, which
+is the whole argument for requiring it: the rule body's binder depth was used
+for a field's own binder type (491 of 627 core recursors read as forged);
+`let` was not descended into (6 more); and the recursive call's callee was
+hardcoded to this recursor, which is right for every one of the 137 recursive
+calls in Lean's own Init — it has no mutual inductive in that set — and wrong
+for 25 in Mathlib. A core-only differential run would have shipped the last
+one.
+
+### What is still assumed with all three passes clean
+
+**That the declaration set came from Lean.** The three passes check a
+declaration against the rules Lean would have followed; none of them shows
+that Lean produced it. A specification can satisfy all three and still be
+nothing Lean would emit. That is what the provenance gate is for, and
+ASSUMPTIONS A3 is written against that boundary.
+
+So the third check still corroborates the term layer only, and the honest
+summary of items 2a–2c is narrower than "the gap is closed": the three
+properties `kernel3` *assumed* are now checked, and the assumption that
+remains is about the export's origin rather than its shape.
 
 ## 3. Fix the two recorded incompleteness findings, or document them as permanent
 

@@ -14,6 +14,7 @@
 | `sample_reports.json` | 幾份提交的完整判定輸出範例 | 驅動程式輸出 |
 | `positivity_differential.json` | 正性 pass 跑過受信任參考環境與 Mathlib 環境裡的每一個歸納型 | `harness/spec_diff.py`（見下） |
 | `recursor_differential.json` | 遞子形狀 pass 跑過同樣這兩個環境裡的每一個遞子 | 同上，`--pass recursor` |
+| `iota_differential.json` | 每個遞子的 iota 規則，從建構子與遞子重新導出後比對 | 同上，`--pass iota` |
 | `corpus_results.json` | 第一輪紀錄（單一核心） | 歷史 |
 | `corpus_results_twokernels.json` | 第二輪紀錄（兩套核心，無第三道檢查） | 歷史 |
 | `corpus_results_mathlib.json` | 第二輪的 Mathlib 紀錄 | 歷史 |
@@ -50,9 +51,9 @@
 另外三條，先讀 `bound` 再讀 `outcome`：NO_DERIVATION 的意思是「在那個範圍內沒找
 到」，僅此而已。完整說明見 ASSUMPTIONS A1c。
 
-## positivity_differential.json、recursor_differential.json
+## positivity_differential.json、recursor_differential.json、iota_differential.json
 
-`harness/kernel3` 三個假設性質裡已檢查的兩個，各自一道 pass，各自做過差分測試。
+`harness/kernel3` 的三個假設性質，各自一道 pass，各自做過差分測試。
 
     export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
     LEAN_PATH=$AMPAS_TRUSTED_OLEAN lean --run harness/Export.lean \
@@ -61,14 +62,18 @@
         AmpasRef.Guards=build/guards.specs
     python3 harness/spec_diff.py --pass recursor build/recursor_core.json \
         AmpasRef.Guards=build/guards.specs
+    python3 harness/spec_diff.py --pass iota build/iota_core.json \
+        AmpasRef.Guards=build/guards.specs
 
-`scripts/verify.sh` 在 tier 1 跑這兩段，tier 3 再加上 Mathlib 那一組——committed
-的那兩份紀錄就是 tier 3 產生的。
+`scripts/verify.sh` 在 tier 1 跑這三段，tier 3 再加上 Mathlib 那一組——committed
+的那三份紀錄就是 tier 3 產生的。
 
 `harness/kernel3/positivity.py` 判斷歸納型規格是否嚴格正性；
 `harness/kernel3/recursor.py` 判斷產生的遞子形狀——各項元數、被消去的那個家族成員
 每個建構子恰好一條 iota 規則、`k` flag，以及消去宇宙：`Prop` 的大消去只在它是
-subsingleton 時才允許。**先讀這個不對稱，再讀數字：**
+subsingleton 時才允許；`harness/kernel3/iota.py` 把每條 iota 規則的右手邊從建構子
+與遞子**重新導出**再比對，所以那裡的 `OK` 意思是「存的那條規則就是導出來的那
+條」。**先讀這個不對稱，再讀數字：**
 
 - 在這些集合上出現 **VIOLATION**，那是**這道 pass 的 bug**，不是對 Lean 的發
   現——這些宣告在模組編譯時全部被 Lean 自己的核心接受過。腳本遇到就以非零結束。
@@ -86,15 +91,27 @@ assumed 宣告），以及嵌套歸納型在包裹型別上額外產生的輔助
 `unclassified_by_cause` 必須把每一筆拒判都算進某個指名成因，`other` 必須是 0。
 新的成因躲在「其他」裡，正是這些 pass 會悄悄停止覆蓋某些東西的方式。
 
-**乾淨的結果買不到什麼。** 這兩道 pass 抓到的是不同的偽造，而且誰也不涵蓋誰：
-`forge_positivity.export` 的遞子是合法的，所以它通過遞子 pass；
-`forge_large_elim.export` 的歸納型是合法的，所以它通過正性 pass。而第三個性質——
-每條 iota 規則實際算出什麼——這裡沒有任何東西檢查。所以同時通過這兩道 pass 的宣
-告仍然不是「被檢查過的規格」；擋下偽造的是來源查核，而這兩道 pass 都沒有放寬它。
-見 ASSUMPTIONS A3 與 ROADMAP 2。
+再加上 iota 那一份：**3410 個遞子、0 個違反、183 個 unclassified**，這 183 個全是
+嵌套歸納型的輔助遞子——也就是 3227 個遞子的規則可以被精確重新導出。
 
-**做這一輪得到的一個發現**，因為它正是差分測試是必要條件而不是形式的理由：遞子
-pass 第一版的規則檢查假設了「互遞歸家族的遞子帶有整個家族每個建構子的 iota 規
-則」。十九個 Mathlib 遞子回報 VIOLATION，而它們全都是合法的——互遞歸遞子帶的是它
-所消去的那個成員的規則。現在這道 pass 從遞子的結論讀出那個成員。一條在「拒絕」方
-向錯掉的規則，同樣可能在「接受」方向錯掉。
+**乾淨的結果買不到什麼。** 這三道 pass 抓到的是不同的偽造，而且誰也不涵蓋誰：四份
+偽造向量各自只失敗一道、通過另外兩道。但三道查的都是「宣告是否符合 Lean 會遵守的
+規則」——沒有一道能證明**那份匯出真的來自 Lean**。一份規格可以同時滿足三道，卻仍
+然不是 Lean 會產生的東西，所以擋下偽造的仍然是來源查核，三道 pass 都沒有放寬它。
+假設是**移位**了，從「宣告的形狀」移到「匯出的來源」，而那是比「規格層已被檢查」
+更窄的一句話。見 ASSUMPTIONS A3 與 ROADMAP 2。
+
+**做這幾輪得到的四個發現**，因為它們正是差分測試是必要條件而不是形式的理由。每一
+個都是 pass 自己的 bug，而且沒有一個能從它自己的單元測試看出來：
+
+* 遞子 pass 假設了「互遞歸家族的遞子帶有整個家族每個建構子的 iota 規則」。十九個
+  Mathlib 遞子回報 VIOLATION，全都是合法的——互遞歸遞子帶的是它所消去的那個成員
+  的規則；
+* iota pass 用了規則主體的 binder 深度去處理欄位自己的 binder 型別（627 個核心遞
+  子裡有 491 個被讀成偽造）；
+* 它沒有進到 `let` 裡面，而 Lean 自己有六個結構的某個欄位型別是以 `let` 開頭的；
+* 它把遞迴呼叫的 callee 寫死成「自己」，這對 Lean Init 裡全部 137 個遞迴呼叫都是
+  對的（那個集合裡沒有互遞歸歸納型），對 Mathlib 裡的 25 個是錯的。**只跑核心那一
+  組的差分測試會讓這個錯誤出廠**——這就是為什麼兩個環境都是必要的。
+
+一條在「拒絕」方向錯掉的規則，同樣可能在「接受」方向錯掉。

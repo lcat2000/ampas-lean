@@ -1,0 +1,788 @@
+{
+  "schema": "ampas-iota-differential/1",
+  "pass": "iota",
+  "reads": "the iota rules of every recursor",
+  "recorded_at": "2026-10-14T05:23:53+00:00",
+  "lean": "Lean (version 4.33.0, commit 5da8a13c67369827303c441170d2f4051339df4c, Release)",
+  "totals": {
+    "checked": 3410,
+    "ok": 3227,
+    "violations": 0,
+    "unclassified": 183
+  },
+  "sets": [
+    {
+      "environment": "AmpasRef.Guards",
+      "specs": "init.specs",
+      "declarations_in_export": 2133,
+      "checked": 627,
+      "ok": 624,
+      "violations": [],
+      "unclassified": [
+        [
+          "Lean.Syntax.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Syntax.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Syntax.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ]
+      ],
+      "unclassified_by_cause": {
+        "nested auxiliary recursor": 3
+      }
+    },
+    {
+      "environment": "AmpasRef.ChallengeMathlib",
+      "specs": "mathlib.specs",
+      "declarations_in_export": 9638,
+      "checked": 2783,
+      "ok": 2603,
+      "violations": [],
+      "unclassified": [
+        [
+          "Aesop.Frontend.RuleExpr.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.Frontend.RuleExpr.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.Frontend.RuleExpr.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_10",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_7",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_8",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.GoalUnsafe.rec_9",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.IndexingMode.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.IndexingMode.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.IndexingMode.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.MVarClusterUnsafe.rec",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.RappUnsafe.rec",
+          "NESTED_AUXILIARY_RECURSOR: 13 motives for a family of 3"
+        ],
+        [
+          "Aesop.Script.StepTree.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.Script.StepTree.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Aesop.Script.StepTree.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.AsyncList.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.AsyncList.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.AsyncList.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.AsyncList.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Compiler.LCNF.Alt.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Compiler.LCNF.Cases.rec",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Compiler.LCNF.Code.rec",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Compiler.LCNF.FunDecl.rec",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 4"
+        ],
+        [
+          "Lean.Data.Trie.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Data.Trie.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Data.Trie.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_7",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Block.rec_8",
+          "NESTED_AUXILIARY_RECURSOR: 9 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Inline.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Inline.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Inline.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Part.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Part.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Doc.Part.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.InfoTree.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.RCases.RCasesPatt.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.RCases.RCasesPatt.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Tactic.TacticParsedSnapshot.rec_7",
+          "NESTED_AUXILIARY_RECURSOR: 8 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.Elab.Term.Do.Code.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 7 motives for a family of 1"
+        ],
+        [
+          "Lean.IR.Alt.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 2"
+        ],
+        [
+          "Lean.IR.Alt.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 2"
+        ],
+        [
+          "Lean.IR.Alt.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 2"
+        ],
+        [
+          "Lean.IR.FnBody.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 2"
+        ],
+        [
+          "Lean.IR.IRType.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.IR.IRType.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.IR.IRType.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Json.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 6 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.Lean.CommandParsedSnapshot.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Language.SnapshotTree.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Level.PP.Result.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Level.PP.Result.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.DocumentSymbol.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.CallHierarchy.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Lsp.Ipc.ModuleHierarchy.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.MessageData.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.MessageData.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.MessageData.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.DiscrTree.Trie.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplit.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitPred.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.CooperSplitProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DiseqCnstr.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DiseqCnstrProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DvdCnstr.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.DvdCnstrProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_5",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_6",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_7",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_8",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstr.rec_9",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.EqCnstrProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.LeCnstr.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.LeCnstrProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Grind.Arith.Cutsat.UnsatProof.rec",
+          "NESTED_AUXILIARY_RECURSOR: 21 motives for a family of 12"
+        ],
+        [
+          "Lean.Meta.Match.Example.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.Match.Example.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.Match.Pattern.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Meta.Match.Pattern.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Parser.Tactic.MCasesPat.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Parser.Tactic.MCasesPat.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Parser.Tactic.MRefinePat.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.Parser.Tactic.MRefinePat.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentArrayNode.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PersistentHashMap.Node.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.PrefixTreeNode.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Lean.Syntax.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Syntax.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Syntax.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.MsgEmbed.rec_4",
+          "NESTED_AUXILIARY_RECURSOR: 5 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Lean.Widget.TaggedText.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "Mathlib.Tactic.Translate.ArgReorder.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "ProofWidgets.Html.rec",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "ProofWidgets.Html.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "ProofWidgets.Html.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 3 motives for a family of 1"
+        ],
+        [
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl.rec",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "_private.Batteries.Data.MLList.Basic.0.MLList.MLListImpl.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 2 motives for a family of 1"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_1",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_2",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ],
+        [
+          "_private.Lean.Elab.ConfigEval.DeriveEvalConfigItem.0.Lean.Elab.ConfigEval.HandlerTrie.rec_3",
+          "NESTED_AUXILIARY_RECURSOR: 4 motives for a family of 1"
+        ]
+      ],
+      "unclassified_by_cause": {
+        "nested auxiliary recursor": 180
+      }
+    }
+  ],
+  "means": [
+    "Every rule in these exports was generated by Lean itself, so a",
+    "VIOLATION would be a bug in harness/kernel3/iota.py and this run exits",
+    "non-zero on one. The pass re-derives each rule's right-hand side from",
+    "the constructor and the recursor and compares it, so an OK here means",
+    "the stored rule IS the derived one, not merely that it looks plausible.",
+    "",
+    "UNCLASSIFIED is the pass declining to decide, and nested inductives'",
+    "auxiliary recursors are nearly all of it.",
+    "",
+    "What this run does NOT establish: that the export came from Lean. All",
+    "three passes check a declaration against the rules Lean would have",
+    "followed; none shows that Lean produced it. That is what the provenance",
+    "gate is for, and ASSUMPTIONS A3 is written against that boundary."
+  ]
+}

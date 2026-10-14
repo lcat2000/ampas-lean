@@ -233,12 +233,13 @@ unreviewed/    quarantined code, kept for comparison, loaded by nothing
 
 1. Replace cross-kernel agreement as the strongest claim — it is now known to
    be defeatable — with something stronger, and say what that would be.
-2. Finish the third check's inductive-specification gap. Two of its three
-   assumed properties are now checked, each by a separate differentially
-   tested pass: strict positivity (3285 inductives, 0 violations) and the
-   recursor's shape (3410 recursors, 0 violations). The iota rules' right-hand
-   sides are still assumed, so a declaration that passes both can still be a
-   forgery and the provenance gate is what catches it.
+2. The third check's three assumed inductive properties are now each checked
+   by a separate, differentially tested pass — positivity (3285 inductives),
+   the recursor's shape and the iota rules (3410 recursors each), 0 violations
+   throughout. What remains assumed has *moved* rather than gone: all three
+   check a declaration against the rules Lean would have followed, none shows
+   that Lean produced it, so the provenance gate is still what catches a
+   forgery. See ROADMAP 2.
 3. Bind the signing key to an identity outside this repository. As of
    2026-10-13 all 13 attestations are signed by a key held by the repository
    owner rather than by the build container, which was the gap. What is left

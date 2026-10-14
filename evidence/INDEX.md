@@ -19,6 +19,7 @@ diff your run against the record.
 | `sample_reports.json` | full driver output for a few submissions, as a format sample | driver output |
 | `positivity_differential.json` | the positivity pass run over every inductive in the trusted reference set and the Mathlib set | `harness/spec_diff.py` (see below) |
 | `recursor_differential.json` | the recursor-shape pass run over every recursor in the same two sets | the same, `--pass recursor` |
+| `iota_differential.json` | every recursor's iota rules re-derived from the constructor and the recursor, and compared | the same, `--pass iota` |
 | `corpus_results.json` | round-1 record (single kernel) | history |
 | `corpus_results_twokernels.json` | round-2 record (two kernels, no third check) | history |
 | `corpus_results_mathlib.json` | round-2 Mathlib record | history |
@@ -113,10 +114,10 @@ Today every stored record in `evidence/` is NO_PROVENANCE: they were issued
 before provenance was recorded, so their kernels cannot be identified from
 the record. That is thirty certified claims, and the gap closes forwards only.
 
-## positivity_differential.json, recursor_differential.json
+## positivity_differential.json, recursor_differential.json, iota_differential.json
 
-Two of `harness/kernel3`'s three assumed properties, each checked by its own
-pass and each differentially tested.
+`harness/kernel3`'s three assumed properties, each checked by its own pass and
+each differentially tested.
 
     export AMPAS_TRUSTED_OLEAN=$PWD/.lake/build/lib/lean
     LEAN_PATH=$AMPAS_TRUSTED_OLEAN lean --run harness/Export.lean \
@@ -125,16 +126,20 @@ pass and each differentially tested.
         AmpasRef.Guards=build/guards.specs
     python3 harness/spec_diff.py --pass recursor build/recursor_core.json \
         AmpasRef.Guards=build/guards.specs
+    python3 harness/spec_diff.py --pass iota build/iota_core.json \
+        AmpasRef.Guards=build/guards.specs
 
-`scripts/verify.sh` runs both at tier 1 and adds the Mathlib set at tier 3,
-which is where the committed records come from.
+`scripts/verify.sh` runs all three at tier 1 and adds the Mathlib set at tier
+3, which is where the committed records come from.
 
 `harness/kernel3/positivity.py` decides strict positivity for an inductive
 specification; `harness/kernel3/recursor.py` decides the generated recursor's
 shape — arities, one iota rule per constructor of the member being eliminated,
 the `k` flag, and the elimination universe, where large elimination of a `Prop`
-is permitted only for a subsingleton. **Read the asymmetry before reading the
-numbers:**
+is permitted only for a subsingleton; `harness/kernel3/iota.py` re-derives each
+iota rule's right-hand side from the constructor and the recursor and compares
+it, so an `OK` there means the stored rule *is* the derived one. **Read the
+asymmetry before reading the numbers:**
 
 - a **VIOLATION** over these sets would be a bug in the pass, not a finding
   about Lean — Lean's own kernel accepted every one of these declarations when
@@ -157,20 +162,36 @@ inductive generates over the nesting type (183).
 nothing under `other`. A new cause hiding in a catch-all is how one of these
 passes would quietly stop covering something.
 
-**What a clean result here does not buy.** The two passes catch different
-forgeries and neither subsumes the other: `forge_positivity.export` has a
-legitimate recursor and passes the recursor pass, `forge_large_elim.export`
-has a legitimate inductive and passes positivity. And the third property —
-what each iota rule actually computes — is checked by nothing here. So a
-declaration passing both passes is still not a checked specification; the
-provenance gate is what catches a forged one, and neither pass relaxes it.
-ASSUMPTIONS A3 and ROADMAP 2.
+And the iota record: **3410 recursors, 0 violations, 183 unclassified**, every
+one of the 183 a nested inductive's auxiliary recursor — so 3227 recursors'
+rules are exactly re-derivable.
 
-**One finding from building it**, because it is the reason the differential
-test is a requirement and not a formality: the recursor pass's first rules
-check assumed a mutual family's recursor carries iota rules for every
-constructor in the family. Nineteen Mathlib recursors came back VIOLATION, all
-legitimate — a mutual recursor carries rules for the member it eliminates. The
-pass now reads that member off the recursor's conclusion. A rule that was
-wrong in the rejecting direction could as easily have been wrong in the
+**What a clean result here does not buy.** The three passes catch different
+forgeries and none subsumes another: each of the four forgery vectors fails
+exactly one pass and passes the other two. But what all three check is a
+declaration against the rules Lean *would have followed* — none of them shows
+that **Lean produced it**. A specification can satisfy all three and still be
+nothing Lean would emit, so the provenance gate is still what catches a forged
+one and no pass relaxes it. The assumption has moved, from the declaration's
+shape to the export's origin, which is a narrower claim than "the
+specification layer is checked". ASSUMPTIONS A3 and ROADMAP 2.
+
+**Four findings from building these**, because they are the reason the
+differential test is a requirement and not a formality. Every one was a bug in
+a pass, and none would have been visible from its own unit tests:
+
+* the recursor pass assumed a mutual family's recursor carries iota rules for
+  every constructor in the family. Nineteen Mathlib recursors came back
+  VIOLATION, all legitimate — a mutual recursor carries rules for the member it
+  eliminates;
+* the iota pass used the rule body's binder depth for a field's own binder
+  type (491 of 627 core recursors read as forged);
+* it did not descend into `let`, and six of Lean's own structures have a field
+  whose type opens with one;
+* and it hardcoded the recursive call's callee to this recursor, which is
+  right for all 137 recursive calls in Lean's Init — that set has no mutual
+  inductive — and wrong for 25 in Mathlib. **A core-only differential run
+  would have shipped that one**, which is why both environments are required.
+
+A rule wrong in the rejecting direction could as easily have been wrong in the
 accepting one.

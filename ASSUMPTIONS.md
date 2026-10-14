@@ -312,27 +312,31 @@ exactly:
 
 **Assumed and NOT checked:** that an inductive declaration is a legitimate
 specification. Three properties make it one — strict positivity, the shape of
-the generated recursor, and its iota rules — and **two of the three are now
-checked**, each by its own separate pass:
+the generated recursor, and its iota rules — and **all three are now checked**,
+each by its own separate pass:
 
 > `harness/kernel3/positivity.py` decides strict positivity.
 > `harness/kernel3/recursor.py` decides the recursor's shape: arities, one
 > iota rule per constructor of the member being eliminated, the `k` flag, and
 > the elimination universe, where large elimination of a `Prop` is allowed
 > only for a subsingleton.
+> `harness/kernel3/iota.py` re-derives each iota rule's right-hand side from
+> the constructor and the recursor and compares it.
 >
-> Both classify rather than judge: a shape neither can decide comes back
-> `UNCLASSIFIED`, never `OK`. Both are differentially tested against the
-> declaration sets Lean itself accepts — 3285 inductives and 3410 recursors,
-> **0 violations** — in `evidence/positivity_differential.json` and
-> `evidence/recursor_differential.json`.
+> All three classify rather than judge: a shape none can decide comes back
+> `UNCLASSIFIED`, never `OK`. All three are differentially tested against the
+> declaration sets Lean itself accepts — 3285 inductives and 3410 recursors
+> twice over, **0 violations** — in `evidence/positivity_differential.json`,
+> `evidence/recursor_differential.json` and `evidence/iota_differential.json`.
 >
-> **Neither changes a verdict, and two of three is not a checked
-> specification.** The iota rules' right-hand sides are still assumed: the
-> recursor pass counts the rules and checks which constructor each belongs to,
-> not what a rule computes. So a declaration that passes both passes can still
-> be a forgery, and the provenance gate below is unchanged and is still what
-> stops one producing a clean result.
+> **None of them changes a verdict, and the sentence above has moved rather
+> than gone.** What all three check is a declaration against the rules Lean
+> *would have followed*. None of them shows that **Lean produced it**: a
+> specification can satisfy all three and still be nothing Lean would emit, so
+> the provenance gate below is unchanged and is still what stops a forged
+> declaration producing a clean result. The assumption that remains is about
+> the export's origin, not its shape — and that is a narrower claim than "the
+> specification layer is checked".
 
 This is the classic source of unsoundness, and it is exploitable:
 
@@ -340,10 +344,20 @@ This is the classic source of unsoundness, and it is exploitable:
 | --- | --- |
 | `Prop` large elimination: a `Prop` with two constructors plus a hand-written recursor eliminating into `Sort u`. Proof irrelevance then makes two types interchangeable | `9/9 checked, 0 errors`, **`False` proved** — now rejected on its recursor's shape by the recursor pass |
 | Non-positive inductive: `Bad.mk : (Bad → MyFalse) → Bad` plus the diagonal argument | `7/7 checked, 0 errors`, **`False` proved** — now rejected on its specification by the positivity pass |
+| Swapped iota rules: `Two.rec`'s two rules exchanged, with nothing in the export exercising them (`control_iota` / `forge_iota`, Lean-generated, one line apart) | `8/8 checked, 0 errors` **for both** — now rejected on the rule by the iota pass |
+| The same swap with a term that does exercise it (`control_iota_exercised` / `forge_iota_exercised`) | the forged one **rejects `pick_fst`**: the swap changes what the kernel proves |
 | Control: the same recursor restricted to `Prop` (legitimate small elimination) | **correctly rejected** |
 
 The control matters: it shows the hole is in the *assumed specification layer*,
 not a general collapse.
+
+The iota pair is weaker than the other two forgeries and is recorded as such:
+**neither of its forgeries proves `False`, and neither can.** A minor
+premise's required type comes from the recursor's *type*, and a forged
+reduction only changes the result side, so the hard minor still blocks the
+construction. A wrong iota rule gives a *consistent* system that computes
+something other than the declaration says — exactly the A1 failure mode, where
+a proof passes under the definitions actually used.
 
 **Mitigation, not a fix.** The gate was not closed by adding reduction rules —
 widening what a checker under review accepts is the direction in which a

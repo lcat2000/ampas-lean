@@ -1,0 +1,74 @@
+#VERSION 1
+#MODE proof
+#MODULE IotaBase
+#ROOTS pick
+1 #NS 0 Two
+2 #NS 1 snd
+0 #EC 1
+#CTOR 2 0 1 1 0 0 0
+3 #NS 1 fst
+#CTOR 3 0 1 0 0 0 0
+1 #US 0
+1 #ES 1
+#IND 1 1 0 0 0 0 1 1 2 3 2 0
+4 #NS 1 rec
+5 #NS 0 motive
+6 #NS 0 t
+7 #NS 0 u
+2 #UP 7
+2 #ES 2
+3 #EP #BD 6 0 2
+8 #NS 0 fst
+4 #EV 0
+5 #EC 3
+6 #EA 4 5
+9 #NS 0 snd
+7 #EV 1
+8 #EC 2
+9 #EA 7 8
+10 #EV 3
+11 #EA 10 4
+12 #EP #BD 6 0 11
+13 #EP #BD 9 9 12
+14 #EP #BD 8 6 13
+15 #EP #BI 5 3 14
+16 #EL #BD 9 9 7
+17 #EL #BD 8 6 16
+18 #EL #BD 5 3 17
+19 #EL #BD 9 9 4
+20 #EL #BD 8 6 19
+21 #EL #BD 5 3 20
+#REC 4 15 0 0 1 2 0 1 1 2 3 0 21 2 0 18 1 7
+10 #NS 0 Nat
+11 #NS 10 succ
+12 #NS 0 n
+22 #EC 10
+23 #EP #BD 12 22 22
+#CTOR 11 23 10 1 0 1 0
+13 #NS 10 zero
+#CTOR 13 22 10 0 0 0 0
+#IND 10 1 0 0 1 0 1 10 2 13 11 0
+14 #NS 0 pick
+15 #NS 0 a
+16 #NS 0 b
+24 #EP #BD 6 0 22
+25 #EP #BD 16 22 24
+26 #EP #BD 15 22 25
+27 #EC 4 1
+17 #NS 0 x
+18 #NS 17 _@
+19 #NS 18 IotaBase
+20 #NI 19 245533531
+21 #NS 20 _hygCtx
+22 #NS 21 _hyg
+23 #NI 22 8
+28 #EL #BD 23 0 22
+29 #EA 27 28
+30 #EV 2
+31 #EA 29 30
+32 #EA 31 7
+33 #EA 32 4
+34 #EL #BD 6 0 33
+35 #EL #BD 16 22 34
+36 #EL #BD 15 22 35
+#DEF 14 26 36 0
