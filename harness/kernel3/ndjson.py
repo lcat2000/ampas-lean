@@ -1,6 +1,6 @@
 """A second frontend for `harness/kernel3`: lean4export's NDJSON format.
 
-ROADMAP 6/1.3b. `kernel3` has three specification passes, each differentially
+ROADMAP 6/1.3b. `kernel3` has five specification passes, each differentially
 tested, and four adversarial vectors — all four of which this repository wrote
 itself. The [Lean Kernel Arena](https://arena.lean-lang.org/) publishes 198
 tests for exactly the layer `kernel3` occupies: 72 that must be REJECTED

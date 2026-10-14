@@ -54,6 +54,7 @@ from kernel3 import positivity as _positivity     # noqa: E402
 from kernel3 import recursor as _recursor         # noqa: E402
 from kernel3 import iota as _iota                 # noqa: E402
 from kernel3 import safety as _safety             # noqa: E402
+from kernel3 import declaration as _declaration   # noqa: E402
 
 # Each pass: the module, the schema its record carries, the declaration kind it
 # reads, and the causes an UNCLASSIFIED can have. Naming the causes here rather
@@ -87,6 +88,12 @@ PASSES = {
         "module": _safety,
         "schema": "ampas-safety-differential/1",
         "reads": "every declaration's unsafe/partial flag",
+        "causes": [],
+    },
+    "declaration": {
+        "module": _declaration,
+        "schema": "ampas-declaration-differential/1",
+        "reads": "every declaration that carries a value",
         "causes": [],
     },
     "iota": {
@@ -144,6 +151,33 @@ MEANS = {
         "What this run does NOT establish: that the flag means what it says. It",
         "reads a field. The arena's 140_falseFromUnsafe and",
         "141_falseFromPartial are what showed the field was being dropped.",
+    ],
+    "declaration": [
+        "Lean adds a declaration to the environment only AFTER checking it, so",
+        "a self-reference in an exported value is an unknown constant there and",
+        "cannot occur; every form of recursion -- structural, well-founded,",
+        "mutual -- is compiled away before a value is exported. A VIOLATION",
+        "here would mean that claim is false for a real library, which would",
+        "make the rule wrong rather than Lean, and this run exits non-zero on",
+        "one.",
+        "",
+        "This pass needs a FULL export, not a --specs one: it reads values, and",
+        "--specs carries only assumed declarations, which have none. Over a",
+        "--specs file it checks nothing and says so by reporting 0 valued",
+        "declarations.",
+        "",
+        "mutual_block_references is recorded and is NOT a violation: a value",
+        "mentioning another member of its own mutual block should also be",
+        "impossible, but nothing in the arena pins it and `should` is the word",
+        "that put three bugs in the iota pass. The count is here so a rule can",
+        "later be added on evidence.",
+        "",
+        "What this run does NOT establish: that a theorem's type is a",
+        "proposition. The rule covers a type whose conclusion is a universe --",
+        "the arena's 012_nonPropThm -- which is decidable by looking at it.",
+        "A theorem typed by some other non-Prop needs infer() and a level",
+        "comparison, which would make this pass depend on the term checker it",
+        "exists to corroborate.",
     ],
     "recursor": [
         "Every recursor in these exports was generated and accepted by Lean's",

@@ -1,0 +1,62 @@
+{
+  "schema": "ampas-declaration-differential/1",
+  "pass": "declaration",
+  "reads": "every declaration that carries a value",
+  "recorded_at": "2026-10-14T13:50:40+00:00",
+  "lean": "unknown",
+  "totals": {
+    "checked": 4444,
+    "ok": 4444,
+    "violations": 0,
+    "unclassified": 0
+  },
+  "sets": [
+    {
+      "environment": "AmpasRef.Guards",
+      "specs": "guards.full",
+      "declarations_in_export": 1466,
+      "checked": 1466,
+      "ok": 1466,
+      "violations": [],
+      "unclassified": [],
+      "unclassified_by_cause": {}
+    },
+    {
+      "environment": "AmpasRef.ChallengeMathlib",
+      "specs": "mathlib.full",
+      "declarations_in_export": 2978,
+      "checked": 2978,
+      "ok": 2978,
+      "violations": [],
+      "unclassified": [],
+      "unclassified_by_cause": {}
+    }
+  ],
+  "means": [
+    "Lean adds a declaration to the environment only AFTER checking it, so",
+    "a self-reference in an exported value is an unknown constant there and",
+    "cannot occur; every form of recursion -- structural, well-founded,",
+    "mutual -- is compiled away before a value is exported. A VIOLATION",
+    "here would mean that claim is false for a real library, which would",
+    "make the rule wrong rather than Lean, and this run exits non-zero on",
+    "one.",
+    "",
+    "This pass needs a FULL export, not a --specs one: it reads values, and",
+    "--specs carries only assumed declarations, which have none. Over a",
+    "--specs file it checks nothing and says so by reporting 0 valued",
+    "declarations.",
+    "",
+    "mutual_block_references is recorded and is NOT a violation: a value",
+    "mentioning another member of its own mutual block should also be",
+    "impossible, but nothing in the arena pins it and `should` is the word",
+    "that put three bugs in the iota pass. The count is here so a rule can",
+    "later be added on evidence.",
+    "",
+    "What this run does NOT establish: that a theorem's type is a",
+    "proposition. The rule covers a type whose conclusion is a universe --",
+    "the arena's 012_nonPropThm -- which is decidable by looking at it.",
+    "A theorem typed by some other non-Prop needs infer() and a level",
+    "comparison, which would make this pass depend on the term checker it",
+    "exists to corroborate."
+  ]
+}

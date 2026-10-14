@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run `harness/kernel3` against the Lean Kernel Arena suite.
 
-ROADMAP 6. `kernel3` has three specification passes, each differentially
+ROADMAP 6. `kernel3` has five specification passes, each differentially
 tested, and four adversarial vectors — all four written by this repository.
 "Thirteen attacks with recorded catching layers is evidence that those
 thirteen are caught, and nothing more" applies to the third check as much as
@@ -29,7 +29,8 @@ questions:
     one ASSUMPTIONS A3 records: a forged inductive specification is ACCEPTED,
     because the specification layer is assumed rather than checked and the
     provenance gate that contains it has no baseline to work from here.
-  * `with_spec_passes` — the same, plus `positivity`, `recursor` and `iota`.
+  * `with_spec_passes` — the same, plus `positivity`, `recursor`, `iota`,
+    `safety` and `declaration`.
     This is what ROADMAP 2a–2c added, and the arena is the first external
     test of it.
 
@@ -66,7 +67,7 @@ sys.setrecursionlimit(%(rec)d)
 sys.path.insert(0, %(harness)r)
 from kernel3.ndjson import parse_ndjson
 from kernel3.check import check_env
-from kernel3 import positivity, recursor, iota, safety
+from kernel3 import positivity, recursor, iota, safety, declaration
 
 path = sys.argv[1]
 out = {"frontend": "ok"}
@@ -92,7 +93,8 @@ out["introduced_assumptions"] = len(r.get("introduced_assumptions", []))
 
 passes = {}
 for name, mod in (("positivity", positivity), ("recursor", recursor),
-                  ("iota", iota), ("safety", safety)):
+                  ("iota", iota), ("safety", safety),
+                  ("declaration", declaration)):
     try:
         p = mod.check_env(env)
         passes[name] = {"checked": p["checked"], "ok": len(p["ok"]),

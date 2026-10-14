@@ -1,5 +1,11 @@
 # kernel3 against the Lean Kernel Arena: the first external measurement
 
+> **This document is in three dated parts and the earlier ones are not
+> rewritten.** What follows is the first measurement, 2026-10-14, when
+> `kernel3` had three specification passes and wrongly accepted 23 of 72.
+> "After the fixes" and "Round 9" below carry it to five passes and 7, and
+> Round 9 retracts a claim this part makes.
+
 **ROADMAP 6.** `harness/kernel3` has three specification passes, each
 differentially tested over 3410 recursors, and four adversarial vectors — all
 four written in this repository. "Thirteen attacks with recorded catching
@@ -211,6 +217,118 @@ to itself, and whether an inductive's own declaration is well formed. Closing
 them would turn a term-layer corroborating checker into a full kernel, which is
 a different decision and is not taken here.
 
+> **That paragraph was wrong about two of the nine, and it is corrected below
+> rather than edited away.** `014_selfProof` and `012_nonPropThm` are not a
+> scope boundary; they are missing checks, decidable by reading the
+> declaration. See "Round 9" at the end of this document.
+
 And note what `047` and `049` are: inductive well-formedness tests whose
 recursors happen to be *plausible* — which is exactly what the six incidental
 catches would look like if their stubs were better.
+
+
+---
+
+# Round 9: two of the nine were missing checks, not scope
+
+**ROADMAP 3.** Two of the nine remaining misses are not about terms,
+inductives or flags. They are about whether the declaration is a declaration:
+
+```
+bad/tutorial/014_selfProof    theorem selfProof : (p : Prop) → p := selfProof
+bad/tutorial/012_nonPropThm   theorem nonPropThm : Prop := (x : Prop) → x
+```
+
+`014` is **the most obvious bogus proof there is.** The theorem's value is a
+reference to itself, so it type-checks against its own declared type, and what
+it proves is `∀ p : Prop, p` — everything, `False` included. Lean rejects it
+for a structural reason `kernel3` did not share: Lean adds a declaration to the
+environment only *after* checking it, so the self-reference is an unknown
+constant. `kernel3`'s reader adds first and checks after, which makes the
+constant resolve.
+
+Calling that "outside what `kernel3` checks" was **an overstatement of this
+checker's scope boundary.** It is a missing check, and `harness/kernel3/
+declaration.py` is a fifth specification pass that makes it:
+
+1. **A value may not mention its own declaration.** In an export, never
+   legitimately: Lean compiles every form of recursion away before a value is
+   exported — structural through `brecOn`, well-founded through
+   `WellFounded.fix`, a mutual block through one `brecOn` application.
+2. **A theorem's statement may not be a universe.** The type of `∀ …, Sort u`
+   is `Sort (imax … (u+1))` and never `Prop`, whatever the levels are, so a
+   `thm` with that type is a definition carrying a theorem's label.
+
+## The containment claim above was also wrong for these two
+
+This document says most of the misses are contained because "the provenance
+gate reports any assumed declaration whose fingerprint is not in the trusted
+baseline". **That mechanism does not apply here.** Both are *defined*
+declarations carrying a value, not assumed ones, so the gate has nothing to
+report — `introduced_assumptions` is `0` for both, in this document's own
+evidence file.
+
+What contains them inside AMPAS's pipeline is the **compile step**: a
+submission is compiled by Lean, which rejects both before an export exists.
+That is a real containment and a different one, and it is precisely the
+containment [ASSUMPTIONS A3](../ASSUMPTIONS.md) says evaporates when the
+checker is pointed at an export of unknown provenance — which is what the
+arena is.
+
+## What the rules were measured against before being believed
+
+ROADMAP 2's discipline applies: both rules are in the **rejecting** direction,
+so the risk is rejecting legitimate work rather than accepting a forgery.
+
+| export | valued declarations | violations |
+| --- | --- | --- |
+| `AmpasRef.Guards` + its Init closure | 1250 of 1466 | 0 |
+| `AmpasRef.ChallengeMathlib` + its Mathlib closure | 2599 of 2978 | 0 |
+
+Record: [`evidence/declaration_differential.json`](../evidence/declaration_differential.json).
+A single violation there would mean the rule is wrong rather than Lean.
+
+This pass needs a **full** export, not a `--specs` one: it reads values, and
+`--specs` carries only assumed declarations, which have none.
+
+**One rule was measured and not adopted.** A value mentioning another member
+of its own mutual block should be as impossible as mentioning itself, and the
+differential finds **0** of those across all 3849 valued declarations — but
+nothing in the arena pins it, and "should" is the word that put three bugs in
+the iota pass. It is recorded as `mutual_block_references` and is not a
+violation, so a rule can be added later on evidence instead of expectation.
+
+## The measurement
+
+| configuration | wrongly accepted | wrongly rejected | correct | declined |
+| --- | --- | --- | --- | --- |
+| round 7, `with_spec_passes` | 9 | 9 | 170 | 10 |
+| round 9, `with_spec_passes` | **9 → 7** | 9 → 8 | 172 | 10 → 11 |
+
+Record: [`evidence/arena_run_round9.json`](../evidence/arena_run_round9.json).
+
+**Only the first column is this round's work, and only two tests moved for it:**
+`012_nonPropThm` and `014_selfProof`, both `ACCEPTED → REJECTED`. The targeted
+count and the actual count agree, which round 7's six incidental catches are
+the reason for checking.
+
+**`wrongly_rejected` 9 → 8 is NOT an improvement and is not claimed as one.**
+`good/perf/proj-cheap-struct` moved `REJECTED → DECLINED` because it was
+killed by the OOM killer — `exit -9` at 71 seconds under a 180-second
+timeout — since this run shared the machine with other work. A resource kill
+is not a verdict, which is the distinction `INCONCLUSIVE` exists for
+throughout this repository, and the `declined` column rising by the same one
+is the same event counted in the other direction. The term layer still rejects
+that test for the structure-eta reason TC-01 describes.
+
+## The seven that remain
+
+| cause | tests |
+| --- | --- |
+| projection typing on `Prop` / `imax` | `proj-of-imax-prop`, `090_projProp2`, `092_projProp4`, `093_projProp5`, `094_projProp6` |
+| inductive well-formedness | `047_inductBadNonSort2`, `049_inductTooFewParams` |
+
+The five projection tests are a genuine typing rule this checker does not
+implement, and the two inductive ones are the hole A3 describes — the same one
+six of round 7's "caught" tests fall into, as that section says. For those
+seven the scope sentence above stands; for `012` and `014` it did not.

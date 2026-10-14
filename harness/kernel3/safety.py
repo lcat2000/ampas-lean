@@ -14,7 +14,7 @@ have found it, because `harness/Export.lean` has no such field to drop —
 AMPAS's own exports cannot contain an unsafe declaration.
 
 **Why this is a pass and not a change to `check.py`.** The term checker is the
-thing under review; the three specification passes were kept out of it on
+thing under review; the other specification passes were kept out of it on
 purpose and this follows the same rule. It also classifies rather than judges,
 and it changes no verdict on its own.
 

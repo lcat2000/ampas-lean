@@ -40,6 +40,13 @@ jobs:
         # A clean advisory result must read as a statement about one list on
         # one date, never as "no known bugs". See ROADMAP 1.
         run: python3 -m pytest tests/test_provenance.py -q
+      - name: declaration well-formedness
+        # ROADMAP 3. kernel3 accepted `theorem t : (p : Prop) → p := t` -- the
+        # most obvious bogus proof there is -- because its reader adds a
+        # declaration before checking it, so the self-reference resolves.
+        # These also pin the correction to docs/ARENA-RESULT.md, which had
+        # called this a scope boundary rather than a missing check.
+        run: python3 -m pytest tests/test_declaration.py -q
       - name: specification passes — positivity, recursor, iota, safety
         # Each forgery must be rejected on the property it forges and must
         # pass the other two, UNCLASSIFIED must never count as a pass, and no

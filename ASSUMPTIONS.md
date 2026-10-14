@@ -486,6 +486,20 @@ rejections from one bug the 3410-recursor differential could not have found:
 the iota pass decides whether a constructor field is recursive syntactically,
 where Lean decides it after δ-reduction.
 
+**Updated the same day, twice.** Five bugs the arena found were fixed and the
+figure went 23 → 9 (`evidence/arena_run_after_fixes.json`); then a **fifth**
+specification pass, `declaration.py`, took it 9 → 7
+(`evidence/arena_run_round9.json`). The paragraphs above are left as they were
+written, since they record what the first external measurement said.
+
+Two of those nine were not what this section describes. `014_selfProof`
+(`theorem t : (p : Prop) → p := t`) and `012_nonPropThm` are not inductive
+specifications at all, and the containment argument in the next paragraph does
+not cover them: they are *defined* declarations carrying a value, so the
+provenance gate reports nothing. What contained them is the compile step — see
+ROADMAP 3a, and `docs/ARENA-RESULT.md`, which retracts its own scope claim
+about them in place.
+
 **In this pipeline the hole is unreachable**, because the export comes from an
 olean the submitter compiled with Lean, and a forged inductive does not survive
 Lean's own elaborator and kernel. That is to say: the assumption is discharged

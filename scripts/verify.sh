@@ -107,11 +107,34 @@ if LEAN_PATH="$TRUSTED" lean --run harness/Export.lean --specs AmpasRef.Guards \
 else
   note "skipped — could not export AmpasRef.Guards specifications"
 fi
+# The declaration pass reads VALUES, which a --specs export does not carry, so
+# it needs a full export of the reference's closure. Roots come from the
+# catalogue rather than being listed here, so adding a claim extends the
+# differential set instead of silently leaving it behind.
+note "declaration well-formedness over the reference's full closure (ROADMAP 3)"
+DECL_ROOTS=$("$PY" -c "
+import json
+d = json.load(open('reference/claims.json'))
+r = set()
+for c in d['claims']:
+    r.add(c['theorem'])
+    g = c.get('guards') or {}
+    if g.get('witness'): r.add(g['witness'])
+    if g.get('nontriviality'): r.add(g['nontriviality'])
+    r.update(g.get('necessity') or [])
+print(' '.join(sorted(r)))")
+if LEAN_PATH="$TRUSTED" lean --run harness/Export.lean AmpasRef.Guards \
+     build/guards.full $DECL_ROOTS >/dev/null 2>&1; then
+  run "$PY" harness/spec_diff.py --pass declaration \
+        build/declaration_core.json AmpasRef.Guards=build/guards.full
+else
+  note "skipped — could not export the reference's full closure"
+fi
 run "$PY" -m pytest tests/test_math_verification.py tests/test_review_drift.py \
       tests/test_third_check.py tests/test_counterexample.py tests/test_derivation_search.py \
       tests/test_triangulation.py tests/test_record_consistency.py tests/test_provenance.py \
       tests/test_positivity.py tests/test_recursor.py tests/test_iota.py \
-      tests/test_safety.py \
+      tests/test_safety.py tests/test_declaration.py \
       tests/test_history_corpus.py tests/test_conleche_evaluation.py \
       tests/test_arena_result.py tests/test_ndjson.py \
       tests/test_portability.py -q
@@ -195,6 +218,22 @@ for r in rows:
     done
   else
     note "skipped — could not export the Mathlib specifications"
+  fi
+
+  # the combined declaration differential: the Mathlib closure is where the
+  # iota pass's three bugs lived, so a rule that is clean only over Init is
+  # not yet measured (reproduces evidence/declaration_differential.json)
+  note "declaration well-formedness over the Mathlib closure too"
+  if LEAN_PATH="$AMPAS_TRUSTED_OLEAN:$MLPATH" lean --run harness/Export.lean \
+       AmpasRef.ChallengeMathlib build/mathlib.full \
+       Ampas.Claims.infinitude_of_primes Nat.exists_infinite_primes Nat.Prime \
+       >/dev/null 2>&1; then
+    run "$PY" harness/spec_diff.py --pass declaration \
+          build/declaration_differential.json \
+          AmpasRef.Guards=build/guards.full \
+          AmpasRef.ChallengeMathlib=build/mathlib.full
+  else
+    note "skipped — could not export the Mathlib full closure"
   fi
 
   note "external validation: Fermat's false claim (1640) vs Euler's refutation (1732)"

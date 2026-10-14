@@ -345,6 +345,69 @@ applies to them too.
 adjudication file states that they will not be fixed and why, so a reader is
 not left expecting a fix that is not coming.
 
+### 3a. Two of the arena's nine were missing checks, not scope
+
+*Done, 2026-10-14* — `harness/kernel3/declaration.py`, a fifth specification
+pass, and a correction to `docs/ARENA-RESULT.md`.
+
+TC-01 and TC-02 above are in the **rejecting** direction, which is the safe
+one — and round 8's arena run confirmed they describe real mechanisms rather
+than convenient ones. Two of the nine remaining misses are in the **accepting**
+direction, which ROADMAP 2 opens by naming as the dangerous one, so they went
+first:
+
+```
+bad/tutorial/014_selfProof    theorem selfProof : (p : Prop) → p := selfProof
+bad/tutorial/012_nonPropThm   theorem nonPropThm : Prop := (x : Prop) → x
+```
+
+**`014` is the most obvious bogus proof there is**, and `kernel3` accepted it.
+The theorem's value is a reference to itself, so it type-checks against its own
+declared type, and what it proves is `∀ p : Prop, p` — everything, `False`
+included. Lean rejects it structurally: Lean adds a declaration to the
+environment only *after* checking it, so the self-reference is an unknown
+constant. `kernel3`'s reader adds first and checks after, which makes the
+constant resolve.
+
+`docs/ARENA-RESULT.md` had both under "outside what `kernel3` checks rather
+than bugs in it". **For `014` that was an overstatement of this checker's own
+scope boundary** — it is a missing check, decidable by reading the
+declaration — and the document now retracts the claim in place rather than
+dropping it.
+
+That document's **containment** claim was wrong for these two as well. It
+attributed containment to the provenance gate; both are *defined* declarations
+carrying a value, not assumed ones, so the gate reports nothing —
+`introduced_assumptions` is `0` for both in its own evidence file. What
+contains them inside AMPAS's pipeline is the **compile step**, which is
+precisely the containment ASSUMPTIONS A3 says evaporates when the checker is
+pointed at an export of unknown provenance.
+
+Two rules, both decidable by reading the declaration, both measured before
+being believed: 3849 valued declarations across Init and Mathlib, 0 violations
+(`evidence/declaration_differential.json`). The pass needs a **full** export —
+it reads values, and `--specs` carries only assumed declarations, which have
+none, so this is the first pass whose differential set is not the specs file.
+
+**A third rule was measured and not adopted.** A value mentioning another
+member of its own mutual block should be as impossible as mentioning itself,
+and the differential finds 0 across all 3849 — but nothing in the arena pins
+it, and "should" is the word that put three bugs in the iota pass. It is
+recorded as `mutual_block_references` so a rule can be added later on
+evidence rather than on expectation.
+
+Arena: **9 wrongly accepted → 7**, and exactly the two targeted tests moved —
+round 7's six incidental catches are why that is checked rather than assumed.
+`wrongly_rejected` also reads 9 → 8, and **that one is not claimed**: a
+`good/perf` test was killed by the OOM killer (`exit -9` at 71s under a 180s
+timeout) because the run shared the machine with other work, and a resource
+kill is not a verdict.
+
+The seven that remain are five projection typing tests on `Prop`/`imax` — a
+genuine typing rule this checker does not implement — and two inductive
+well-formedness tests, which are the A3 hole. For those seven the scope
+sentence stands; for these two it did not.
+
 ## 4. Independent review of the fidelity judgements
 
 **Why.** All 13 claims are `reviewed_by` the same assistant that wrote the
