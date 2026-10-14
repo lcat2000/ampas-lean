@@ -1,0 +1,38 @@
+{
+  "schema": "ampas-ndjson-frontend-differential/1",
+  "recorded_at": "2026-10-14T10:46:23+00:00",
+  "ampas_export": {
+    "file": "diff_ampas.export",
+    "declarations": 1145
+  },
+  "ndjson_export": {
+    "file": "diff_ndjson.ndjson",
+    "declarations": 59627
+  },
+  "shared_declarations": 1145,
+  "agreed": 1145,
+  "mismatches": [],
+  "only_in_ampas_export": 0,
+  "only_in_ndjson_export": 58482,
+  "means": [
+    "The same Lean environment, exported by two different exporters and",
+    "read by kernel3's two frontends, gives the SAME declaration",
+    "fingerprints wherever both exporters emitted the declaration.",
+    "",
+    "A mismatch would be a bug in harness/kernel3/ndjson.py, not a",
+    "finding about Lean, and this run exits non-zero on one.",
+    "",
+    "`only_in_*` are the two exporters' different closure rules --",
+    "AMPAS's walks from named roots, lean4export's takes a module's",
+    "whole closure -- and not a sign of a dropped declaration. What",
+    "would be that sign is `shared_declarations` falling: it is",
+    "reported so that a frontend which quietly stopped reading records",
+    "cannot pass by comparing fewer and fewer things.",
+    "",
+    "What this does NOT establish: that either frontend reads the",
+    "arena's files correctly. The arena corpus contains declaration",
+    "shapes this environment has no instance of, and for those the only",
+    "guard is that harness/kernel3/ndjson.py RAISES on a record kind it",
+    "does not know rather than skipping it."
+  ]
+}
