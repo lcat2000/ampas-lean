@@ -53,7 +53,17 @@ say "Auditor"
 # Lean distributions (see docs/build-notes.md), so a failure here is not fatal.
 if lake build audit 2>/dev/null; then
   cp -f .lake/build/bin/audit harness/audit
-  echo "compiled auditor: harness/audit"
+  # Which source this binary was built from, by content. The drivers refuse a
+  # binary whose recorded hash does not match harness/Audit.lean, and refuse
+  # one with no record at all, so editing the source cannot leave the old
+  # binary silently in use. An mtime comparison was tried first and is not
+  # enough: a plain `cp` of an old binary resets its mtime.
+  "$PY" -c "import hashlib,pathlib,sys
+src=pathlib.Path('harness/Audit.lean').read_bytes()
+pathlib.Path('harness/audit.source-sha256').write_text(
+    hashlib.sha256(src).hexdigest()+'  harness/Audit.lean\n',
+    encoding='utf-8', newline='\n')"
+  echo "compiled auditor: harness/audit (source recorded in harness/audit.source-sha256)"
 else
   echo "could not link the auditor executable; the driver will interpret"
   echo "harness/Audit.lean instead (slower, same results). See docs/build-notes.md."

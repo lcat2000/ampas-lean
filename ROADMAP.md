@@ -517,10 +517,28 @@ resource in the whole pipeline.
    `Audit.lean` and re-running executed the code from before the edit. Here
    it surfaced as a confusing error; the harmful version is a mode present in
    both builds whose behaviour changed — which this nearly was, since a stale
-   binary would have kept emitting `∃ m, m < m` after the fix. Both drivers
-   now prefer the source when the binary is older, and
-   `audit_fingerprint_path()` follows the same rule so provenance cannot
-   record a hash for code that did not run.
+   binary would have kept emitting `∃ m, m < m` after the fix.
+
+   Both drivers now compare **by content**: `bootstrap.sh` records the
+   SHA-256 of the source it compiled, a binary whose record disagrees loses to
+   the source, and so does a binary with no record at all.
+   `audit_fingerprint_path()` follows the same rule, so provenance cannot
+   record a hash for code that did not run. An mtime comparison was tried
+   first and failed within minutes of being written: a plain `cp` of an old
+   binary resets its mtime, so stale code looked current — and the test that
+   passed locally while CI failed did so because *this* container had a stale
+   binary lying in it and a clean checkout had none. Both are the session's
+   recurring shape, a label that does not track the data beside it. What the
+   record closes is the accident, not a party who forges it; that limit is
+   stated in the function and pinned by a test, exactly as `custody` is in the
+   key record.
+
+   And one more, found by the fix: `_audit` wrote every auditor request to a
+   fixed `.review_req.json` in the repository root and unlinked it afterwards,
+   so two concurrent runs each deleted the other's request. It surfaced as a
+   `KeyError` on the mode's own output key — a symptom naming nothing about
+   the cause — when a `checklist_evidence.py check` ran beside the test suite.
+   CHANGELOG 0.3.0 records the same class of bug costing a certified claim.
 
 **Done when:** a statement cannot be frozen without a counterexample search
 having run — reached — and the triangulation protocol has been tried on at

@@ -38,6 +38,7 @@ import hashlib
 import os
 import shutil
 import subprocess
+import tempfile
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -134,28 +135,48 @@ def audit_cmd() -> list[str]:
 
 
 def audit_binary_is_stale() -> bool:
-    """Is the compiled auditor older than its source?
+    """Does the compiled auditor match the Audit.lean beside it?
 
-    This used to go unasked, and the binary simply won. Edit Audit.lean,
-    re-run, and the code that executes is the code from before the edit --
-    with nothing in the output saying so. Found while adding the `fidelity`
-    mode: the new mode fell through to `audit` and failed with
-    "solution_module: String expected", which is the HARMLESS version. The
-    harmful version is a mode that exists in both builds and changed
-    behaviour, where a stale binary returns a plausible wrong answer. (It
-    nearly happened: the first `fidelity` implementation rendered
-    `∀ n, ∃ m, n < m` as `∃ m, m < m`, and a stale binary would have kept
-    emitting that after the fix.)
+    Compared by CONTENT, not by mtime. The first version of this asked whether
+    the binary was older than the source, and a plain `cp` of an old binary
+    resets its mtime and makes stale code look current -- which happened
+    within minutes of writing it. An mtime is a label that does not track the
+    data it describes, so `bootstrap.sh` records the SHA-256 of the source it
+    compiled in `harness/audit.source-sha256` and this compares against it.
 
-    Erring toward the source is the safe direction: interpreting is slower and
-    always current, and `audit_fingerprint_path()` hashes whichever one runs,
-    so the provenance record follows this decision rather than contradicting
-    it.
+    The three answers:
+      * no binary            -> not stale (nothing to be stale; the normal
+                                state, since the binary is gitignored and only
+                                bootstrap.sh builds it)
+      * binary, no record    -> STALE. A binary of unknown provenance is
+                                exactly what this guards against, and erring
+                                toward the source is the safe direction:
+                                interpreting is slower and always current.
+      * record disagrees     -> STALE.
+
+    **The record is an assertion by whatever wrote it**, exactly like
+    `custody` in reference/reviewer_key.json. Only `bootstrap.sh` writing it
+    at compile time makes it mean anything: a hand-written record makes stale
+    code look current, which was verified by writing one. What this closes is
+    the accident -- an edit that never got recompiled -- not a party who
+    forges the record, and that party can equally ship any binary they like.
+
+    Why it matters: editing Audit.lean and re-running used to execute the code
+    from before the edit with nothing in the output saying so. Found while
+    adding the `fidelity` mode, where it surfaced as a confusing error. The
+    harmful version is a mode present in both builds whose behaviour changed,
+    which that nearly was -- the first `fidelity` implementation rendered
+    `forall n, exists m, n < m` as `exists m, m < m`, and a stale binary would
+    have kept emitting it after the fix.
     """
     src = HERE / "Audit.lean"
-    if not src.is_file():
+    if not AUDIT_BIN.is_file() or not src.is_file():
         return False
-    return AUDIT_BIN.stat().st_mtime < src.stat().st_mtime
+    record = AUDIT_BIN.with_name(AUDIT_BIN.name + ".source-sha256")
+    if not record.is_file():
+        return True
+    want = hashlib.sha256(src.read_bytes()).hexdigest()
+    return record.read_text(encoding="utf-8").split()[0].strip() != want
 
 TRUSTED_OLEAN = Path(os.environ.get("AMPAS_TRUSTED_OLEAN", ROOT / "build"))
 ATTEST_DIR = ROOT / "reference" / "attestations"
@@ -179,7 +200,16 @@ def sha256_str(s: str) -> str:
 
 
 def _audit(request: dict) -> dict:
-    req = ROOT / ".review_req.json"
+    # A UNIQUE path per call. This was a fixed `.review_req.json` in the
+    # repository root, so two concurrent runs -- a `checklist_evidence.py
+    # check` beside a test suite, which is how it was found -- each unlinked
+    # the other's request and the survivor read a stale or missing file. The
+    # symptom was a KeyError on the mode's own output key, which names nothing
+    # about the cause. CHANGELOG 0.3.0 records the same class of bug costing a
+    # certified claim: two concurrent sessions on a two-core machine.
+    fd, name = tempfile.mkstemp(prefix=".review_req-", suffix=".json", dir=ROOT)
+    os.close(fd)
+    req = Path(name)
     req.write_text(json.dumps(request), encoding="utf-8", newline="\n")
     env = dict(os.environ)
     env["PATH"] = f"{LEAN_ROOT / 'bin'}:{env.get('PATH','')}"

@@ -37,6 +37,7 @@ reference/claims.json, surfaced in the result but never inferred.
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 try:
     import resource          # POSIX only
@@ -158,19 +159,48 @@ def audit_cmd() -> list[str]:
 
 
 def audit_binary_is_stale() -> bool:
-    """Is the compiled auditor older than its source?
+    """Does the compiled auditor match the Audit.lean beside it?
 
-    This used to go unasked, and the binary simply won: edit Audit.lean,
-    re-run, and the code that executes is the code from before the edit, with
-    nothing in the output saying so. harness/ampas_review.py carries the same
-    rule and the reasoning behind it; the two must agree, since a run that
-    interprets while the fingerprint hashes the binary would record provenance
-    for code that did not run.
+    Compared by CONTENT, not by mtime. The first version of this asked whether
+    the binary was older than the source, and a plain `cp` of an old binary
+    resets its mtime and makes stale code look current -- which happened
+    within minutes of writing it. An mtime is a label that does not track the
+    data it describes, so `bootstrap.sh` records the SHA-256 of the source it
+    compiled in `harness/audit.source-sha256` and this compares against it.
+
+    The three answers:
+      * no binary            -> not stale (nothing to be stale; the normal
+                                state, since the binary is gitignored and only
+                                bootstrap.sh builds it)
+      * binary, no record    -> STALE. A binary of unknown provenance is
+                                exactly what this guards against, and erring
+                                toward the source is the safe direction:
+                                interpreting is slower and always current.
+      * record disagrees     -> STALE.
+
+    **The record is an assertion by whatever wrote it**, exactly like
+    `custody` in reference/reviewer_key.json. Only `bootstrap.sh` writing it
+    at compile time makes it mean anything: a hand-written record makes stale
+    code look current, which was verified by writing one. What this closes is
+    the accident -- an edit that never got recompiled -- not a party who
+    forges the record, and that party can equally ship any binary they like.
+
+    Why it matters: editing Audit.lean and re-running used to execute the code
+    from before the edit with nothing in the output saying so. Found while
+    adding the `fidelity` mode, where it surfaced as a confusing error. The
+    harmful version is a mode present in both builds whose behaviour changed,
+    which that nearly was -- the first `fidelity` implementation rendered
+    `forall n, exists m, n < m` as `exists m, m < m`, and a stale binary would
+    have kept emitting it after the fix.
     """
     src = HERE / "Audit.lean"
-    if not src.is_file():
+    if not AUDIT_BIN.is_file() or not src.is_file():
         return False
-    return AUDIT_BIN.stat().st_mtime < src.stat().st_mtime
+    record = AUDIT_BIN.with_name(AUDIT_BIN.name + ".source-sha256")
+    if not record.is_file():
+        return True
+    want = hashlib.sha256(src.read_bytes()).hexdigest()
+    return record.read_text(encoding="utf-8").split()[0].strip() != want
 
 
 def audit_fingerprint_path() -> Path:

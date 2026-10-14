@@ -370,21 +370,86 @@ def test_the_auditor_renders_inside_the_telescope():
         "serializing free variables")
 
 
-def test_a_stale_compiled_auditor_is_not_preferred_over_its_source():
+def test_a_stale_compiled_auditor_is_not_preferred_over_its_source(tmp_path):
     """`audit_cmd()` preferred the binary unconditionally, so editing
     Audit.lean and re-running executed the code from before the edit with
-    nothing in the output saying so. Found while adding the `fidelity` mode;
-    the harmful version is a mode present in both builds whose behaviour
-    changed."""
+    nothing in the output saying so.
+
+    Staleness is decided by CONTENT. mtime was tried first and is not enough:
+    a plain `cp` of an old binary resets its mtime, which happened in the same
+    session it was written -- and a test that merely asserted the function
+    returned *something* passed locally because this repository had a stale
+    binary lying in it, while CI's clean checkout had none and the function
+    raised. Both failures are the same shape: a label that does not track the
+    data beside it.
+    """
+    import hashlib
     import ampas_review as R
     import ampas_lean as L
-    assert R.audit_binary_is_stale() is not None
+
     for mod in (R, L):
         assert "stale" in (mod.audit_cmd.__doc__ or "").lower()
-    # the fingerprint must follow the same decision, or provenance records a
-    # hash for code that did not run
+        assert "mtime" in (mod.audit_binary_is_stale.__doc__ or "")
     doc = " ".join((L.audit_fingerprint_path.__doc__ or "").split())
     assert "same staleness rule as audit_cmd()" in doc
+
+    # The three answers, exercised on the REAL function by pointing its two
+    # module globals at a temp directory. A test that reimplemented the rule
+    # could not catch a bug in the rule, which is the point of having it.
+    src = tmp_path / "Audit.lean"
+    src.write_text("-- the source\n", encoding="utf-8", newline="\n")
+    binary = tmp_path / "audit"
+    record = tmp_path / "audit.source-sha256"
+    want = hashlib.sha256(src.read_bytes()).hexdigest()
+
+    for mod in (R, L):
+        old_here, old_bin = mod.HERE, mod.AUDIT_BIN
+        # reset: the first module through the loop leaves both files behind
+        binary.unlink(missing_ok=True)
+        record.unlink(missing_ok=True)
+        src.write_text("-- the source\n", encoding="utf-8", newline="\n")
+        try:
+            mod.HERE, mod.AUDIT_BIN = tmp_path, binary
+            assert mod.audit_binary_is_stale() is False, (
+                f"{mod.__name__}: no binary is not staleness -- it is the "
+                f"normal state, and tier 0 has none")
+            binary.write_bytes(b"\x7fELF")
+            assert mod.audit_binary_is_stale() is True, (
+                f"{mod.__name__}: a binary with no record of its source is of "
+                f"unknown provenance and must lose to the source")
+            record.write_text(want + "  Audit.lean\n", encoding="utf-8", newline="\n")
+            assert mod.audit_binary_is_stale() is False, f"{mod.__name__}"
+            src.write_text("-- edited\n", encoding="utf-8", newline="\n")
+            assert mod.audit_binary_is_stale() is True, (
+                f"{mod.__name__}: an edited source must win")
+            # the failure mtime could not see: same content, newer binary
+            record.write_text(want + "  Audit.lean\n", encoding="utf-8", newline="\n")
+            binary.touch()
+            assert mod.audit_binary_is_stale() is True, (
+                f"{mod.__name__}: touching the binary must not make stale code "
+                f"look current -- that is exactly what mtime got wrong")
+        finally:
+            mod.HERE, mod.AUDIT_BIN = old_here, old_bin
+
+    # and the live repository answers without raising in every state
+    assert L.audit_binary_is_stale() == R.audit_binary_is_stale()
+
+
+def test_bootstrap_records_which_source_it_compiled():
+    """The record is what makes the check content-based rather than a guess,
+    so the only thing that writes it must keep writing it."""
+    sh = (ROOT / "scripts" / "bootstrap.sh").read_text(encoding="utf-8")
+    assert "audit.source-sha256" in sh
+    assert "sha256" in sh
+    assert "harness/audit.source-sha256" in (
+        ROOT / ".gitignore").read_text(encoding="utf-8"), (
+        "the record is as platform-specific as the binary it describes")
+    # and the limit must stay stated: the record is an assertion by whatever
+    # wrote it, so this closes the accident and not a forging party
+    import ampas_review as R
+    doc = " ".join((R.audit_binary_is_stale.__doc__ or "").split())
+    assert "assertion by whatever wrote it" in doc
+    assert "closes is the accident" in doc
 
 
 def test_the_driver_reproduces_its_own_record():
@@ -397,3 +462,18 @@ def test_the_driver_reproduces_its_own_record():
                        cwd=ROOT, capture_output=True, text=True, encoding="utf-8",
                        timeout=1800)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_the_auditor_request_file_is_unique_per_call():
+    """Two concurrent runs used to clobber each other: `_audit` wrote a fixed
+    `.review_req.json` in the repository root and unlinked it afterwards, so a
+    `checklist_evidence.py check` running beside the test suite made one of
+    them read a file the other had already deleted. The symptom was a
+    `KeyError` on the mode's own output key, which names nothing about the
+    cause. CHANGELOG 0.3.0 records the same class of bug costing a certified
+    claim."""
+    src = (ROOT / "harness" / "ampas_review.py").read_text(encoding="utf-8")
+    assert ".review_req.json\"" not in src, (
+        "a fixed request path is a collision between any two concurrent runs")
+    assert "tempfile.mkstemp" in src
+    assert ".review_req-*.json" in (ROOT / ".gitignore").read_text(encoding="utf-8")

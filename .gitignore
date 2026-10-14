@@ -9,6 +9,7 @@ build/
 # the compiled auditor is platform-specific and the driver can interpret
 # harness/Audit.lean instead
 harness/audit
+harness/audit.source-sha256
 harness/Audit.c
 
 # Python
@@ -19,3 +20,4 @@ __pycache__/
 # scratch files the drift tests and the third check create
 tests/forgeries/.tmp_*
 .review_req.json
+.review_req-*.json
