@@ -626,9 +626,40 @@ with an empty family is declined where it could be decided); and
 `140_falseFromUnsafe` / `141_falseFromPartial` (the `isUnsafe` and `safety`
 flags the NDJSON frontend reads and throws away).
 
-Those four and the iota bug are the next round. **The measurement is recorded
-before any of them is touched**, so the improvement is measured against a
-number written down before it was known how to improve it.
+#### Fixed the same day: 23 → 9
+
+Five fixes, each re-validated by the Init and Mathlib differential before being
+believed. `evidence/arena_run_after_fixes.json`:
+
+| configuration | wrongly accepted | wrongly rejected | correct |
+| --- | --- | --- | --- |
+| `with_spec_passes` | **23 → 9** | **12 → 9** | 153 → 170 |
+
+`wrongly_rejected` back to 9 is the term layer's own figure — the specification
+passes now cost nothing, where before they cost three false rejections. The
+fixes: a level *parameter* may be instantiated to `Prop` (wrong in the
+**accepting** direction); an empty recursor family is malformed, not
+undecidable; fewer motives than family members is malformed (a nested auxiliary
+has *more* — 0 fewer and 183 more across 3410 real recursors); a recursor's
+name must tie it to its inductive; and recursiveness sometimes needs reduction,
+so the iota pass declines where it used to derive a wrong rule. Plus a fourth
+pass, `harness/kernel3/safety.py`, for the `unsafe` / `partial` flags the
+NDJSON frontend was reading and throwing away — **a hole unfindable from
+inside**, since `harness/Export.lean` has no such field to drop.
+
+**Six of the fourteen newly rejected tests are caught for the wrong reason**,
+and the record says so: `050`–`053`, `056` and `061` are about malformed
+*inductives*, which `kernel3` still does not check, and all six are rejected by
+`0 motives for a family of 1` — because an ill-formed inductive cannot have a
+real recursor, so the test author attached a stub and the new motive rule trips
+on it. Had the stubs been plausible, `kernel3` would accept all six, which is
+exactly what the remaining `047` and `049` are.
+
+**The nine that remain** are scope rather than bugs: the projection typing rule
+on `Prop`/`imax` (5), whether a theorem's type is a `Prop` and whether a
+definition refers to itself (2), and inductive well-formedness (2). Closing
+them turns a term-layer corroborating checker into a full kernel, which is a
+different decision and is not taken here.
 
 
 ## 7. Mathlib coverage beyond one claim

@@ -138,3 +138,79 @@ Those four, and the iota recursive-field bug above, are what the next round
 addresses. The measurement is recorded first, before any of them is touched,
 so that the improvement is measured against a number that was written down
 before it was known how to improve it.
+
+---
+
+# After the fixes (same day)
+
+Five bugs the arena found were fixed, each re-validated by the differential
+test over Init and Mathlib before being believed. Re-measured:
+[`evidence/arena_run_after_fixes.json`](../evidence/arena_run_after_fixes.json).
+
+| configuration | wrongly accepted | wrongly rejected | correct | declined |
+| --- | --- | --- | --- | --- |
+| `term_only` | 28 | 9 | 151 | 10 |
+| `with_spec_passes` | **23 → 9** | **12 → 9** | 153 → 170 | 10 |
+
+`wrongly_rejected` returning to 9 is the term layer's own figure: **the
+specification passes now cost nothing**, where before they cost three false
+rejections.
+
+## The five fixes
+
+1. **A level parameter may be instantiated to `Prop`.** `is_prop_valued` asked
+   whether a sort was *literally* zero, so `MyBool : Sort u` with two
+   constructors got a large eliminator. It now asks whether the sort *could* be
+   zero. Wrong in the **accepting** direction — the direction ROADMAP 2 warned
+   about.
+2. **A recursor with `all: []` is malformed**, not undecidable. It was declined,
+   and declining let `rogue : False` through.
+3. **Fewer motives than family members is malformed.** The pass tested `!=` and
+   called both directions "a nested auxiliary recursor"; a nested auxiliary has
+   *more*. Measured over 3410 real recursors: 0 fewer, 183 more.
+4. **A recursor's name ties it to its inductive.** Must be `<member>.rec` or
+   `<member>.rec_N`; all 3410 are, with no exception to carve.
+5. **Recursiveness sometimes needs reduction**, and the iota pass decided it
+   syntactically. The ambiguous case now declines instead of deriving a wrong
+   rule. Plus a fourth pass, `safety.py`, for the `unsafe`/`partial` flags the
+   frontend was reading and throwing away.
+
+## Six of the fourteen were caught for the wrong reason
+
+The fixes targeted five tests and the count moved by fourteen. **An unexplained
+improvement is as suspicious as an unexplained regression**, so:
+`050_inductWrongCtorParams`, `051_inductWrongCtorResParams`,
+`052_inductWrongCtorResLevel`, `053_inductInIndex`, `056_reduceCtorType.mk` and
+`061_typeWithTooHighTypeField.mk` are all rejected by one rule —
+`0 motives for a family of 1` — and **none of them is about recursors**.
+
+`050` is the clearest. Its inductive declares a parameter of type `Sort 0`
+while its constructor takes one of type `Sort 1`. kernel3 has no opinion about
+that mismatch. What it does have an opinion about is the recursor the file
+carries alongside, which is a **stub**: 0 motives, 0 minors, 0 rules, typed
+`Sort 0`. Lean could not generate a real recursor for an ill-formed inductive,
+so the author attached a degenerate one, and the new motive rule trips on that.
+
+The outcome is right and the mechanism is adjacent to the defect. **Had the
+author attached a plausible-looking recursor, kernel3 would accept these six
+again.** They count in the fourteen because the arena scores outcomes; they are
+called out here because this repository scores mechanisms — `evidence/ablation.json`
+exists for exactly this distinction.
+
+## The nine that remain
+
+| cause | tests |
+| --- | --- |
+| projection typing on `Prop` / `imax` | `proj-of-imax-prop`, `090_projProp2`, `092_projProp4`, `093_projProp5`, `094_projProp6` |
+| declaration well-formedness | `012_nonPropThm`, `014_selfProof` |
+| inductive well-formedness | `047_inductBadNonSort2`, `049_inductTooFewParams` |
+
+These are outside what `kernel3` checks rather than bugs in it: the projection
+typing rule, whether a theorem's type is a `Prop`, whether a definition refers
+to itself, and whether an inductive's own declaration is well formed. Closing
+them would turn a term-layer corroborating checker into a full kernel, which is
+a different decision and is not taken here.
+
+And note what `047` and `049` are: inductive well-formedness tests whose
+recursors happen to be *plausible* — which is exactly what the six incidental
+catches would look like if their stubs were better.

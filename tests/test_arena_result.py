@@ -158,3 +158,78 @@ def test_the_document_and_the_record_agree():
         assert str(n) in doc
     assert "055" in doc and "056" in doc
     assert "not an excuse" in doc
+
+
+# ---------------------------------------------------------------------------
+# After the five fixes (same day). The before-record above stays untouched, so
+# the improvement is a diff rather than a number edited in place.
+AFTER = ROOT / "evidence" / "arena_run_after_fixes.json"
+after = json.loads(AFTER.read_text(encoding="utf-8"))
+
+
+def test_the_improvement_is_recorded_as_a_comparison_not_a_replacement():
+    c = after["comparison"]
+    assert c["against"].startswith("evidence/arena_run.json")
+    assert c["before"] == rec["totals"], (
+        "the comparison must quote the before-record's own totals")
+
+
+def test_wrongly_accepted_fell_and_wrongly_rejected_returned_to_baseline():
+    b = after["comparison"]["before"]["with_spec_passes"]
+    a = after["comparison"]["after"]["with_spec_passes"]
+    assert (b["wrongly_accepted"], a["wrongly_accepted"]) == (23, 9)
+    assert (b["wrongly_rejected"], a["wrongly_rejected"]) == (12, 9)
+    # the passes now cost nothing: 9 is the term layer's own figure
+    assert a["wrongly_rejected"] == after["totals"]["term_only"]["wrongly_rejected"]
+
+
+def test_the_after_totals_are_recomputable_from_its_own_rows():
+    for cfg in ("term_only", "with_spec_passes"):
+        wa = sum(1 for r in after["results"]
+                 if r["expected"] == "REJECTED" and r[cfg] == "ACCEPTED")
+        assert after["totals"][cfg]["wrongly_accepted"] == wa, cfg
+
+
+def test_the_three_false_rejections_became_declines_not_acceptances():
+    """The iota fix had to move them out of REJECTED without moving them into
+    a wrong ACCEPTED: they are good tests, so accepting them is correct, and
+    the pass reaching that by declining is the honest route."""
+    for name in after["comparison"]["false_rejections_removed"]:
+        row = next(r for r in after["results"] if name in r["test"])
+        assert row["with_spec_passes"] == "ACCEPTED", name
+        assert row["expected"] == "ACCEPTED", name
+
+
+def test_the_six_incidental_catches_are_called_incidental():
+    """The fixes targeted five tests and the count moved by fourteen. An
+    unexplained improvement is as suspicious as an unexplained regression, and
+    six of the fourteen are rejected by a rule that has nothing to do with
+    their defect."""
+    inc = after["comparison"]["the_six_incidental_catches"]
+    assert len(inc["tests"]) == 6
+    assert "0 motives" in inc["all_rejected_by"]
+    why = " ".join(inc["why_this_is_not_a_capability"])
+    assert "does not check inductive well-formedness" in why
+    assert "STUB" in why or "stub" in why
+    assert "would accept these six again" in why
+    assert "scores mechanisms" in why
+
+
+def test_the_remaining_nine_are_scope_and_say_which_scope():
+    s = after["comparison"]["still_wrongly_accepted"]
+    assert s["count"] == 9
+    named = sum(len(v) for k, v in s.items()
+                if isinstance(v, list) and k not in ("reading",))
+    assert named == 9, "every remaining miss must be under a named cause"
+    why = " ".join(s["reading"])
+    assert "not bugs in it" in why
+    assert "full kernel" in why
+    assert "047" in why and "049" in why, (
+        "the two that would look like the incidental six must be named")
+
+
+def test_the_document_carries_both_numbers():
+    doc = DOC.read_text(encoding="utf-8")
+    assert "23 → 9" in doc
+    assert "12 → 9" in doc
+    assert "caught for the wrong reason" in doc
